@@ -1,0 +1,194 @@
+paper:
+  title: "Sortition Upstream of NTQR"
+  subtitle: "How Panel Formation and Size Shape Ground-Truth-Free Evaluation"
+  version: "0.1.0"
+  date: "2026-06-25"
+  cover:
+    image: "figures/ntqr_cover.png"
+    title: "Sortition-to-NTQR schematic cover"
+    description: "Deterministic schematic cover showing the pipeline from audited lottery through trios to NTQR agreement diagnostics and strategy ranking."
+
+authors:
+  - name: "Daniel Ari Friedman"
+    email: "danielarifriedman@gmail.com"
+    affiliation: "Active Inference Institute"
+    orcid: "0000-0001-6232-9096"
+    corresponding: true
+
+publication:
+  year: "2026"
+  doi: "10.5281/zenodo.21083779"
+  version_doi: "10.5281/zenodo.21083780"
+  version_record: "https://zenodo.org/records/21083780"
+
+keywords:
+  - "sortition"
+  - "NTQR"
+  - "unlabeled evaluation"
+  - "expert panels"
+  - "peer review"
+  - "error independence"
+  - "statistical power"
+  - "panel formation"
+  - "synthetic evaluation"
+  - "LLM reviewers"
+
+# Stage-02 analysis script order (dependency-correct). Without this allowlist the
+# infra runs scripts/*.py in lexicographic order, which puts figure/consumer
+# scripts BEFORE their data producers and hard-fails a clean `--pipeline` run.
+# Producers run first, then the token injector (so token-reading figures see a
+# fresh manuscript_variables.json), then the figure/explorer consumers. The stego
+# scripts are intentionally omitted: they consume the stage-05 rendered PDF and
+# are invoked as an explicit post-render step, never as stage-04 analysis.
+analysis:
+  scripts:
+    - bench_alarm.py
+    - run_sweep.py
+    - run_analytical_predictions.py
+    - run_power_analysis.py
+    - run_independence_sweep.py
+    - run_cross_family.py
+    - run_cross_family_multiseed.py
+    - run_postdoc_panel.py
+    - run_personas.py
+    - run_bloc_phase.py
+    - z_generate_manuscript_variables.py
+    - make_cover.py
+    - make_figures.py
+    - make_extended_figures.py
+    - make_web_explorer.py
+
+link-citations: true
+
+default_profile: manuscript_contrast
+
+experiment_profiles:
+  smoke:
+    description: "Fast deterministic CI/profile smoke grid matching the original manuscript spine."
+    experiment:
+      strategies: [representative_sortition, random_selection, ideological_selection, expertise_threshold]
+      panel_sizes: [3, 6]
+      mean_expertises: [0.72]
+      expertise_heterogeneities: [0.08]
+      bias_stds: [0.3]
+      n_items_values: [150]
+      prevalence_as: [0.5]
+      seeds: [0, 1, 2]
+      n_experts: 48
+      n_trios: 4
+  manuscript_main:
+    description: "Reported deterministic grid: strategy x size x competence/bias/corpus-size sensitivity."
+    experiment:
+      strategies: [representative_sortition, random_selection, ideological_selection, expertise_threshold]
+      panel_sizes: [3, 6]
+      mean_expertises: [0.68, 0.72]
+      expertise_heterogeneities: [0.08]
+      bias_stds: [0.2, 0.3]
+      n_items_values: [120, 180]
+      prevalence_as: [0.5]
+      seeds: [0, 1, 2, 3, 4]
+      n_experts: 48
+      n_trios: 4
+  manuscript_contrast:
+    description: "Reported contrast grid: strategy x panel-size x expertise x bias sensitivity with one corpus-size/prevalence baseline."
+    experiment:
+      strategies: [representative_sortition, random_selection, ideological_selection, expertise_threshold]
+      panel_sizes: [3, 6, 9, 12]
+      mean_expertises: [0.62, 0.68, 0.74, 0.80]
+      expertise_heterogeneities: [0.08]
+      bias_stds: [0.1, 0.2, 0.35, 0.5]
+      n_items_values: [300]
+      prevalence_as: [0.5]
+      seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]
+      n_experts: 96
+      n_trios: 8
+  tolerance:
+    description: "Fixed-trio error-correlation tolerance sweep settings."
+    experiment:
+      strategies: [representative_sortition, ideological_selection]
+      panel_sizes: [3]
+      mean_expertises: [0.72]
+      expertise_heterogeneities: [0.08]
+      bias_stds: [0.3]
+      n_items_values: [120]
+      prevalence_as: [0.5]
+      seeds: [0, 1, 2, 3, 4, 5]
+      n_experts: 24
+      n_trios: 1
+  power:
+    description: "Design-budget profile used to size prospective seed ladders."
+    experiment:
+      strategies: [representative_sortition, random_selection, ideological_selection, expertise_threshold]
+      panel_sizes: [3, 6]
+      mean_expertises: [0.72]
+      expertise_heterogeneities: [0.08]
+      bias_stds: [0.3]
+      n_items_values: [150]
+      prevalence_as: [0.5]
+      seeds: [0, 1, 2, 3, 4, 5, 6, 7]
+      n_experts: 48
+      n_trios: 4
+  panel_ladder:
+    description: "Panel-size sensitivity ladder; research profile, not CI default."
+    experiment:
+      strategies: [representative_sortition, random_selection, ideological_selection, expertise_threshold]
+      panel_sizes: [3, 4, 5, 6, 9, 12]
+      mean_expertises: [0.72]
+      expertise_heterogeneities: [0.08]
+      bias_stds: [0.3]
+      n_items_values: [150]
+      prevalence_as: [0.5]
+      seeds: [0, 1, 2, 3, 4]
+      n_experts: 72
+      n_trios: 8
+  research_broad:
+    description: "Broader sensitivity profile spanning prevalence, expertise, bias, heterogeneity, corpus size, and panel size."
+    experiment:
+      strategies: [representative_sortition, random_selection, ideological_selection, expertise_threshold]
+      panel_sizes: [3, 4, 5, 6, 9]
+      mean_expertises: [0.64, 0.68, 0.72, 0.78]
+      expertise_heterogeneities: [0.04, 0.08, 0.12]
+      bias_stds: [0.1, 0.2, 0.3, 0.4]
+      n_items_values: [90, 120, 180, 240]
+      prevalence_as: [0.35, 0.5, 0.65]
+      seeds: [0, 1, 2, 3, 4, 5, 6, 7]
+      n_experts: 72
+      n_trios: 8
+
+live_cross_family:
+  description: "Required-live Qwen x Gemma cross-family decorrelation companion settings."
+  models: [qwen2.5:3b, gemma3:4b]
+  replicates_per_model: 2
+  seeds: [0, 1, 2, 3, 4, 5]
+  n_items: 150
+  target_accuracy: 0.75
+  shared_strength: 0.85
+  base_url: "http://localhost:11434"
+  temperature: 0.6
+  num_predict: 1
+  timeout: 20.0
+  progress_every: 25
+  require_live: true
+
+live_postdoc_panel:
+  description: "Required-live Gemma postdoctoral-review panel sampling companion settings."
+  model: gemma3:4b
+  seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+  n_reviewers: 48
+  n_applications: 72
+  panel_sizes: [3, 6]
+  strategies: [representative_sortition, random_selection, ideological_selection, expertise_threshold]
+  n_trios: 8
+  prevalence_strong: 0.5
+  age_min: 28
+  age_max: 52
+  mean_expertise: 0.74
+  expertise_heterogeneity: 0.08
+  age_bias_std: 0.65
+  base_url: "http://localhost:11434"
+  temperature: 0.2
+  num_predict: 1
+  timeout: 20.0
+  progress_every: 25
+  require_live: true
+  cache_path: "output/data/postdoc_votes/gemma3_4b_votes.json"

@@ -1,0 +1,59 @@
+{
+  "judge_models": [
+    "qwen2.5:3b@0.6",
+    "gemma3:4b@0.6",
+    "qwen2.5:3b@1.0"
+  ],
+  "live_ollama": true,
+  "n_items": 60,
+  "max_operand": 99,
+  "panel_audit_hash": "d8d262b8ce38df26fff980208caa66fbac9316f71ca636f80fe9942182675466",
+  "persona_ids": [
+    "e0008",
+    "e0024",
+    "e0028"
+  ],
+  "persona_specs": [
+    {
+      "id": "e0008",
+      "expertise_level": "competent",
+      "leaning": "neutral",
+      "ideology": "right",
+      "target_accuracy": 0.7733
+    },
+    {
+      "id": "e0024",
+      "expertise_level": "competent",
+      "leaning": "toward_false",
+      "ideology": "left",
+      "target_accuracy": 0.7613
+    },
+    {
+      "id": "e0028",
+      "expertise_level": "expert",
+      "leaning": "toward_true",
+      "ideology": "center",
+      "target_accuracy": 0.8959
+    }
+  ],
+  "empirical_per_judge_accuracy": [
+    0.5833,
+    0.5833,
+    0.5833
+  ],
+  "oracle_prevalence_a": 0.45,
+  "oracle_accuracies": [
+    0.537,
+    0.537,
+    0.537
+  ],
+  "ntqr_degenerate": false,
+  "degenerate_note": null,
+  "eie_prevalence_a": 0.0333,
+  "eie_accuracies": [
+    1.0,
+    0.7414,
+    1.0
+  ],
+  "eie_error": 0.7934
+}

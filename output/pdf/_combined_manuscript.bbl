@@ -1,0 +1,373 @@
+\begin{thebibliography}{48}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Aquinas(1920)]{aquinas_lots}
+Thomas Aquinas.
+\newblock \emph{Summa Theologiae, Second Part of the Second Part, Question 95,
+  Article 8}.
+\newblock Benziger Brothers, 1920.
+\newblock URL \url{https://www.newadvent.org/summa/3095.htm#article8}.
+\newblock Original work composed in the thirteenth century.
+
+\bibitem[Aristotle(1935)]{aristotle_athenian}
+Aristotle.
+\newblock \emph{The Athenian Constitution}.
+\newblock Harvard University Press, 1935.
+\newblock URL \url{https://topostext.org/work/99}.
+\newblock Original work composed in the fourth century BCE; Loeb Classical
+  Library translation.
+
+\bibitem[Aristotle(1944)]{aristotle_politics}
+Aristotle.
+\newblock \emph{Politics}.
+\newblock Harvard University Press, 1944.
+\newblock URL \url{https://topostext.org/work/100}.
+\newblock Original work composed in the fourth century BCE; Loeb Classical
+  Library translation.
+
+\bibitem[Arvan et~al.(2025)Arvan, Bright, and Heesen]{arvan2025}
+Marcus Arvan, Liam~Kofi Bright, and Remco Heesen.
+\newblock Jury theorems for peer review.
+\newblock \emph{The British Journal for the Philosophy of Science}, 76\penalty0
+  (2):\penalty0 319--344, 2025.
+\newblock \doi{10.1086/719117}.
+
+\bibitem[Avin(2019)]{avin2019}
+Shahar Avin.
+\newblock Mavericks and lotteries.
+\newblock \emph{Studies in History and Philosophy of Science Part A},
+  76:\penalty0 13--23, 2019.
+\newblock \doi{10.1016/j.shpsa.2018.11.006}.
+
+\bibitem[Bender et~al.(2021)Bender, Gebru, McMillan-Major, and
+  Shmitchell]{bender2021}
+Emily~M. Bender, Timnit Gebru, Angelina McMillan-Major, and Shmargaret
+  Shmitchell.
+\newblock On the dangers of stochastic parrots: Can language models be too big?
+\newblock In \emph{Proceedings of the 2021 ACM Conference on Fairness,
+  Accountability, and Transparency}, pages 610--623, 2021.
+\newblock \doi{10.1145/3442188.3445922}.
+
+\bibitem[Bollen et~al.(2014)Bollen, Crandall, Junk, Ding, and
+  B{\"o}rner]{bollen2014}
+Johan Bollen, David Crandall, Damion Junk, Ying Ding, and Katy B{\"o}rner.
+\newblock From funding agencies to scientific agency: Collective allocation of
+  science funding as an alternative to peer review.
+\newblock \emph{EMBO Reports}, 15\penalty0 (2):\penalty0 131--133, 2014.
+\newblock \doi{10.1002/embr.201338068}.
+
+\bibitem[Borda(1781)]{borda1781}
+Jean-Charles~de Borda.
+\newblock M{\'e}moire sur les {\'e}lections au scrutin.
+\newblock \emph{Histoire de l'Acad{\'e}mie Royale des Sciences}, pages
+  657--665, 1781.
+\newblock URL
+  \url{https://bibbase.org/network/publication/denbspborda-mmoiresurleslectionsauscrutin-1781}.
+\newblock Published in the Academy volume for 1781.
+
+\bibitem[{Citizen-Infra}(2024)]{allotment}
+{Citizen-Infra}.
+\newblock allotment: An auditable fair-sortition engine.
+\newblock Software, AGPL-3.0, 2024.
+\newblock URL \url{https://github.com/Citizen-Infra/allotment}.
+\newblock Implements the maximin stratified-sortition lottery of Flanigan et
+  al. (2021); used in this work as the representative-sortition panel-formation
+  engine.
+
+\bibitem[Cohen(1988)]{cohen1988}
+Jacob Cohen.
+\newblock \emph{Statistical Power Analysis for the Behavioral Sciences}.
+\newblock Lawrence Erlbaum Associates, 2 edition, 1988.
+\newblock ISBN 9780805802832.
+
+\bibitem[Cole et~al.(1981)Cole, Cole, and Simon]{cole1981}
+Stephen Cole, Jonathan~R. Cole, and Gary~A. Simon.
+\newblock Chance and consensus in peer review.
+\newblock \emph{Science}, 214\penalty0 (4523):\penalty0 881--886, 1981.
+\newblock \doi{10.1126/science.7302566}.
+
+\bibitem[Condorcet(1785)]{condorcet1785}
+Nicolas de~Caritat Condorcet.
+\newblock \emph{Essai sur l'application de l'analyse {\`a} la probabilit{\'e}
+  des d{\'e}cisions rendues {\`a} la pluralit{\'e} des voix}.
+\newblock Imprimerie Royale, 1785.
+\newblock URL \url{https://archive.org/details/bub_gb_RzAVAAAAQAAJ}.
+
+\bibitem[Contarini(1599)]{contarini1599}
+Gasparo Contarini.
+\newblock \emph{The Commonwealth and Government of Venice}.
+\newblock I. Windet for E. Mattes, 1599.
+\newblock URL
+  \url{https://onlinebooks.library.upenn.edu/webbin/book/lookupid?key=olbp14764}.
+\newblock English translation of De magistratibus et republica Venetorum.
+
+\bibitem[Corrada-Emmanuel(2026)]{ntqr08}
+Andres Corrada-Emmanuel.
+\newblock ntqr: Tools for the logic of evaluation using unlabeled data.
+\newblock Python package version 0.8, 2026.
+\newblock URL \url{https://pypi.org/project/ntqr/}.
+\newblock Released May 28, 2026. Documentation:
+  https://ntqr.readthedocs.io/en/latest/.
+
+\bibitem[Dawid and Skene(1979)]{dawid1979}
+A.~P. Dawid and A.~M. Skene.
+\newblock Maximum likelihood estimation of observer error-rates using the em
+  algorithm.
+\newblock \emph{Journal of the Royal Statistical Society: Series C (Applied
+  Statistics)}, 28\penalty0 (1):\penalty0 20--28, 1979.
+\newblock \doi{10.2307/2346806}.
+
+\bibitem[Efron and Tibshirani(1993)]{efron1993}
+Bradley Efron and Robert~J. Tibshirani.
+\newblock \emph{An Introduction to the Bootstrap}.
+\newblock Chapman and Hall/CRC, 1993.
+\newblock \doi{10.1201/9780429246593}.
+
+\bibitem[Emrich and Piedmonte(1991)]{emrich1991}
+Lawrence~J. Emrich and Marion~R. Piedmonte.
+\newblock A method for generating high-dimensional multivariate binary
+  variates.
+\newblock \emph{The American Statistician}, 45\penalty0 (4):\penalty0 302--304,
+  1991.
+\newblock \doi{10.2307/2684786}.
+
+\bibitem[Fang and Casadevall(2016)]{fang2016}
+Ferric~C. Fang and Arturo Casadevall.
+\newblock Research funding: The case for a modified lottery.
+\newblock \emph{mBio}, 7\penalty0 (2):\penalty0 e00422--16, 2016.
+\newblock \doi{10.1128/mBio.00422-16}.
+
+\bibitem[Fang et~al.(2016)Fang, Bowen, and Casadevall]{fang2016elife}
+Ferric~C. Fang, Anthony Bowen, and Arturo Casadevall.
+\newblock Nih peer review percentile scores are poorly predictive of grant
+  productivity.
+\newblock \emph{eLife}, 5:\penalty0 e13323, 2016.
+\newblock \doi{10.7554/eLife.13323}.
+
+\bibitem[Fishkin(2009)]{fishkin2009}
+James~S. Fishkin.
+\newblock \emph{When the People Speak: Deliberative Democracy and Public
+  Consultation}.
+\newblock Oxford University Press, 2009.
+\newblock ISBN 9780199604432.
+\newblock URL
+  \url{https://global.oup.com/academic/product/when-the-people-speak-9780199604432}.
+
+\bibitem[Flanigan et~al.(2021)Flanigan, G{\"o}lz, Gupta, Hennig, and
+  Procaccia]{flanigan2021}
+Bailey Flanigan, Paul G{\"o}lz, Anupam Gupta, Brett Hennig, and Ariel~D.
+  Procaccia.
+\newblock Fair algorithms for selecting citizens' assemblies.
+\newblock \emph{Nature}, 596:\penalty0 548--552, 2021.
+\newblock \doi{10.1038/s41586-021-03788-6}.
+
+\bibitem[Ginther et~al.(2011)Ginther, Schaffer, Schnell, Masimore, Liu, Haak,
+  and Kington]{ginther2011}
+Donna~K. Ginther, Walter~T. Schaffer, Joshua Schnell, Beth Masimore, Faye Liu,
+  Laurel~L. Haak, and Raynard Kington.
+\newblock Race, ethnicity, and nih research awards.
+\newblock \emph{Science}, 333\penalty0 (6045):\penalty0 1015--1019, 2011.
+\newblock \doi{10.1126/science.1196783}.
+
+\bibitem[Grofman et~al.(1983)Grofman, Owen, and Feld]{grofman1983}
+Bernard Grofman, Guillermo Owen, and Scott~L. Feld.
+\newblock Thirteen theorems in search of the truth.
+\newblock \emph{Theory and Decision}, 15\penalty0 (3):\penalty0 261--278, 1983.
+\newblock \doi{10.1007/BF00125672}.
+
+\bibitem[Hardt et~al.(2016)Hardt, Price, and Srebro]{hardt2016}
+Moritz Hardt, Eric Price, and Nathan Srebro.
+\newblock Equality of opportunity in supervised learning.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~29, 2016.
+\newblock URL
+  \url{https://papers.nips.cc/paper_files/paper/2016/hash/9d2682367c3935defcb1f9e247a97c0d-Abstract.html}.
+
+\bibitem[Helmer et~al.(2017)Helmer, Schottdorf, Neef, and
+  Battaglia]{helmer2017}
+Markus Helmer, Manuel Schottdorf, Andreas Neef, and Demian Battaglia.
+\newblock Gender bias in scholarly peer review.
+\newblock \emph{eLife}, 6:\penalty0 e21718, 2017.
+\newblock \doi{10.7554/eLife.21718}.
+
+\bibitem[Holm(1979)]{holm1979}
+Sture Holm.
+\newblock A simple sequentially rejective multiple test procedure.
+\newblock \emph{Scandinavian Journal of Statistics}, 6\penalty0 (2):\penalty0
+  65--70, 1979.
+\newblock URL \url{https://www.jstor.org/stable/4615733}.
+
+\bibitem[Hong and Page(2004)]{hong2004}
+Lu~Hong and Scott~E. Page.
+\newblock Groups of diverse problem solvers can outperform groups of
+  high-ability problem solvers.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 101\penalty0
+  (46):\penalty0 16385--16389, 2004.
+\newblock \doi{10.1073/pnas.0403723101}.
+
+\bibitem[Johnson(2008)]{johnson2008}
+Valen~E. Johnson.
+\newblock Statistical analysis of the national institutes of health peer review
+  system.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 105\penalty0
+  (32):\penalty0 11076--11080, 2008.
+\newblock \doi{10.1073/pnas.0804538105}.
+
+\bibitem[Kaplan et~al.(2008)Kaplan, Lacetera, and Kaplan]{kaplan2008}
+David Kaplan, Nicola Lacetera, and Celia Kaplan.
+\newblock Sample size and precision in nih peer review.
+\newblock \emph{PLOS ONE}, 3\penalty0 (7):\penalty0 e2761, 2008.
+\newblock \doi{10.1371/journal.pone.0002761}.
+
+\bibitem[Karger et~al.(2014)Karger, Oh, and Shah]{karger2014}
+David~R. Karger, Sewoong Oh, and Devavrat Shah.
+\newblock Budget-optimal task allocation for reliable crowdsourcing systems.
+\newblock \emph{Operations Research}, 62\penalty0 (1):\penalty0 1--24, 2014.
+\newblock \doi{10.1287/opre.2013.1235}.
+
+\bibitem[Lamont(2009)]{lamont2009}
+Mich{\`e}le Lamont.
+\newblock \emph{How Professors Think: Inside the Curious World of Academic
+  Judgment}.
+\newblock Harvard University Press, 2009.
+\newblock \doi{10.4159/9780674054158}.
+\newblock URL \url{https://www.hup.harvard.edu/books/9780674057333}.
+
+\bibitem[Lee et~al.(2013)Lee, Sugimoto, Zhang, and Cronin]{lee2013}
+Carole~J. Lee, Cassidy~R. Sugimoto, Guo Zhang, and Blaise Cronin.
+\newblock Bias in peer review.
+\newblock \emph{Journal of the American Society for Information Science and
+  Technology}, 64\penalty0 (1):\penalty0 2--17, 2013.
+\newblock \doi{10.1002/asi.22784}.
+
+\bibitem[Merton(1968)]{merton1968}
+Robert~K. Merton.
+\newblock The matthew effect in science.
+\newblock \emph{Science}, 159\penalty0 (3810):\penalty0 56--63, 1968.
+\newblock \doi{10.1126/science.159.3810.56}.
+
+\bibitem[Montesquieu(1748)]{montesquieu1748}
+Charles de~Secondat Montesquieu.
+\newblock \emph{The Spirit of Laws}.
+\newblock Online Library of Liberty, 1748.
+\newblock URL
+  \url{https://oll.libertyfund.org/titles/montesquieu-complete-works-vol-1-the-spirit-of-laws}.
+\newblock Cited through the Online Library of Liberty edition of the 1777
+  English translation.
+
+\bibitem[Nelsen(2006)]{nelsen2006}
+Roger~B. Nelsen.
+\newblock \emph{An Introduction to Copulas}.
+\newblock Springer, 2nd edition, 2006.
+
+\bibitem[Neumark et~al.(2019)Neumark, Burn, and Button]{neumark2019}
+David Neumark, Ian Burn, and Patrick Button.
+\newblock Is it harder for older workers to find jobs? new and improved
+  evidence from a field experiment.
+\newblock \emph{Journal of Political Economy}, 127\penalty0 (2):\penalty0
+  922--970, 2019.
+\newblock \doi{10.1086/701029}.
+
+\bibitem[North and Fiske(2013)]{north2013}
+Michael~S. North and Susan~T. Fiske.
+\newblock Act your (old) age: Prescriptive, ageist biases over succession,
+  consumption, and identity.
+\newblock \emph{Personality and Social Psychology Bulletin}, 39\penalty0
+  (6):\penalty0 720--734, 2013.
+\newblock \doi{10.1177/0146167213480043}.
+
+\bibitem[Parisi et~al.(2014)Parisi, Strino, Nadler, and Kluger]{parisi2014}
+Fabio Parisi, Francesco Strino, Boaz Nadler, and Yuval Kluger.
+\newblock Ranking and combining multiple predictors without labeled data.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 111\penalty0
+  (4):\penalty0 1253--1258, 2014.
+\newblock \doi{10.1073/pnas.1219097111}.
+
+\bibitem[Peters and Ceci(1982)]{peters1982}
+Douglas~P. Peters and Stephen~J. Ceci.
+\newblock Peer-review practices of psychological journals: The fate of
+  published articles, submitted again.
+\newblock \emph{Behavioral and Brain Sciences}, 5\penalty0 (2):\penalty0
+  187--195, 1982.
+\newblock \doi{10.1017/S0140525X00011183}.
+
+\bibitem[Pier et~al.(2018)Pier, Brauer, Filut, Kaatz, Raclaw, Nathan, Ford, and
+  Carnes]{pier2018}
+Elizabeth~L. Pier, Markus Brauer, Amarette Filut, Anna Kaatz, Joshua Raclaw,
+  Mitchell~J. Nathan, Cecilia~E. Ford, and Molly Carnes.
+\newblock Low agreement among reviewers evaluating the same nih grant
+  applications.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 115\penalty0
+  (12):\penalty0 2952--2957, 2018.
+\newblock \doi{10.1073/pnas.1714379115}.
+
+\bibitem[Platanios et~al.(2014)Platanios, Blum, and Mitchell]{platanios2014}
+Emmanouil~Antonios Platanios, Avrim Blum, and Tom~M. Mitchell.
+\newblock Estimating accuracy from unlabeled data.
+\newblock In \emph{Proceedings of the Thirtieth Conference on Uncertainty in
+  Artificial Intelligence (UAI)}, pages 682--691, 2014.
+
+\bibitem[Raykar et~al.(2010)Raykar, Yu, Zhao, Valadez, Florin, Bogoni, and
+  Moy]{raykar2010}
+Vikas~C. Raykar, Shipeng Yu, Linda~H. Zhao, Gerardo~Hermosillo Valadez, Charles
+  Florin, Luca Bogoni, and Linda Moy.
+\newblock Learning from crowds.
+\newblock \emph{Journal of Machine Learning Research}, 11\penalty0
+  (43):\penalty0 1297--1322, 2010.
+\newblock URL \url{https://jmlr.org/papers/v11/raykar10a.html}.
+
+\bibitem[Rousseau(1762)]{rousseau1762}
+Jean-Jacques Rousseau.
+\newblock \emph{The Social Contract and Discourses}.
+\newblock J. M. Dent and Sons, 1762.
+\newblock URL
+  \url{https://oll.libertyfund.org/titles/cole-the-social-contract-and-discourses}.
+\newblock The Social Contract was first published in 1762; cited through the
+  Online Library of Liberty edition.
+
+\bibitem[Shi et~al.(2025)Shi, Ma, Liang, Diao, Ma, and Vosoughi]{shi2025}
+Lin Shi, Chiyu Ma, Wenhua Liang, Xingjian Diao, Weicheng Ma, and Soroush
+  Vosoughi.
+\newblock Judging the judges: A systematic study of position bias in
+  llm-as-a-judge.
+\newblock In \emph{Proceedings of the 14th International Joint Conference on
+  Natural Language Processing and the 4th Conference of the Asia-Pacific
+  Chapter of the Association for Computational Linguistics}, pages 292--314,
+  2025.
+\newblock \doi{10.18653/v1/2025.ijcnlp-long.18}.
+
+\bibitem[Stone(2011)]{stone2011}
+Peter Stone.
+\newblock \emph{The Luck of the Draw: The Role of Lotteries in Decision
+  Making}.
+\newblock Oxford University Press, 2011.
+\newblock \doi{10.1093/acprof:oso/9780199756100.001.0001}.
+
+\bibitem[Tomkins et~al.(2017)Tomkins, Zhang, and Heavlin]{tomkins2017}
+Andrew Tomkins, Min Zhang, and William~D. Heavlin.
+\newblock Reviewer bias in single- versus double-blind peer review.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 114\penalty0
+  (48):\penalty0 12708--12713, 2017.
+\newblock \doi{10.1073/pnas.1707323114}.
+
+\bibitem[Wenner{\aa}s and Wold(1997)]{wenneras1997}
+Christine Wenner{\aa}s and Agnes Wold.
+\newblock Nepotism and sexism in peer-review.
+\newblock \emph{Nature}, 387:\penalty0 341--343, 1997.
+\newblock \doi{10.1038/387341a0}.
+
+\bibitem[Zheng et~al.(2023)Zheng, Chiang, Sheng, Zhuang, Wu, Zhuang, Lin, Li,
+  Li, Xing, Zhang, Gonzalez, and Stoica]{zheng2023}
+Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan Zhuang, Zhanghao Wu, Yonghao
+  Zhuang, Zi~Lin, Zhuohan Li, Dacheng Li, Eric~P. Xing, Hao Zhang, Joseph~E.
+  Gonzalez, and Ion Stoica.
+\newblock Judging llm-as-a-judge with mt-bench and chatbot arena.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~36, 2023.
+\newblock URL \url{https://arxiv.org/abs/2306.05685}.
+
+\end{thebibliography}

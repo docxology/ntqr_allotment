@@ -1,0 +1,21 @@
+{
+  "manifest": "output/data/stego_manifest.json",
+  "payload": {
+    "cover_manifest_sha256": "05aad9d30d20718c6ee5e5661d1a996e9ff3298e53471b743a2fd3aeeb9eae68",
+    "generated_at": "2026-06-30T21:40:46+00:00",
+    "manuscript_config_sha256": "57be594575991a8c083f0c4cb3f2dfe4f17679041dd34e2f05aede9c696739c2",
+    "manuscript_data_figure_count": 20,
+    "manuscript_variables_sha256": "795c85ad361c5c53b0ed30d71d76a1917863934de6bc9b44370a9664650be28f",
+    "payload_caveat": "Plain JSON provenance embedded in a lossless PNG LSB layer and mirrored inside the PDF as comments; not encryption, not a scientific result, and not intended to carry confidential data.",
+    "schema_version": 1,
+    "semantic_role": "local steganographic provenance variant",
+    "source_cover": "output/figures/ntqr_cover.png",
+    "source_cover_sha256": "6d85d2dbb9debf31ce963da578444227677ae92c7f71a3f0a8b9803ff5c79021",
+    "source_pdf": "output/pdf/NTQR_allotment_combined.pdf",
+    "source_pdf_sha256": "73289489d2d123f198ccee83adac10e61a752805d908970030c2d5ac009061e4"
+  },
+  "payload_sha256": "11f378e96a099c66e622f456798c7df2997e89ef738458275902f2ceef3483f6",
+  "schema_version": 1,
+  "stego_cover": "output/figures/ntqr_cover_stego.png",
+  "stego_pdf": "output/pdf/NTQR_allotment_combined_stego.pdf"
+}

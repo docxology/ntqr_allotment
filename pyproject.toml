@@ -1,0 +1,64 @@
+# NTQR_allotment — sortition-upstream-of-NTQR research project.
+#
+# Dependency strategy (see docs/dependencies.md / README):
+#   * allotment is AGPL-3.0 and NOT on PyPI -> installed from its git source.
+#   * ntqr ships a working wheel but a BROKEN sdist (its flit build references a
+#     README.md that is absent from the sdist tarball), so `uv` cannot lock it
+#     from the index. We vendor the published wheel under vendor/ and point
+#     `[tool.uv.sources]` at the local file -> deterministic, fully locked,
+#     survives `uv run` re-sync. Verified with uv 0.11.6 / CPython 3.12.13.
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ntqr_allotment"
+version = "0.1.0"
+description = "Sortition upstream of NTQR: how panel formation and size shape ground-truth-free evaluation of noisy experts."
+authors = [{name = "Daniel Ari Friedman", email = "danielarifriedman@gmail.com"}]
+readme = "README.md"
+# allotment requires >=3.12; ntqr is 3.10+. Floor is 3.12.
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.26.0",
+    "matplotlib>=3.8.0",
+    "pyyaml>=6.0",
+    "requests>=2.31.0",   # Ollama HTTP client (no SDK dependency)
+    "ntqr>=0.8",
+    "allotment",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+]
+
+[tool.uv.sources]
+allotment = { git = "https://github.com/Citizen-Infra/allotment" }
+ntqr = { path = "vendor/ntqr-0.8-py2.py3-none-any.whl" }
+
+[tool.pytest.ini_options]
+pythonpath = [".", "src"]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "requires_ollama: test needs a live Ollama server (empirical persona layer)",
+]
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+omit = ["tests/*", "*/__init__.py", "*/test_*.py"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+precision = 2
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+]

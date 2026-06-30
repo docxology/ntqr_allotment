@@ -1,0 +1,390 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% Slide layout defaults for warning-clean scientific decks.
+\usepackage{etoolbox}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{}
+\IfFileExists{seqsplit.sty}{\usepackage{seqsplit}}{\newcommand{\seqsplit}[1]{#1}}
+\protected\def\breakseq#1{\seqsplit{#1}}
+\protected\def\breaktt#1{\begingroup\ttfamily\seqsplit{#1}\endgroup}
+\setlength{\emergencystretch}{6em}
+\tolerance=5000
+\hbadness=10000
+\hfuzz=1pt
+\setlength{\tabcolsep}{2pt}
+\AtBeginEnvironment{longtable}{\tiny\renewcommand{\arraystretch}{0.86}\setlength{\tabcolsep}{1pt}}
+\AtBeginEnvironment{tabular}{\tiny\renewcommand{\arraystretch}{0.86}\setlength{\tabcolsep}{1pt}}
+
+% Natbib and cross-reference fallbacks — slides don't load natbib
+% or cleveref, but combined-PDF manuscript prose may emit these
+% commands. The fallback renders citations as a bracketed key list
+% and cross-references as detokenized labels so slides don't fail on
+% undefined control sequences or raw underscores. \providecommand is
+% a no-op if packages load later.
+\providecommand{\citep}[1]{[#1]}
+\providecommand{\citet}[1]{#1}
+\providecommand{\citealp}[1]{#1}
+\providecommand{\citeauthor}[1]{#1}
+\providecommand{\citeyear}[1]{#1}
+\providecommand{\cref}[1]{\texttt{\detokenize{#1}}}
+\providecommand{\Cref}[1]{\texttt{\detokenize{#1}}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\section{Introduction: panel formation before blind
+evaluation}\label{introduction-panel-formation-before-blind-evaluation}
+
+\begin{frame}[fragile,allowframebreaks]{Blind evaluation begins before
+the estimator}
+\protect\phantomsection\label{blind-evaluation-begins-before-the-estimator}
+Evaluating decision-makers without an answer key is a recurring problem:
+in crowdsourcing, in ensembles of classifiers, in deliberative bodies,
+and in any setting where the truth is expensive, contested, or
+unavailable at evaluation time --- the problem Dawid and Skene first
+formalized for observer error-rate estimation without ground truth
+\href{https://doi.org/10.2307/2346806}{Dawid and Skene (1979)}. Later
+learning-from-crowds work made the same inferential problem operational
+for noisy human labels and missing gold standards
+\href{https://jmlr.org/papers/v11/raykar10a.html}{Raykar et al.~(2010)},
+and budget-optimal crowdsourcing work shows why worker reliability,
+redundancy, and task assignment cannot be separated when answers are
+inferred from noisy repeated judgments rather than gold labels
+\href{https://doi.org/10.1287/opre.2013.1235}{Karger et al.~(2014)}. A
+parallel line estimates classifier accuracy \emph{without any labels} by
+exploiting the structure of agreements among multiple predictors ---
+logic- and constraint-based \breakseq{[@platanios2014]} and spectral
+\breakseq{[@parisi2014]} --- and, like the exact NTQR solver, these methods
+lean on an \textbf{error-independence} (or low-rank residual-dependence)
+assumption whose violation is exactly the failure mode we make tunable
+here. The \texttt{ntqr} package (v0.8) frames the problem as algebraic
+logic for unsupervised evaluation from unlabeled decision data
+\href{https://pypi.org/project/ntqr/}{Corrada-Emmanuel (2026)}. Our
+generative model for \emph{violating} that assumption --- same-group
+judges sharing a latent shock through a Gaussian copula on a
+probit-thresholded competence variable --- is the standard construction
+for correlated binary outcomes \breakseq{[@emrich1991; @nelsen2006]}, which
+lets us preserve each judge's marginal accuracy exactly while dialing
+cross-judge error correlation. Given the joint pattern of agreements and
+disagreements among three binary judges, its error-independent (EIE)
+evaluator returns the possible logically consistent combinations of item
+prevalence and per-judge accuracy that could have produced those votes
+--- \emph{with no labels at all}.
+
+The \texttt{ntqr} evaluator, however, takes the panel as a fixed input.
+Its claims are about which evaluations are logically consistent for a
+given set of judges. The judges themselves arrive from \emph{somewhere}:
+a hiring process, a volunteer pool, a citizens' assembly lottery, a
+top-k leaderboard. That upstream step --- \textbf{panel formation} ---
+is the part this project studies. Our central question is deliberately
+one level above NTQR:
+
+\begin{quote}
+Across matched synthetic population and corpus settings, how do the
+\emph{strategy that forms the panel} and the \emph{size of the panel}
+change the oracle-referenced error of no-answer-key NTQR-style
+evaluations?
+\end{quote}
+
+Two scope notes frame everything below. First, \emph{oracle-referenced
+recovery error} is the distance between the blind, no-answer-key
+estimate and the estimate you would have obtained \emph{with} the answer
+key --- lower is better. Second, NTQR's exact error-independent
+evaluator solves for \emph{exactly three} binary judges, so a panel of
+any larger size is evaluated as an ensemble of its constituent trios;
+``panel size,'' throughout, means how many such trios the panel
+contributes, not a larger joint solve.
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Application review as the empirical
+stress test}
+\protect\phantomsection\label{application-review-as-the-empirical-stress-test}
+Application review is the manuscript's concrete empirical stress test
+because it combines expert judgment, scarce labels, panel formation, and
+plausible nuisance bias in one setting. Studies of academic and grant
+peer review emphasize that expert panels are not transparent measurement
+devices: judgment is field-situated
+\href{https://doi.org/10.4159/9780674054158}{Lamont (2009)}, replication
+of review decisions can be fragile
+\href{https://doi.org/10.1017/S0140525X00011183}{Peters and Ceci
+(1982)}, reviewer agreement can be low even on the same proposals
+\href{https://doi.org/10.1126/science.7302566}{Cole et al.~(1981)};
+\href{https://doi.org/10.1073/pnas.1714379115}{Pier et al.~(2018)}, and
+statistical analysis of NIH review scores shows that panel-scoring
+uncertainty can materially change which proposals would be funded
+\href{https://doi.org/10.1073/pnas.0804538105}{Johnson (2008)}.
+Productivity follow-up work adds a separate caution: NIH peer-review
+percentile scores can be weak predictors of grant productivity
+\href{https://doi.org/10.7554/eLife.13323}{Fang et al.~(2016)}, and
+peer-review bias is a documented design concern rather than an exotic
+failure mode \href{https://doi.org/10.1002/asi.22784}{Lee et
+al.~(2013)}; \href{https://doi.org/10.1073/pnas.1707323114}{Tomkins et
+al.~(2017)}; \href{https://doi.org/10.7554/eLife.21718}{Helmer et
+al.~(2017)}. The postdoctoral fellowship version is also historically
+apt: Wennerås and Wold's analysis of postdoctoral fellowship review
+found nepotism and sexism in peer review
+\href{https://doi.org/10.1038/387341a0}{Wennerås and Wold (1997)}, while
+broader funding studies report racial disparities in award outcomes
+\href{https://doi.org/10.1126/science.1196783}{Ginther et al.~(2011)}.
+
+Those literatures motivate the \emph{mechanism} we stress-test, not the
+conclusion. This project uses fictitious postdoctoral applications and
+synthetic age metadata so the hidden quality label is generated
+independently of age. Age is included as a protected-attribute nuisance
+axis because age bias and age-discrimination effects are documented in
+employment-relevant settings
+\href{https://doi.org/10.1177/0146167213480043}{North and Fiske (2013)};
+\href{https://doi.org/10.1086/701029}{Neumark et al.~(2019)}. The
+manuscript therefore asks a controlled design question, not a policy
+question: if reviewer expertise and irrelevant age bias are known in the
+generator or prompt profile, which sampling rule best limits
+oracle-referenced NTQR error and age-conditioned recommendations?
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Sortition from civic lotteries to
+evaluator sampling}
+\protect\phantomsection\label{sortition-from-civic-lotteries-to-evaluator-sampling}
+Sortition --- selection by lottery, often with quotas that make the
+drawn body mirror the population --- is the canonical \emph{fair},
+non-comparative panel-formation rule
+\href{https://doi.org/10.1093/acprof:oso/9780199756100.001.0001}{Stone
+(2011)}. Modern implementations use auditable maximin algorithms
+\href{https://doi.org/10.1038/s41586-021-03788-6}{Flanigan et
+al.~(2021)} that maximize the minimum selection probability subject to
+representativeness constraints. Sortition is attractive precisely
+because it does \textbf{not} select on competence; it selects on
+representativeness. That makes it a sharp test case for NTQR: a
+representative panel is heterogeneous and, by design, \emph{not} curated
+for accuracy. Does representativeness help or hurt an estimator that
+depends on the statistical independence of judges' errors?
+
+That procedural tension has a long pre-1800 lineage. Aristotle's
+political theory treats lot and election as constitutional signals ---
+lot as democratic, election as oligarchic --- while the Athenian
+institutional account describes juries and offices allocated by lot
+\href{https://topostext.org/work/100}{Aristotle (Politics)};
+\href{https://topostext.org/work/99}{Aristotle (Athenian Constitution)}.
+Medieval and early-modern writers kept the same problem visible under
+different vocabularies:
+\href{https://www.newadvent.org/summa/3095.htm\#article8}{Aquinas (Summa
+Theologiae II-II q.95 a.8)} distinguished practical uses of lots from
+divinatory misuse, and
+\href{https://onlinebooks.library.upenn.edu/webbin/book/lookupid?key=olbp14764}{Contarini
+(1599)} described Venetian mixed selection machinery as an
+anti-factional civic design. Enlightenment writers then made the
+lot-versus-choice contrast explicit again:
+\href{https://oll.libertyfund.org/titles/montesquieu-complete-works-vol-1-the-spirit-of-laws}{Montesquieu
+(1748)} and
+\href{https://oll.libertyfund.org/titles/cole-the-social-contract-and-discourses}{Rousseau
+(1762)} both distinguish election by lot from election by choice. We
+cite these sources as procedural history, not as direct empirical
+precedent: this manuscript does not claim that Athenian juries, Venetian
+offices, or scholastic accounts of chance anticipate NTQR. They do show
+that the upstream choice between lot, choice, status, and asserted
+competence is an old institutional design problem.
+
+Randomness is already a serious proposal in adjacent research-funding
+design, but usually at a different point in the pipeline:
+collective-allocation and modified-lottery proposals address how funds
+might be allocated after review or thresholding
+\href{https://doi.org/10.1002/embr.201338068}{Bollen et al.~(2014)};
+\href{https://doi.org/10.1128/mBio.00422-16}{Fang and Casadevall
+(2016)}. Lottery arguments also arise from the maverick-science problem:
+if high-variance projects are hard to rank reliably, randomized
+allocation can be an epistemic risk-control device rather than only an
+administrative convenience
+\href{https://doi.org/10.1016/j.shpsa.2018.11.006}{Avin (2019)}. This
+manuscript moves the lottery upstream. It asks how reviewer
+\emph{sampling} changes an unlabeled evaluator before any funding
+decision is made.
+
+The tension is not artificial. Classical jury-theorem results make group
+accuracy depend on competence, independence, and aggregation rule
+\href{https://doi.org/10.1007/BF00125672}{Grofman et al.~(1983)}, while
+diversity results show that heterogeneous problem-solving groups can
+outperform ability-selected groups under specific search conditions
+\href{https://doi.org/10.1073/pnas.0403723101}{Hong and Page (2004)}.
+Deliberative public-consultation work likewise treats representative
+participation as a normative and epistemic design choice, not just a
+sampling convenience
+\href{https://global.oup.com/academic/product/when-the-people-speak-9780199604432}{Fishkin
+(2009)}. The formal voting-theory lineage is also historical rather than
+merely modern:
+\href{https://bibbase.org/network/publication/denbspborda-mmoiresurleslectionsauscrutin-1781}{Borda
+(1781)} proposed a scored ballot for elections, and
+\href{https://archive.org/details/bub_gb_RzAVAAAAQAAJ}{Condorcet (1785)}
+analyzed the probability of correct plurality decisions. Those works
+mostly take the voters or jurors as given. The present instrument asks
+the upstream question they leave exogenous: how does the rule that forms
+the evaluator panel change the blind recovery problem before aggregation
+begins? This manuscript does not assume which rationale wins under NTQR;
+it measures the trade-off in a controlled binary-evaluation instrument.
+
+We compare four panel-formation strategies against each other and
+against the supervised oracle: auditable representative sortition,
+uniform random selection (the honest baseline), single-bloc ideological
+selection (a deliberately correlated, non-representative comparator),
+and competence-first expertise thresholding. The oracle and the strong
+baselines are first-class comparators, not strawmen --- the point of the
+instrument is to \emph{measure}, including measuring our own preferred
+narrative against an honest null.
+\end{frame}
+
+\begin{frame}[fragile,allowframebreaks]{Falsifiable claims and negative
+controls}
+\protect\phantomsection\label{falsifiable-claims-and-negative-controls}
+We state the study as five falsifiable hypotheses (H1--H5) and let the
+regenerated artifacts adjudicate each. The synthetic deterministic track
+tests H1--H4 against a known oracle; the live single-model companion
+tests H5. Methods (Table @tbl:falsification) states the load-bearing
+assumption and the negative-control check behind each, and the
+Discussion returns an explicit verdict hypothesis by hypothesis.
+
+\begin{enumerate}
+\tightlist
+\item
+  \textbf{H1 --- Formation strategy is the dominant lever.} Different
+  panel-formation rules yield materially different oracle-referenced EIE
+  recovery error, even at a fixed population and panel size.
+  \emph{Tested by} the weighted-mean strategy ranking with a bootstrap
+  separation gate and a power budget (\breakseq{[@fig:ranking]}).
+\item
+  \textbf{H2 --- Concentrating correlated bias degrades recovery.}
+  Single-bloc selection, which seats judges whose errors are correlated,
+  recovers with higher EIE error than a representative draw, because the
+  error-independence assumption NTQR rests on is most stressed by a
+  correlated panel. \emph{Tested by} the
+  representative-minus-single-bloc contrast across the full regime grid
+  against analytical sign predictions (\breakseq{[@fig:repideo]}), and resolved
+  by the composition-coupled error confound that fans the strategies
+  apart as within-bloc coupling rises (\breakseq{[@fig:blocphase]}).
+\item
+  \textbf{H3 --- Size is a sampling knob, not guaranteed improvement.}
+  Forming a larger ensemble gives more trios to average over, but
+  whether that helps or hurts recovery --- and whether any effect comes
+  from the larger ensemble violating the solver's error-independence
+  assumption more --- is an empirical question; the power question is
+  how many observations at the analyzed grain would be needed to resolve
+  a contrast of the observed magnitude. \emph{Tested by} the
+  per-strategy size sweep, a paired regime-controlled size contrast, a
+  per-trio conditioning diagnostic, and the power/MDE budgets
+  (\breakseq{[@fig:powercurve]}, \breakseq{[@fig:powervn]}, \breakseq{[@fig:triocond]}).
+\item
+  \textbf{H4 --- Error-correlation is measurable, and recovery degrades
+  with it.} A controlled correlation injection produces a realized
+  error-correlation that NTQR itself reports, and oracle-referenced
+  recovery error should rise as that realized correlation grows.
+  \emph{Tested by} the tolerance sweep, reporting the
+  realized-correlation trend and an OLS recovery-vs-correlation slope
+  with a bootstrap interval (\breakseq{[@fig:tolerance]}); the recovery slope,
+  unresolved by the global-injection sweep, is resolved positive once
+  the correlation is composition-coupled and marginal-preserving
+  (\breakseq{[@fig:blocphase]}).
+\item
+  \textbf{H5 --- The synthetic ranking transfers to a live single-model
+  panel.} The strategy ordering measured against the synthetic oracle
+  reproduces when one local \texttt{gemma3:4b} model is prompted as
+  different reviewers. \emph{Tested by} a matched-grain cross-track
+  ranking comparison and cell-level directional alignment
+  (\breakseq{[@fig:trackinversion]}, \breakseq{[@fig:postdocalign]}).
+\end{enumerate}
+
+These hypotheses are written to be refutable, and the data refute
+several: H3 and H5 are rejected; H2 and H4 are unresolved on the
+baseline grid and resolve only once correlation is coupled to panel
+composition; and H1's ranking collapses to competence-first versus a
+bunched remainder. The instrument, its resolved cells, its explicit
+design-limited cells, and the axis-conditional negative control that
+keeps the sortition result honest --- not a manufactured sortition win
+--- are the contribution.
+\end{frame}
+
+\end{document}

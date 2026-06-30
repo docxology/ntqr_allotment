@@ -1,0 +1,91 @@
+\frametitle{Real-Ollama reviewer-panel track: single-model live companion}
+\protect\phantomsection\label{real-ollama-reviewer-panel-track-single-model-live-companion}
+The second methodological track uses one live local language model
+through Ollama: \texttt{gemma3:4b}. It is deliberately
+\textbf{single-model} and deliberately not a model-family comparison.
+The empirical question is whether the same sampling mechanisms studied
+analytically --- representative sortition, random selection, same-bias
+bloc selection, and expertise-threshold selection --- remain visible
+when one real local LLM is prompted as different postdoctoral-review
+panelists.
+
+The live track is therefore closer to an instrumented LLM-judge stress
+test than to an ethnography of human review. LLM-as-judge work has shown
+that prompted model judgments can be useful but also vulnerable to
+evaluator-specific artifacts such as position, verbosity, and
+self-enhancement biases \href{https://arxiv.org/abs/2306.05685}{Zheng et
+al.~(2023)}; systematic position-bias tests likewise show that judge
+outputs can change with answer order rather than only answer quality
+\href{https://doi.org/10.18653/v1/2025.ijcnlp-long.18}{Shi et
+al.~(2025)}. Broader language-model risk work likewise warns against
+treating fluent model output as an unmediated measurement of social
+reality \href{https://doi.org/10.1145/3442188.3445922}{Bender et
+al.~(2021)}. We use one model, bounded decoding, serialized provenance,
+and synthetic applicant/reviewer metadata precisely so the empirical
+surface remains auditable and does not masquerade as human-review
+validation. The two tracks are kept strictly separate and their evidence
+is never pooled: the synthetic deterministic track remains the
+controlled spine, while the live track is a companion stress test with
+separate artifacts, a separate config hash (\texttt{5161ffe474b3}), and
+separate caveats --- neither supplies evidence for the other's claims.
+
+\begin{block}{Postdoctoral corpus: protected-attribute stress test}
+\protect\phantomsection\label{postdoctoral-corpus-protected-attribute-stress-test}
+The empirical setting is a fictitious postdoctoral fellowship review
+panel. Each application has generated dossier text, a hidden latent
+quality label used only for oracle scoring, and synthetic age metadata
+in the range configured by \breaktt{live\_postdoc\_panel}. True latent
+quality is generated independently of age by default. Age is therefore a
+nuisance/protected-attribute stress test: any age-conditioned
+recommendation shift is reviewer bias expression, not signal. We report
+the observable older-minus-younger recommendation-rate disparity as a
+diagnostic in the spirit of protected-attribute error-rate auditing
+\href{https://papers.nips.cc/paper_files/paper/2016/hash/9d2682367c3935defcb1f9e247a97c0d-Abstract.html}{Hardt
+et al.~(2016)} (age is a probe, not an endorsement; see Ethics).
+\end{block}
+
+\begin{block}{Reviewer profiles: expertise and age-bias prompts}
+\protect\phantomsection\label{reviewer-profiles-expertise-and-age-bias-prompts}
+Each synthetic reviewer has an expertise level and an irrelevant
+age-bias factor. Positive age bias means the reviewer erroneously favors
+older applicants; negative age bias means the reviewer erroneously
+favors younger applicants. Expertise controls sensitivity to merit
+evidence. The \breaktt{ideological\_selection} strategy key is kept
+internally for compatibility with the synthetic pipeline, but in the
+postdoctoral panel it is displayed as \textbf{same-bias selection}: a
+deliberately non-representative bloc that concentrates one bias
+direction.
+
+\breaktt{scripts/run\_postdoc\_panel.py} first runs the analytical
+postdoc vote model and then, unless explicitly asked for an offline
+smoke run, runs the live Gemma panel against Ollama with
+\breaktt{-\/-require-live}. The manuscript-facing configuration uses 12
+seeds, 48 synthetic reviewers, 72 fictitious applications per seed,
+panel sizes 3, 6, 4 sampling strategies, temperature 0.2,
+\texttt{num\_predict=1}, and timeout 20.0 s. Vote-cache keys include the
+config hash, seed, reviewer id, application id, model digest, and decode
+parameters, so interrupted live runs can resume without mixing
+incompatible votes.
+\end{block}
+
+\begin{block}{Postdoc aggregation: analytical-vs-Gemma alignment}
+\protect\phantomsection\label{postdoc-aggregation-analytical-vs-gemma-alignment}
+For each sampled panel, selected reviewers vote on the same fictitious
+applications. Panels of size greater than three are evaluated with the
+same ensemble-of-trios rule as the synthetic track: usable trios are
+passed through the exact three-classifier EIE and majority-vote
+evaluators, scored against the hidden oracle, and averaged. The live
+artifact records per-seed/per-strategy/per-size EIE error, majority-vote
+error, usable-trio counts, degeneracy counts, older-minus-younger
+recommendation-rate disparity, panel composition, model digest, decode
+parameters, and vote-cache provenance in
+\breaktt{output/data/postdoc\_panel\_results.json}. The companion
+\breaktt{output/data/postdoc\_panel\_alignment.json} compares analytical
+and Gemma directional signs cell by cell and marks unresolved cells
+explicitly. A generated local web explorer
+(\breaktt{output/web/ntqr\_explorer.html}) is a non-publishing reader/QA
+aid over these same source artifacts; it exposes filters and source
+tables but does not change the PDF claim boundary, and a statistic is
+eligible for manuscript prose only after it is regenerated into the
+static artifacts and the token/caption contract.
+\end{block}

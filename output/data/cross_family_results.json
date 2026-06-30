@@ -1,0 +1,166 @@
+{
+  "config_hash": "487db462c9b9",
+  "config_path": "manuscript/config.yaml",
+  "delta_cross_minus_same": -0.069862,
+  "families": [
+    "qwen2",
+    "qwen2",
+    "gemma3",
+    "gemma3"
+  ],
+  "interpretation": "Signed magnitude (cross minus same). A negative delta means cross-family pairs were less error-correlated on this sample. NOT an absolute 'sortition validated' claim; n-limited.",
+  "judge_ids": [
+    "qwen2-qwen2.5:3b-0",
+    "qwen2-qwen2.5:3b-1",
+    "gemma3-gemma3:4b-2",
+    "gemma3-gemma3:4b-3"
+  ],
+  "judge_provenance": [
+    {
+      "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "family": "qwen2",
+      "judge_id": "qwen2-qwen2.5:3b-0",
+      "model": "qwen2.5:3b",
+      "num_predict": 1,
+      "seed": 0,
+      "temperature": 0.6
+    },
+    {
+      "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "family": "qwen2",
+      "judge_id": "qwen2-qwen2.5:3b-1",
+      "model": "qwen2.5:3b",
+      "num_predict": 1,
+      "seed": 1,
+      "temperature": 0.6
+    },
+    {
+      "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+      "family": "gemma3",
+      "judge_id": "gemma3-gemma3:4b-2",
+      "model": "gemma3:4b",
+      "num_predict": 1,
+      "seed": 2,
+      "temperature": 0.6
+    },
+    {
+      "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+      "family": "gemma3",
+      "judge_id": "gemma3-gemma3:4b-3",
+      "model": "gemma3:4b",
+      "num_predict": 1,
+      "seed": 3,
+      "temperature": 0.6
+    }
+  ],
+  "live_ollama": true,
+  "mean_abs_cross_family": 0.0,
+  "mean_abs_same_family": 0.069862,
+  "models": [
+    "qwen2.5:3b",
+    "gemma3:4b"
+  ],
+  "n_cross_pairs": 4,
+  "n_families": 2,
+  "n_items": 150,
+  "n_judges": 4,
+  "n_same_pairs": 2,
+  "nonzero_pairs": 1,
+  "num_predict": 1,
+  "pair_abs_corr": {
+    "(0,1)": 0.0,
+    "(0,2)": 0.0,
+    "(0,3)": 0.0,
+    "(1,2)": 0.0,
+    "(1,3)": 0.0,
+    "(2,3)": 0.139724
+  },
+  "pair_group_summaries": [
+    {
+      "ci_high": 0.0,
+      "ci_low": 0.0,
+      "mean_abs_corr": 0.0,
+      "n_pairs": 4,
+      "nonzero_pairs": 0,
+      "relation": "cross",
+      "std_abs_corr": 0.0
+    },
+    {
+      "ci_high": 0.139724,
+      "ci_low": 0.0,
+      "mean_abs_corr": 0.069862,
+      "n_pairs": 2,
+      "nonzero_pairs": 1,
+      "relation": "same",
+      "std_abs_corr": 0.0988
+    }
+  ],
+  "pair_records": [
+    {
+      "abs_corr": 0.0,
+      "family_i": "qwen2",
+      "family_j": "qwen2",
+      "i": 0,
+      "j": 1,
+      "pair_id": "(0,1)",
+      "relation": "same"
+    },
+    {
+      "abs_corr": 0.0,
+      "family_i": "qwen2",
+      "family_j": "gemma3",
+      "i": 0,
+      "j": 2,
+      "pair_id": "(0,2)",
+      "relation": "cross"
+    },
+    {
+      "abs_corr": 0.0,
+      "family_i": "qwen2",
+      "family_j": "gemma3",
+      "i": 0,
+      "j": 3,
+      "pair_id": "(0,3)",
+      "relation": "cross"
+    },
+    {
+      "abs_corr": 0.0,
+      "family_i": "qwen2",
+      "family_j": "gemma3",
+      "i": 1,
+      "j": 2,
+      "pair_id": "(1,2)",
+      "relation": "cross"
+    },
+    {
+      "abs_corr": 0.0,
+      "family_i": "qwen2",
+      "family_j": "gemma3",
+      "i": 1,
+      "j": 3,
+      "pair_id": "(1,3)",
+      "relation": "cross"
+    },
+    {
+      "abs_corr": 0.139724,
+      "family_i": "gemma3",
+      "family_j": "gemma3",
+      "i": 2,
+      "j": 3,
+      "pair_id": "(2,3)",
+      "relation": "same"
+    }
+  ],
+  "provenance_label": "live empirical, n-limited",
+  "replicates_per_model": 2,
+  "require_live": true,
+  "run_count": 1,
+  "schema_version": 2,
+  "seed": 0,
+  "shared_strength": 0.85,
+  "source_config_hash": "e6e4c6e68324",
+  "target_accuracy": 0.75,
+  "temperature": 0.6,
+  "timeout": 20.0,
+  "total_pairs": 6
+}

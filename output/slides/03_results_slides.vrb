@@ -1,0 +1,180 @@
+\frametitle{Real-Ollama postdoctoral panel results: live H5 companion}
+\protect\phantomsection\label{real-ollama-postdoctoral-panel-results-live-h5-companion}
+The live-Ollama results are separate empirical companion artifacts. They
+use one local \texttt{gemma3:4b} model prompted as synthetic
+postdoctoral reviewers over fictitious applications with synthetic age
+metadata. The result is not a model-family comparison, not a
+human-review validation, and not evidence that age belongs in real
+admissions or hiring review.
+
+\begin{block}{Gemma ranking asks the same sampling question under prompt
+labels}
+\protect\phantomsection\label{gemma-ranking-asks-the-same-sampling-question-under-prompt-labels}
+The live artifact uses 12 seeds, 48 reviewers, 72 applications per seed,
+panel sizes 3, 6, and live Ollama provenance (\texttt{gemma3:4b} digest
+a2af6cc3eb7f, config hash 5161ffe474b3, vote-cache entries 23688). The
+best live postdoc EIE point estimate is same-bias selection at 0.216;
+the worst is expertise threshold at 0.347. For the three-seat panels,
+representative sortition has EIE 0.225, same-bias selection has 0.228,
+expertise-threshold selection has 0.347, and random selection has 0.262.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth,height=0.46\textheight,keepaspectratio,alt={Side-by-side strategy ranking for the analytical vote model (square markers) and the live Gemma reviewer panel (circle markers), one row per sampling strategy, from source output/data/postdoc\_panel\_results.json. Metric: oracle-referenced EIE error (lower is better), aggregated by track, sampling strategy, and panel size, with descriptive intervals over 12 seeds. The two marker shapes are juxtaposed, never pooled, so the reader can see where the live model echoes the analytical ordering and where it departs; the horizontal gap between a strategy's square and circle is exactly that analytical-vs-live divergence. Claim: the live single-model panel is analysed as a within-model sampling-strategy stress test, not as an LLM-family comparison; caveat: it uses synthetic applications and age metadata only, one local Gemma model, and carries no human-review validation.}]{../figures/postdoc_strategy_ranking.png}
+\caption{Side-by-side strategy ranking for the analytical vote model
+(square markers) and the live Gemma reviewer panel (circle markers), one
+row per sampling strategy, from source
+\protect\breaktt{output/data/postdoc\_panel\_results.json}. Metric:
+oracle-referenced EIE error (lower is better), aggregated by track,
+sampling strategy, and panel size, with descriptive intervals over 12
+seeds. The two marker shapes are juxtaposed, never pooled, so the reader
+can see where the live model echoes the analytical ordering and where it
+departs; the horizontal gap between a strategy's square and circle is
+exactly that analytical-vs-live divergence. Claim: the live single-model
+panel is analysed as a within-model sampling-strategy stress test, not
+as an LLM-family comparison; caveat: it uses synthetic applications and
+age metadata only, one local Gemma model, and carries no human-review
+validation.}\label{fig:postdocrank}
+\end{figure}
+\end{block}
+
+\begin{block}{Same-bias panels expose age-conditioned recommendations}
+\protect\phantomsection\label{same-bias-panels-expose-age-conditioned-recommendations}
+The age-bias outcome is older-minus-younger recommendation rate.
+Positive values mean older synthetic applicants are recommended more
+often; negative values mean younger synthetic applicants are recommended
+more often. At the three-seat panel grain, representative sortition's
+live disparity is -0.190, while same-bias selection's live disparity is
+-0.214. Age bias here \emph{is} simply illegitimate: because true
+quality is generated independently of age, any age-conditioned shift is
+a reviewer acting on an irrelevant attribute. That is exactly why age is
+a useful \emph{probe} --- it gives a clean, known-illegitimate signal
+whose magnitude we can read directly --- so the question is not whether
+age bias is acceptable (it is not) but whether the upstream sampling
+rule \textbf{amplifies or contains} an illegitimate bias the reviewers
+already carry. The disparities here are negative across the board,
+meaning this model favors younger synthetic applicants; the experiment
+measures that illegitimate behavior to compare bias containment across
+sampling rules (age is a probe; see Ethics).
+
+\begin{figure}
+\centering
+\includegraphics[width=0.72\linewidth,height=0.46\textheight,keepaspectratio,alt={Heatmap of the older-minus-younger recommendation-rate disparity expressed by the live Gemma reviewer panel, by sampling strategy (rows) and panel size (columns), from source output/data/postdoc\_panel\_results.json. Because true latent quality is generated independently of age, any non-zero cell is reviewer age-bias expression rather than signal: positive values mean older synthetic applicants are recommended more often, negative values mean younger applicants are. Metric: age-conditioned recommendation-rate difference, aggregated over 12 seeds; read down a column to compare how each sampling rule amplifies or dampens the irrelevant age signal. Claim: same-bias (single-bloc) sampling is the explicit bias-amplification stress test among the strategies; caveat: all applicants and ages are synthetic, and this figure does not validate Gemma or endorse age-aware real review.}]{../figures/postdoc_age_bias_heatmap.png}
+\caption{Heatmap of the older-minus-younger recommendation-rate
+disparity expressed by the live Gemma reviewer panel, by sampling
+strategy (rows) and panel size (columns), from source
+\protect\breaktt{output/data/postdoc\_panel\_results.json}. Because true
+latent quality is generated independently of age, any non-zero cell is
+reviewer age-bias expression rather than signal: positive values mean
+older synthetic applicants are recommended more often, negative values
+mean younger applicants are. Metric: age-conditioned recommendation-rate
+difference, aggregated over 12 seeds; read down a column to compare how
+each sampling rule amplifies or dampens the irrelevant age signal.
+Claim: same-bias (single-bloc) sampling is the explicit
+bias-amplification stress test among the strategies; caveat: all
+applicants and ages are synthetic, and this figure does not validate
+Gemma or endorse age-aware real review.}\label{fig:postdocbias}
+\end{figure}
+\end{block}
+
+\begin{block}{Analytical and Gemma cells stay juxtaposed, not pooled}
+\protect\phantomsection\label{analytical-and-gemma-cells-stay-juxtaposed-not-pooled}
+The alignment artifact compares analytical prediction signs with live
+Gemma observations by strategy and panel size. 8 of 8 cells are resolved
+after zero-sign cells are marked unresolved; the resolved-cell
+sign-agreement rate is 0.500. This agreement is a \textbf{weak
+directional check, not an independent match}: every live Gemma
+age-disparity sign in this run is negative (the model uniformly favors
+younger synthetic applicants), so the rate mostly measures how often the
+analytical sign is also negative rather than a cell-by-cell coincidence
+of two freely varying signals. This is the intended bridge between the
+synthetic and live tracks: same causal question, shared sampling
+vocabulary, separate evidence levels.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.72\linewidth,height=0.46\textheight,keepaspectratio,alt={Cell-by-cell alignment grid comparing the analytical age-disparity direction with the live Gemma direction, one cell per strategy x panel-size combination, from source output/data/postdoc\_panel\_alignment.json. Each cell is marked agree, disagree, or unresolved (a zero-sign cell on either track), so the figure functions as the explicit bridge between the controlled and the live track while keeping their uncertainties separate. Statistic: sign agreement between the analytical and live age-disparity directions; resolved-cell agreement 0.500 over 8 resolved cells. Because every live disparity sign is negative in this run, the agreement rate is a weak directional check rather than an independent match, and should be read as such. Claim: the analytical and empirical tracks can be compared cell by cell without pooling their uncertainty; caveat: single-model live evidence is descriptive and n-limited.}]{../figures/postdoc_empirical_alignment.png}
+\caption{Cell-by-cell alignment grid comparing the analytical
+age-disparity direction with the live Gemma direction, one cell per
+strategy x panel-size combination, from source
+\protect\breaktt{output/data/postdoc\_panel\_alignment.json}. Each cell
+is marked agree, disagree, or unresolved (a zero-sign cell on either
+track), so the figure functions as the explicit bridge between the
+controlled and the live track while keeping their uncertainties
+separate. Statistic: sign agreement between the analytical and live
+age-disparity directions; resolved-cell agreement 0.500 over 8 resolved
+cells. Because every live disparity sign is negative in this run, the
+agreement rate is a weak directional check rather than an independent
+match, and should be read as such. Claim: the analytical and empirical
+tracks can be compared cell by cell without pooling their uncertainty;
+caveat: single-model live evidence is descriptive and
+n-limited.}\label{fig:postdocalign}
+\end{figure}
+\end{block}
+
+\begin{block}{Synthetic strategy ranking does not transfer to the live
+track}
+\protect\phantomsection\label{synthetic-strategy-ranking-does-not-transfer-to-the-live-track}
+\textbf{H5 (does the synthetic ranking transfer to a live single-model
+panel?).} The synthetic and live tracks are never pooled, and a
+matched-grain comparison shows why pooling would mislead. At the shared
+three-seat panel grain (\breakseq{[@fig:trackinversion]}) the strategy
+\emph{rank order} inverts between tracks. The rule with by far the
+lowest synthetic recovery error --- expertise threshold at 0.037 --- is
+the \textbf{worst} under the live Gemma panel at 0.347. The other three
+strategies are bunched on \emph{both} tracks --- synthetically at
+0.118--0.124 and live at 0.225--0.262 --- so they neither clearly invert
+nor clearly transfer. The robust component of the non-transfer is
+therefore the expertise-threshold flip alone --- it is the lone clear
+outlier on both tracks (best synthetic, worst live) --- so the
+non-transfer claim rests on the competence-first rule reversing, not on
+a precisely resolved ordering of the other three (which are
+statistically indistinguishable on each track). We compare ranks, not
+magnitudes, because the two tracks own different oracles and different
+uncertainty, so the figure is a qualitative non-transfer result rather
+than a pooled effect size.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth,height=0.46\textheight,keepaspectratio,alt={Cross-track strategy-ranking inversion at the matched three-seat grain, shown as a slope chart, from source output/data/sweep\_aggregated.csv (synthetic POWER\_*\_SIZE3, left column) and source output/data/postdoc\_panel\_results.json (live POSTDOC\_*\_EIE, right column). Each strategy is a coloured line connecting its rank under the synthetic track to its rank under the live track; lines that cross are strategies whose standing reverses, and the steepest crossers are expertise threshold (synthetic best to live worst) and single-bloc selection (synthetic worst to live rank-two), while representative sortition is near-best on both tracks. The y-axis is ordinal rank, with the raw error annotated at each node so the reader can see that the live top three are tightly bunched while expertise threshold is the lone outlier. Statistic: ordinal EIE-error rank per track over 96 synthetic seeds and 12 live seeds; ranks compared, magnitudes not pooled (the two tracks own different oracles and uncertainty). Claim: the formation rule that is best blind on synthetic data is worst under one local Gemma model, so the synthetic ranking does not transfer to the live single-model panel; caveat: single-model live evidence is descriptive and n-limited, not a human-review validation.}]{../figures/track_ranking_inversion.png}
+\caption{Cross-track strategy-ranking inversion at the matched
+three-seat grain, shown as a slope chart, from source
+\protect\breaktt{output/data/sweep\_aggregated.csv} (synthetic
+\protect\texttt{POWER\_*\_SIZE3}, left column) and source
+\protect\breaktt{output/data/postdoc\_panel\_results.json} (live
+\protect\texttt{POSTDOC\_*\_EIE}, right column). Each strategy is a
+coloured line connecting its rank under the synthetic track to its rank
+under the live track; lines that cross are strategies whose standing
+reverses, and the steepest crossers are expertise threshold (synthetic
+best to live worst) and single-bloc selection (synthetic worst to live
+rank-two), while representative sortition is near-best on both tracks.
+The y-axis is ordinal rank, with the raw error annotated at each node so
+the reader can see that the live top three are tightly bunched while
+expertise threshold is the lone outlier. Statistic: ordinal EIE-error
+rank per track over 96 synthetic seeds and 12 live seeds; ranks
+compared, magnitudes not pooled (the two tracks own different oracles
+and uncertainty). Claim: the formation rule that is best blind on
+synthetic data is worst under one local Gemma model, so the synthetic
+ranking does not transfer to the live single-model panel; caveat:
+single-model live evidence is descriptive and n-limited, not a
+human-review validation.}\label{fig:trackinversion}
+\end{figure}
+
+\textbf{Why the ranking inverts.} The two tracks do genuinely disagree,
+and for a principled reason. In the synthetic track the generator
+\emph{sets} each judge's accuracy directly, so competence-first
+selection seats genuinely higher-accuracy judges and the exact solver
+recovers them cleanly --- the ordering is, in part, built into the
+data-generating process. Live, ``expertise'' is only a \emph{prompt
+instruction}: the local \texttt{gemma3:4b} model need not behave more
+accurately, or with more independent errors, when it is told it is an
+expert reviewer. Selecting personas by their stated expertise therefore
+seats no better live judges, and the rule that wins by construction on
+synthetic data carries no guaranteed live advantage --- here it is the
+worst. Put differently, the synthetic oracle rewards a property
+(controlled judge accuracy) that the prompted model does not inherit
+from the persona label. This is a hypothesis about the mechanism, not a
+measured causal claim, and it is the empirical reason the manuscript
+keeps the synthetic and live tracks at distinct inference levels rather
+than reporting a single cross-track strategy winner.
+\end{block}

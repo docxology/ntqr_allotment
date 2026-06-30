@@ -1,0 +1,115 @@
+{
+  "caveat": "Deterministic schematic only; not an empirical result and not counted as a manuscript data figure.",
+  "concept_references": {
+    "large_page": "external design-tool concept render (large/page layout); not part of the regeneration pipeline",
+    "mobile_portrait": "external design-tool concept render (mobile/portrait layout); not part of the regeneration pipeline"
+  },
+  "cover_image": "output/figures/ntqr_cover.png",
+  "displayed_case_axes": {
+    "bias_stds": [
+      0.1,
+      0.2,
+      0.35,
+      0.5
+    ],
+    "panel_sizes": [
+      3,
+      6,
+      9,
+      12
+    ]
+  },
+  "displayed_cases": [
+    {
+      "bias_std": 0.1,
+      "label": "n=3 | bias 0.10",
+      "panel_size": 3
+    },
+    {
+      "bias_std": 0.2,
+      "label": "n=3 | bias 0.20",
+      "panel_size": 3
+    },
+    {
+      "bias_std": 0.35,
+      "label": "n=3 | bias 0.35",
+      "panel_size": 3
+    },
+    {
+      "bias_std": 0.5,
+      "label": "n=3 | bias 0.50",
+      "panel_size": 3
+    },
+    {
+      "bias_std": 0.1,
+      "label": "n=6 | bias 0.10",
+      "panel_size": 6
+    },
+    {
+      "bias_std": 0.2,
+      "label": "n=6 | bias 0.20",
+      "panel_size": 6
+    },
+    {
+      "bias_std": 0.35,
+      "label": "n=6 | bias 0.35",
+      "panel_size": 6
+    },
+    {
+      "bias_std": 0.5,
+      "label": "n=6 | bias 0.50",
+      "panel_size": 6
+    },
+    {
+      "bias_std": 0.1,
+      "label": "n=9 | bias 0.10",
+      "panel_size": 9
+    },
+    {
+      "bias_std": 0.2,
+      "label": "n=9 | bias 0.20",
+      "panel_size": 9
+    },
+    {
+      "bias_std": 0.35,
+      "label": "n=9 | bias 0.35",
+      "panel_size": 9
+    },
+    {
+      "bias_std": 0.5,
+      "label": "n=9 | bias 0.50",
+      "panel_size": 9
+    },
+    {
+      "bias_std": 0.1,
+      "label": "n=12 | bias 0.10",
+      "panel_size": 12
+    },
+    {
+      "bias_std": 0.2,
+      "label": "n=12 | bias 0.20",
+      "panel_size": 12
+    },
+    {
+      "bias_std": 0.35,
+      "label": "n=12 | bias 0.35",
+      "panel_size": 12
+    },
+    {
+      "bias_std": 0.5,
+      "label": "n=12 | bias 0.50",
+      "panel_size": 12
+    }
+  ],
+  "manifest": "output/data/cover_manifest.json",
+  "profile_name": "manuscript_contrast",
+  "schema_version": 1,
+  "semantic_role": "schematic front-matter cover for the sortition-to-NTQR evaluation pipeline",
+  "source_config": "manuscript/config.yaml",
+  "source_config_hash": "57be59457599",
+  "visual_contract": {
+    "editable_layers": "title, author, affiliation, ORCID, DOI, and source notes remain renderer-owned text",
+    "forbidden_claims": "no exact performance values, DOI identifiers, or source claims are baked into the raster",
+    "reading_order": "audited lottery -> representative vs single-bloc panel composition -> shared-confound error coupling -> NTQR agreement matrix -> phase-transition fan-out (recovery error vs within-bloc coupling), with a subordinate panel-size x bias case grid"
+  }
+}

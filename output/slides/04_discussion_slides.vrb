@@ -1,0 +1,21 @@
+\frametitle{Data, code, and generated-artifact availability}
+\protect\phantomsection\label{data-code-and-generated-artifact-availability}
+All source code, methods, and documentation are openly available at the
+public repository
+\href{https://github.com/docxology/ntqr_allotment}{\breaktt{docxology/ntqr\_allotment}}:
+the deterministic synthetic instrument, the bloc-confound and Herfindahl
+modules, the live Gemma vote cache with serialized model provenance,
+every figure, and the manuscript regeneration pipeline. Every reported
+number is token-injected from \texttt{output/data/} by
+\breaktt{src/ntqr\_allotment/manuscript\_variables.py}, so no result is
+hand-transcribed and the manuscript regenerates from source under a
+zero-orphan token contract. The synthetic track is fully deterministic
+under fixed seeds (profile config hash \texttt{fda4da941cf0}); the live
+track reproduces against a local Ollama \texttt{gemma3:4b} instance
+(digest \texttt{a2af6cc3eb7f}, config hash \texttt{5161ffe474b3}) using
+the serialized, resumable per-vote cache keyed on the config hash, seed,
+reviewer, application, model digest, and decode parameters. A
+steganographic provenance variant of the PDF additionally carries an
+extractable hash of the current source PDF, verified by
+\breaktt{scripts/verify\_stego.py}. The archival DOI is
+\href{https://doi.org/10.5281/zenodo.21083779}{10.5281/zenodo.21083779}.

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>04_discussion.md.web</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script data-template-mathjax-config>
+window.MathJax = window.MathJax || {};
+window.MathJax.chtml = Object.assign({}, window.MathJax.chtml, {
+  fontURL: "https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.0.0/chtml/woff2",
+  dynamicPrefix: "https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.0.0/chtml/dynamic"
+});
+</script>
+<script defer=""
+  src="https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-chtml.js"
+  type="text/javascript" integrity="sha384-2BWc4dVaHADUocwKrUrK9u3iDwHxVMKXWEcoRmUkXYSFKhAsgVAYClu9ydNuo5Oz" crossorigin="anonymous"></script>
+</head>
+<body>
+<h1 id="discussion-claim-boundaries-and-implications">Discussion: claim
+boundaries and implications</h1>
+<h2 id="hypothesis-verdicts-before-interpretation">Hypothesis verdicts
+before interpretation</h2>
+<p>We return an explicit verdict on each pre-stated hypothesis
+(Introduction, H1–H5) before interpreting it, so the contribution is the
+adjudication itself rather than a single narrative.</p>
+<ul>
+<li><strong>H1 (formation strategy is the dominant lever) —
+supported.</strong> The four panels do not separate into a graded
+four-way ladder. Competence-first selection (<strong>expertise
+threshold</strong>) is clearly best at 0.037, while representative
+sortition, single-bloc selection, and random selection cluster around
+0.147-0.148 with overlapping intervals. The resolved result is
+competence-first versus the bottom cluster, not a precise ordering
+inside that cluster.</li>
+<li><strong>H2 (concentrating correlated error degrades recovery) —
+unresolved on the baseline grid, then RESOLVED by the
+composition-coupled confound.</strong> On the baseline generator the
+representative-vs-single-bloc contrast is design-limited, for a
+structural reason: that generator never realizes H2’s premise, because
+its judges err independently and ideology shifts only marginal accuracy,
+so the strategies coincide <em>by construction</em> and no regime sweep
+can fan them out. Once a composition-coupled,
+marginal-accuracy-preserving error confound supplies the missing channel
+(<span class="citation"
+data-cites="fig:blocphase">[@fig:blocphase]</span>), the contrast
+resolves cleanly: single-bloc error exceeds representative error in
+180/205 matched regimes (paired mean 0.102, 95% CI ±0.012), the gap
+widening from 0.000 to 0.112 as coupling rises. The advantage is real
+but <strong>conditional</strong>: an orthogonal-axis negative control
+removes it, so we claim “balancing the axis the confound rides on
+preserves recovery,” not a universal sortition law.</li>
+<li><strong>H3 (size is a sampling knob, not guaranteed improvement) —
+supported only in the bounded sense.</strong> A paired,
+regime-controlled test resolves a trio-to-six-seat size effect for 3 of
+the four strategies, and every resolved effect is a tiny increase in
+error: random selection (+0.015), representative sortition (+0.007), and
+competence-first selection (+0.004). Single-bloc is within noise. So
+more experts do not help here, but they also do not create a material
+penalty; size is essentially neutral at this grid, and the dominant
+lever is strategy, not size.</li>
+<li><strong>H4 (error-correlation is measurable, and recovery degrades
+with it) — diagnostic confirmed; recovery slope resolved by the
+composition-coupled instrument.</strong> The diagnostic works — the
+realized correlation tracks the injected coupling (0.019 to 0.123). The
+<em>global-injection</em> tolerance sweep leaves the
+recovery-vs-correlation slope unresolved (-0.145, 95% CI [-4.335, 0.911]
+crosses zero), and we now read that as a limitation of that instrument —
+it couples correlation uniformly to a fixed trio and uses a small grid —
+rather than as evidence of no effect. The composition-coupled,
+marginal-accuracy-preserving sweep (<span class="citation"
+data-cites="fig:blocphase">[@fig:blocphase]</span>), with far more
+observations per point, resolves the recovery half in the affirmative:
+recovery error rises with within-bloc coupling for the panels that
+concentrate the confound, and the closed-form Herfindahl account
+(§Methods) explains the ordering. So the recovery half is a result, not
+an open question, under a correctly specified confound.</li>
+<li><strong>H5 (the synthetic ranking transfers to a live single-model
+panel) — rejected.</strong> At the matched three-seat grain the ranking
+inverts: the rule that is best blind on synthetic data (expertise
+threshold, 0.037) is the worst under the live <code>gemma3:4b</code>
+panel (0.347). The robust component is that expertise-threshold flip;
+the live top three are bunched and the evidence is single-model and
+n-limited, so we report non-transfer of the best-synthetic rule rather
+than a precise live winner. The suggested caution, scoped to this one
+companion model: “choose the most expert judges” most cleanly minimized
+blind-recovery error on judges of <em>known</em> accuracy, yet it was
+the worst rule once “expert” was merely a prompt label the model need
+not honor — a hypothesis that self-asserted expertise may be an unsafe
+blind-evaluation selection criterion, worth testing beyond one model
+rather than an established result.</li>
+</ul>
+<p>The remaining subsections elaborate the mechanism behind each
+verdict.</p>
+<h2 id="practical-lesson-selection-rule-before-panel-size">Practical
+lesson: selection rule before panel size</h2>
+<p>Three usable lessons follow for anyone selecting judges to be
+evaluated without an answer key. (i) <em>Which</em> rule forms the panel
+matters far more than how many judges it seats: competence-first
+selection set the lowest blind-recovery error here, while panel size was
+essentially neutral (H1, H3). (ii) Representative selection protects
+unsupervised recovery <em>only</em> when the lottery balances the very
+attribute a shared error rides on; balanced on the wrong axis it gives
+no protection (H2/H4, negative control), and the exposure it controls is
+a closed-form concentration (Herfindahl) index you can compute on a
+<em>proposed</em> panel before any votes are cast. (iii) The advantage
+of picking “expert” judges did not survive when judges were a prompted
+live model rather than parameterized synthetic ones (H5), so a selection
+rule validated on controllable judges cannot be assumed to carry over to
+real ones.</p>
+<h2 id="formation-strategy-is-the-measured-lever">Formation strategy is
+the measured lever</h2>
+<p>Studying NTQR <em>upstream</em> — at the panel-formation step rather
+than at the estimator — reframes ground-truth-free evaluation as a
+selection problem. The strongest finding is that competence-first
+selection sets a much lower downstream no-answer-key error floor than
+the other panel-formation rules. The other three strategies cluster
+tightly enough that their point-estimate order should not be read as a
+substantive ranking. The scientific claim is therefore about the
+competence-first-vs-rest separation, not about naming a bottom-cluster
+winner or loser.</p>
+<p>That framing matters for application review because peer-review
+scholarship already treats expert judgment as socially situated and
+panel-dependent rather than mechanically objective <a
+href="https://doi.org/10.4159/9780674054158">Lamont (2009)</a>; <a
+href="https://doi.org/10.1002/asi.22784">Lee et al. (2013)</a>, and
+because empirical studies find substantial reviewer disagreement on the
+same submitted work <a
+href="https://doi.org/10.1126/science.7302566">Cole et al. (1981)</a>;
+<a href="https://doi.org/10.1073/pnas.1714379115">Pier et
+al. (2018)</a>, score-model uncertainty large enough to alter the
+implied funded set <a
+href="https://doi.org/10.1073/pnas.0804538105">Johnson (2008)</a>, and
+limited grant-productivity predictiveness of NIH percentiles <a
+href="https://doi.org/10.7554/eLife.13323">Fang et al. (2016)</a>. The
+manuscript’s increment is narrower: it instruments one selection
+mechanism and asks whether different panel draws change an unlabeled
+evaluator’s oracle-referenced error. The claim is about generated
+artifacts and one local Gemma stress test, not about the global
+reliability of academic review.</p>
+<p>This is, in part, a result <em>against</em> the intuitive case for
+sortition. A representative lottery is the fair, auditable way to form a
+panel, but on this instrument it does not minimize oracle-referenced EIE
+error — competence-first does. We report that plainly rather than
+engineering a narrative in which sortition wins. That is not a general
+refutation of sortition, deliberative participation, or the “diversity
+can beat ability” result. Those arguments rely on different objectives
+and premises: democratic legitimacy and public consultation <a
+href="https://global.oup.com/academic/product/when-the-people-speak-9780199604432">Fishkin
+(2009)</a>, search diversity <a
+href="https://doi.org/10.1073/pnas.0403723101">Hong and Page (2004)</a>,
+and jury-theorem aggregation under competence and
+conditional-independence assumptions <a
+href="https://doi.org/10.1007/BF00125672">Grofman et al. (1983)</a>. The
+present result is narrower: in this binary noisy-judge instrument,
+competence-first sampling gives the lowest oracle-referenced EIE error.
+Relative to the single-bloc comparator the representative draw’s point
+estimate is now reported over the full active regime grid rather than
+collapsed to two panel-size means. Some cells resolve in the predicted
+direction, others remain descriptive or design-limited, so we claim
+artifact-bounded regime structure, not a general sortition advantage
+over single-bloc selection.</p>
+<h2 id="design-limited-nulls-remain-results">Design-limited nulls remain
+results</h2>
+<p>Two results are bounded rather than universal, and we do not dress
+them up.</p>
+<ol type="1">
+<li><p><strong>On the baseline grid, representative vs ideological is
+design-limited.</strong> Varying expert stringency, bias spread, and
+panel size jointly, the heatmap reports which regenerated synthetic
+cells align with the directional prediction, which resolve by
+descriptive intervals, and which remain uncertain — but the pooled
+contrast is not resolved there, <em>by construction</em>, because the
+baseline judges err independently. It resolves only once the
+composition-coupled confound supplies the correlation channel (see the
+H2 verdict and <span class="citation"
+data-cites="fig:blocphase">[@fig:blocphase]</span>); the null is a
+property of the baseline design, not of sortition.</p></li>
+<li><p><strong>Size is not a uniform power knob.</strong> A paired,
+regime-controlled contrast resolves a trio-to-six-seat size change for 3
+of the four strategies, and each resolved change is a small increase in
+error. The largest delta is +0.015, so more experts do not help and at
+most very slightly hurt. The clean “more experts always helps” story is
+rejected, but the result is essentially neutral rather than a material
+size penalty. That is consistent with peer-review jury-theorem work:
+adding reviewers helps only under assumptions about competence,
+dependence, and aggregation that must be checked rather than presumed <a
+href="https://doi.org/10.1086/719117">Arvan et al. (2025)</a>.</p></li>
+</ol>
+<p>Reporting these nulls is the point of building a measurement
+instrument rather than a demonstration.</p>
+<h2
+id="independence-explains-why-strategy-ordering-changes">Independence
+explains why strategy ordering changes</h2>
+<p>NTQR’s EIE solver rests on the judges’ errors being approximately
+independent. On the baseline generator, single-bloc selection is
+indistinguishable from representative and random selection <strong>by
+construction</strong>: ideology there shifts only each judge’s marginal
+accuracy, every judge errs from an independent stream, and an
+agreement-only estimator cannot be moved by composition. Single-bloc
+becomes the <em>separable</em> adversarial comparator only once the
+composition-coupled confound supplies a genuine cross-judge
+error-correlation channel (<span class="citation"
+data-cites="fig:blocphase">[@fig:blocphase]</span>). Competence-first
+panels pair high accuracy with whatever independence the population
+affords, giving the solver the easiest system to invert. The
+fair-lottery argument should therefore be made from auditability,
+representation, and bounded empirical performance rather than from an
+unqualified error-minimization win.</p>
+<h2 id="error-independence-must-be-measured-before-interpretation">Error
+independence must be measured before interpretation</h2>
+<p>The assumption the whole ordering hangs on — that judges’ errors are
+approximately independent — is, in this instrument, no longer an
+assumption but a measured quantity. The controlled-correlation sweep
+confirms the <em>knob works</em>: the realized pairwise correlation NTQR
+reports rises with the injected coupling (0.019 to 0.123). What it does
+<strong>not</strong> yet resolve, at this grid, is whether that
+correlation degrades recovery — the fitted slope is
+<strong>statistically indistinguishable from zero</strong> (-0.145, 95%
+CI [-4.335, 0.911] spans zero), unresolved rather than absent — and the
+power layer explains why that is unsurprising rather than disappointing:
+12 of 28 contrasts are well-powered at the current seed count (MDE
+0.101), 13 reach nominal significance, and 12 survive Holm correction.
+The honest reading is that the current design resolves the largest
+separations but leaves smaller neighboring contrasts design-limited. The
+strategy <em>ranking</em> remains an ordering of point estimates; the
+analysis says exactly how many seeds would let the unresolved contrasts
+resolve. That global-injection slope is, in any case, the wrong
+instrument for the recovery question — it couples correlation to a fixed
+trio regardless of how the panel was formed; the marginal-preserving
+composition-coupled sweep (<span class="citation"
+data-cites="fig:blocphase">[@fig:blocphase]</span>) resolves the
+recovery half in the affirmative, as adjudicated in the H4 verdict
+above.</p>
+<p>The Gemma postdoctoral panel is the direct live look at the same
+sampling mechanism under a real local LLM. It does not ask whether one
+model family beats another; it asks whether representative, random,
+same-bias, and expertise-first sampling leave different traces when one
+<code>gemma3:4b</code> model is prompted as reviewers with different
+expertise and irrelevant age-bias profiles. The live artifact reports 72
+fictitious applications per seed and model provenance (digest
+a2af6cc3eb7f), while the alignment artifact juxtaposes analytical signs
+with Gemma signs over 8 strategy-size cells. We still deliberately
+under-claim it: the applications and ages are synthetic, the reviewer
+personas are prompts rather than humans, and the resolved agreement rate
+(0.500 over 8 resolved cells) is descriptive companion evidence, not
+validation that Gemma or any age-aware real review process is
+appropriate. The competence-first versus representative comparison is
+likewise gated by an explicit CI-overlap verdict
+(<strong>separated</strong>, means 0.037 vs 0.122), so “beats” is never
+asserted across overlapping intervals.</p>
+<h2
+id="scholarship-frames-the-stress-test-not-the-evidence-level">Scholarship
+frames the stress test, not the evidence level</h2>
+<p>The postdoctoral-review setting is intentionally close to a
+literature where selection, status, and bias are known concerns.
+Cumulative-advantage accounts of scientific recognition <a
+href="https://doi.org/10.1126/science.159.3810.56">Merton (1968)</a>,
+resubmission experiments showing fragility in journal review <a
+href="https://doi.org/10.1017/S0140525X00011183">Peters and Ceci
+(1982)</a>, blind-review experiments and observational bias studies <a
+href="https://doi.org/10.1073/pnas.1707323114">Tomkins et
+al. (2017)</a>; <a href="https://doi.org/10.7554/eLife.21718">Helmer et
+al. (2017)</a>, and empirical studies of fellowship or grant outcomes <a
+href="https://doi.org/10.1038/387341a0">Wennerås and Wold (1997)</a>; <a
+href="https://doi.org/10.1126/science.1196783">Ginther et al. (2011)</a>
+make it reasonable to study reviewer sampling, not only evaluator
+algebra. The age axis has the same status: ageism and age-discrimination
+findings motivate it as a protected-attribute stress test <a
+href="https://doi.org/10.1177/0146167213480043">North and Fiske
+(2013)</a>; <a href="https://doi.org/10.1086/701029">Neumark et
+al. (2019)</a>, but the manuscript does not infer anything about real
+postdoctoral age discrimination from prompted Gemma votes.</p>
+<p>The synthetic and Gemma tracks therefore answer different questions.
+The synthetic track can make controlled claims because it owns the
+oracle label and the expert parameters. The live Gemma track can only
+show whether the same sampling vocabulary produces measurable traces
+under one local model with serialized provenance. Prompted LLM
+evaluation is itself an active measurement problem, not a neutral
+readout <a href="https://arxiv.org/abs/2306.05685">Zheng et
+al. (2023)</a>, and language-model risk scholarship cautions against
+treating model text as a transparent substitute for human judgment <a
+href="https://doi.org/10.1145/3442188.3445922">Bender et al. (2021)</a>,
+so the correct inference level is empirical feasibility plus directional
+stress testing. Lottery and collective-allocation proposals in science
+funding <a href="https://doi.org/10.1002/embr.201338068">Bollen et
+al. (2014)</a>; <a href="https://doi.org/10.1128/mBio.00422-16">Fang and
+Casadevall (2016)</a>, and maverick-science arguments for lotteries <a
+href="https://doi.org/10.1016/j.shpsa.2018.11.006">Avin (2019)</a> make
+randomized institutional design a legitimate comparator, but they do not
+license a claim that lottery-formed reviewer panels optimize NTQR
+recovery. Scholarship supplies the problem context and the variables
+worth stress-testing; regenerated artifacts supply the evidence.</p>
+<p>The pre-1800 sources sharpen that boundary rather than broadening the
+claim. Aristotle, Aquinas, Contarini, Montesquieu, Rousseau, Borda, and
+Condorcet show that lot, choice, mixed selection, and probabilistic
+group judgment have long been treated as procedural responses to
+faction, legitimacy, and uncertainty. They do not license a claim that
+historical sortition “validates” this synthetic NTQR instrument. The
+contribution here is narrower: a regenerated experiment that keeps
+historical and modern motivations upstream of the evidentiary claim,
+then tests how panel formation changes oracle-referenced blind
+recovery.</p>
+<p>The historical sources also draw a useful negative boundary. We
+exclude gambling lotteries, divinatory lots, and broad political-theory
+claims that are not about selecting evaluators or aggregating judgments.
+The manuscript’s analogy is procedural: randomness can distribute
+evaluative authority when deterministic selection is capture-prone or
+status-weighted. Whether that helps an unlabeled evaluator is not
+answered by the history; it is answered by the regenerated artifacts
+above.</p>
+<h2
+id="limitations-synthetic-scope-single-model-live-evidence-historical-analogy">Limitations:
+synthetic scope, single-model live evidence, historical analogy</h2>
+<p>The reported <code>manuscript_contrast</code> grid fixes prevalence
+and corpus size while varying mean expertise, bias, panel size, and
+strategy; it uses 96 experts, 300 as the modal item count in the
+rendered tokens, and up to 8 trios per panel over 96 seeds. The
+repository now defines broader sensitivity and finer panel-ladder
+profiles, but those profiles are configuration surfaces until
+regenerated and audited as manuscript evidence; the reported results
+remain bounded to the active profile. The oracle-closest tie-break is
+deliberately charitable to the unsupervised estimate, so reported errors
+are a lower bound on what a blind tie-break would incur. The alarm’s
+<span class="math inline">\(O(Q^3)\)</span> cost confines the
+consistency-alarm track to small corpora (<span
+class="math inline">\(Q\leq30\)</span>), so the alarm cannot yet serve
+as a sweep-scale signal. The statistical-power analysis shows most
+strategy contrasts are underpowered at the current seed count, so
+several headline comparisons are design-limited rather than settled. The
+Gemma postdoctoral panel is also bounded: it uses fictitious
+applications, synthetic age metadata, prompted reviewer personas, and
+one local model. It tests whether the sampling mechanism is visible
+under that empirical stress test; it does not establish human-review
+performance or a policy claim about age. Finally, the synthetic
+generator is a model of noisy judges, not a guarantee about real
+ones.</p>
+<h2
+id="synthetic-and-live-tracks-operate-at-different-inference-levels">Synthetic
+and live tracks operate at different inference levels</h2>
+<p>This manuscript follows a standard division between controlled
+experiment and empirical companion evidence. The deterministic synthetic
+track is the controlled Results spine: it generates the
+strategy-ranking, panel-size, controlled-correlation, power-budget,
+alarm-cost, and analytical-alignment numbers from regenerated local
+artifacts. Those claims are validated against known oracle labels
+because the generator owns the truth labels.</p>
+<p>The real-Ollama track is reported as separate live artifacts and
+empirical companion evidence, not a pooled extension of the synthetic
+sweep. It was performed locally with required-live
+<code>gemma3:4b</code> (full provenance in Methods), showing the same
+sampling vocabulary run on a real local model prompted as different
+reviewers. It does not validate the full synthetic regime grid,
+establish a population effect size, or prove that Gemma substitutes for
+human reviewers.</p>
+<p>The combined interpretation is therefore deliberately tiered:
+synthetic experiments support the controlled mechanism and regime maps;
+analytical checks test directional expectations against those
+regenerated artifacts; and live Ollama runs demonstrate empirical
+feasibility plus n-limited directional support. Wider parameter sweeps
+and larger empirical panels are the next steps before any stronger
+general claim.</p>
+<h2 id="data-code-and-generated-artifact-availability">Data, code, and
+generated-artifact availability</h2>
+<p>All source code, methods, and documentation are openly available at
+the public repository <a
+href="https://github.com/docxology/ntqr_allotment"><code>docxology/ntqr_allotment</code></a>:
+the deterministic synthetic instrument, the bloc-confound and Herfindahl
+modules, the live Gemma vote cache with serialized model provenance,
+every figure, and the manuscript regeneration pipeline. Every reported
+number is token-injected from <code>output/data/</code> by
+<code>src/ntqr_allotment/manuscript_variables.py</code>, so no result is
+hand-transcribed and the manuscript regenerates from source under a
+zero-orphan token contract. The synthetic track is fully deterministic
+under fixed seeds (profile config hash <code>fda4da941cf0</code>); the
+live track reproduces against a local Ollama <code>gemma3:4b</code>
+instance (digest <code>a2af6cc3eb7f</code>, config hash
+<code>5161ffe474b3</code>) using the serialized, resumable per-vote
+cache keyed on the config hash, seed, reviewer, application, model
+digest, and decode parameters. A steganographic provenance variant of
+the PDF additionally carries an extractable hash of the current source
+PDF, verified by <code>scripts/verify_stego.py</code>. The archival DOI
+is <a
+href="https://doi.org/10.5281/zenodo.21083779">10.5281/zenodo.21083779</a>.</p>
+<h2 id="ethics-protected-attributes-and-competing-interests">Ethics,
+protected attributes, and competing interests</h2>
+<p>The postdoctoral-review setting is entirely synthetic: the
+applications, latent quality labels, reviewer personas, and age metadata
+are all generated, and no human subjects, real applicants, or real
+review records are involved. True latent quality is generated
+independently of age; age enters only as a protected-attribute stress
+test for bias expression under sampling, and its use here is diagnostic,
+not an endorsement of using age in real admissions, hiring, or
+fellowship review. The live language-model outputs are treated as an
+instrumented measurement of a prompted system, not as a substitute for
+human judgment. The authors declare no competing interests.</p>
+</body>
+</html>

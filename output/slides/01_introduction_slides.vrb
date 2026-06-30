@@ -1,0 +1,66 @@
+\frametitle{Falsifiable claims and negative controls}
+\protect\phantomsection\label{falsifiable-claims-and-negative-controls}
+We state the study as five falsifiable hypotheses (H1--H5) and let the
+regenerated artifacts adjudicate each. The synthetic deterministic track
+tests H1--H4 against a known oracle; the live single-model companion
+tests H5. Methods (Table @tbl:falsification) states the load-bearing
+assumption and the negative-control check behind each, and the
+Discussion returns an explicit verdict hypothesis by hypothesis.
+
+\begin{enumerate}
+\tightlist
+\item
+  \textbf{H1 --- Formation strategy is the dominant lever.} Different
+  panel-formation rules yield materially different oracle-referenced EIE
+  recovery error, even at a fixed population and panel size.
+  \emph{Tested by} the weighted-mean strategy ranking with a bootstrap
+  separation gate and a power budget (\breakseq{[@fig:ranking]}).
+\item
+  \textbf{H2 --- Concentrating correlated bias degrades recovery.}
+  Single-bloc selection, which seats judges whose errors are correlated,
+  recovers with higher EIE error than a representative draw, because the
+  error-independence assumption NTQR rests on is most stressed by a
+  correlated panel. \emph{Tested by} the
+  representative-minus-single-bloc contrast across the full regime grid
+  against analytical sign predictions (\breakseq{[@fig:repideo]}), and resolved
+  by the composition-coupled error confound that fans the strategies
+  apart as within-bloc coupling rises (\breakseq{[@fig:blocphase]}).
+\item
+  \textbf{H3 --- Size is a sampling knob, not guaranteed improvement.}
+  Forming a larger ensemble gives more trios to average over, but
+  whether that helps or hurts recovery --- and whether any effect comes
+  from the larger ensemble violating the solver's error-independence
+  assumption more --- is an empirical question; the power question is
+  how many observations at the analyzed grain would be needed to resolve
+  a contrast of the observed magnitude. \emph{Tested by} the
+  per-strategy size sweep, a paired regime-controlled size contrast, a
+  per-trio conditioning diagnostic, and the power/MDE budgets
+  (\breakseq{[@fig:powercurve]}, \breakseq{[@fig:powervn]}, \breakseq{[@fig:triocond]}).
+\item
+  \textbf{H4 --- Error-correlation is measurable, and recovery degrades
+  with it.} A controlled correlation injection produces a realized
+  error-correlation that NTQR itself reports, and oracle-referenced
+  recovery error should rise as that realized correlation grows.
+  \emph{Tested by} the tolerance sweep, reporting the
+  realized-correlation trend and an OLS recovery-vs-correlation slope
+  with a bootstrap interval (\breakseq{[@fig:tolerance]}); the recovery slope,
+  unresolved by the global-injection sweep, is resolved positive once
+  the correlation is composition-coupled and marginal-preserving
+  (\breakseq{[@fig:blocphase]}).
+\item
+  \textbf{H5 --- The synthetic ranking transfers to a live single-model
+  panel.} The strategy ordering measured against the synthetic oracle
+  reproduces when one local \texttt{gemma3:4b} model is prompted as
+  different reviewers. \emph{Tested by} a matched-grain cross-track
+  ranking comparison and cell-level directional alignment
+  (\breakseq{[@fig:trackinversion]}, \breakseq{[@fig:postdocalign]}).
+\end{enumerate}
+
+These hypotheses are written to be refutable, and the data refute
+several: H3 and H5 are rejected; H2 and H4 are unresolved on the
+baseline grid and resolve only once correlation is coupled to panel
+composition; and H1's ranking collapses to competence-first versus a
+bunched remainder. The instrument, its resolved cells, its explicit
+design-limited cells, and the axis-conditional negative control that
+keeps the sortition result honest --- not a manufactured sortition win
+--- are the contribution.

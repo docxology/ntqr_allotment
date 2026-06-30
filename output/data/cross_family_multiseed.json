@@ -1,0 +1,829 @@
+{
+  "config_hash": "a7457d3a89d9",
+  "config_path": "manuscript/config.yaml",
+  "cross_pairs_per_run": 4,
+  "deltas": [
+    -0.069862,
+    -0.04884,
+    -0.044957,
+    -0.042172,
+    -0.039434,
+    -0.057654
+  ],
+  "interpretation": "sign_stability is the fraction of independent runs whose cross-minus-same delta is negative (the decorrelation direction). 1.0 means every run agreed; ~0.5 means the sign is a coin-flip. n-limited.",
+  "judge_provenance": [
+    {
+      "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "family": "qwen2",
+      "judge_id": "qwen2-qwen2.5:3b-0",
+      "model": "qwen2.5:3b",
+      "num_predict": 1,
+      "seed": 0,
+      "temperature": 0.6
+    },
+    {
+      "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "family": "qwen2",
+      "judge_id": "qwen2-qwen2.5:3b-1",
+      "model": "qwen2.5:3b",
+      "num_predict": 1,
+      "seed": 1,
+      "temperature": 0.6
+    },
+    {
+      "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+      "family": "gemma3",
+      "judge_id": "gemma3-gemma3:4b-2",
+      "model": "gemma3:4b",
+      "num_predict": 1,
+      "seed": 2,
+      "temperature": 0.6
+    },
+    {
+      "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+      "family": "gemma3",
+      "judge_id": "gemma3-gemma3:4b-3",
+      "model": "gemma3:4b",
+      "num_predict": 1,
+      "seed": 3,
+      "temperature": 0.6
+    }
+  ],
+  "live_ollama": true,
+  "max_delta": -0.039434,
+  "mean_delta": -0.050487,
+  "min_delta": -0.069862,
+  "models": [
+    "qwen2.5:3b",
+    "gemma3:4b"
+  ],
+  "n_items": 150,
+  "n_runs": 6,
+  "nonzero_pairs_per_run": [
+    1,
+    6,
+    1,
+    1,
+    1,
+    1
+  ],
+  "num_predict": 1,
+  "per_run": [
+    {
+      "delta_cross_minus_same": -0.069862,
+      "judge_provenance": [
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-0",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 0,
+          "temperature": 0.6
+        },
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-1",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 1,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-2",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 2,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-3",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 3,
+          "temperature": 0.6
+        }
+      ],
+      "mean_abs_cross_family": 0.0,
+      "mean_abs_same_family": 0.069862,
+      "n_cross_pairs": 4,
+      "n_same_pairs": 2,
+      "nonzero_pairs": 1,
+      "pair_group_summaries": [
+        {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "mean_abs_corr": 0.0,
+          "n_pairs": 4,
+          "nonzero_pairs": 0,
+          "relation": "cross",
+          "std_abs_corr": 0.0
+        },
+        {
+          "ci_high": 0.139724,
+          "ci_low": 0.0,
+          "mean_abs_corr": 0.069862,
+          "n_pairs": 2,
+          "nonzero_pairs": 1,
+          "relation": "same",
+          "std_abs_corr": 0.0988
+        }
+      ],
+      "pair_records": [
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "qwen2",
+          "i": 0,
+          "j": 1,
+          "pair_id": "(0,1)",
+          "relation": "same"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 2,
+          "pair_id": "(0,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 3,
+          "pair_id": "(0,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 2,
+          "pair_id": "(1,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 3,
+          "pair_id": "(1,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.139724,
+          "family_i": "gemma3",
+          "family_j": "gemma3",
+          "i": 2,
+          "j": 3,
+          "pair_id": "(2,3)",
+          "relation": "same"
+        }
+      ],
+      "seed": 0,
+      "total_pairs": 6
+    },
+    {
+      "delta_cross_minus_same": -0.04884,
+      "judge_provenance": [
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-0",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 0,
+          "temperature": 0.6
+        },
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-1",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 1,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-2",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 2,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-3",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 3,
+          "temperature": 0.6
+        }
+      ],
+      "mean_abs_cross_family": 0.005397,
+      "mean_abs_same_family": 0.054237,
+      "n_cross_pairs": 4,
+      "n_same_pairs": 2,
+      "nonzero_pairs": 6,
+      "pair_group_summaries": [
+        {
+          "ci_high": 0.005397,
+          "ci_low": 0.005397,
+          "mean_abs_corr": 0.005397,
+          "n_pairs": 4,
+          "nonzero_pairs": 4,
+          "relation": "cross",
+          "std_abs_corr": 0.0
+        },
+        {
+          "ci_high": 0.102065,
+          "ci_low": 0.006409,
+          "mean_abs_corr": 0.054237,
+          "n_pairs": 2,
+          "nonzero_pairs": 2,
+          "relation": "same",
+          "std_abs_corr": 0.067639
+        }
+      ],
+      "pair_records": [
+        {
+          "abs_corr": 0.006409,
+          "family_i": "qwen2",
+          "family_j": "qwen2",
+          "i": 0,
+          "j": 1,
+          "pair_id": "(0,1)",
+          "relation": "same"
+        },
+        {
+          "abs_corr": 0.005397,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 2,
+          "pair_id": "(0,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.005397,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 3,
+          "pair_id": "(0,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.005397,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 2,
+          "pair_id": "(1,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.005397,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 3,
+          "pair_id": "(1,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.102065,
+          "family_i": "gemma3",
+          "family_j": "gemma3",
+          "i": 2,
+          "j": 3,
+          "pair_id": "(2,3)",
+          "relation": "same"
+        }
+      ],
+      "seed": 1,
+      "total_pairs": 6
+    },
+    {
+      "delta_cross_minus_same": -0.044957,
+      "judge_provenance": [
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-0",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 0,
+          "temperature": 0.6
+        },
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-1",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 1,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-2",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 2,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-3",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 3,
+          "temperature": 0.6
+        }
+      ],
+      "mean_abs_cross_family": 0.0,
+      "mean_abs_same_family": 0.044957,
+      "n_cross_pairs": 4,
+      "n_same_pairs": 2,
+      "nonzero_pairs": 1,
+      "pair_group_summaries": [
+        {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "mean_abs_corr": 0.0,
+          "n_pairs": 4,
+          "nonzero_pairs": 0,
+          "relation": "cross",
+          "std_abs_corr": 0.0
+        },
+        {
+          "ci_high": 0.089913,
+          "ci_low": 0.0,
+          "mean_abs_corr": 0.044957,
+          "n_pairs": 2,
+          "nonzero_pairs": 1,
+          "relation": "same",
+          "std_abs_corr": 0.063578
+        }
+      ],
+      "pair_records": [
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "qwen2",
+          "i": 0,
+          "j": 1,
+          "pair_id": "(0,1)",
+          "relation": "same"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 2,
+          "pair_id": "(0,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 3,
+          "pair_id": "(0,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 2,
+          "pair_id": "(1,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 3,
+          "pair_id": "(1,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.089913,
+          "family_i": "gemma3",
+          "family_j": "gemma3",
+          "i": 2,
+          "j": 3,
+          "pair_id": "(2,3)",
+          "relation": "same"
+        }
+      ],
+      "seed": 2,
+      "total_pairs": 6
+    },
+    {
+      "delta_cross_minus_same": -0.042172,
+      "judge_provenance": [
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-0",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 0,
+          "temperature": 0.6
+        },
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-1",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 1,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-2",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 2,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-3",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 3,
+          "temperature": 0.6
+        }
+      ],
+      "mean_abs_cross_family": 0.0,
+      "mean_abs_same_family": 0.042172,
+      "n_cross_pairs": 4,
+      "n_same_pairs": 2,
+      "nonzero_pairs": 1,
+      "pair_group_summaries": [
+        {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "mean_abs_corr": 0.0,
+          "n_pairs": 4,
+          "nonzero_pairs": 0,
+          "relation": "cross",
+          "std_abs_corr": 0.0
+        },
+        {
+          "ci_high": 0.084345,
+          "ci_low": 0.0,
+          "mean_abs_corr": 0.042172,
+          "n_pairs": 2,
+          "nonzero_pairs": 1,
+          "relation": "same",
+          "std_abs_corr": 0.059641
+        }
+      ],
+      "pair_records": [
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "qwen2",
+          "i": 0,
+          "j": 1,
+          "pair_id": "(0,1)",
+          "relation": "same"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 2,
+          "pair_id": "(0,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 3,
+          "pair_id": "(0,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 2,
+          "pair_id": "(1,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 3,
+          "pair_id": "(1,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.084345,
+          "family_i": "gemma3",
+          "family_j": "gemma3",
+          "i": 2,
+          "j": 3,
+          "pair_id": "(2,3)",
+          "relation": "same"
+        }
+      ],
+      "seed": 3,
+      "total_pairs": 6
+    },
+    {
+      "delta_cross_minus_same": -0.039434,
+      "judge_provenance": [
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-0",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 0,
+          "temperature": 0.6
+        },
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-1",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 1,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-2",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 2,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-3",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 3,
+          "temperature": 0.6
+        }
+      ],
+      "mean_abs_cross_family": 0.0,
+      "mean_abs_same_family": 0.039434,
+      "n_cross_pairs": 4,
+      "n_same_pairs": 2,
+      "nonzero_pairs": 1,
+      "pair_group_summaries": [
+        {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "mean_abs_corr": 0.0,
+          "n_pairs": 4,
+          "nonzero_pairs": 0,
+          "relation": "cross",
+          "std_abs_corr": 0.0
+        },
+        {
+          "ci_high": 0.078869,
+          "ci_low": 0.0,
+          "mean_abs_corr": 0.039434,
+          "n_pairs": 2,
+          "nonzero_pairs": 1,
+          "relation": "same",
+          "std_abs_corr": 0.055768
+        }
+      ],
+      "pair_records": [
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "qwen2",
+          "i": 0,
+          "j": 1,
+          "pair_id": "(0,1)",
+          "relation": "same"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 2,
+          "pair_id": "(0,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 3,
+          "pair_id": "(0,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 2,
+          "pair_id": "(1,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 3,
+          "pair_id": "(1,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.078869,
+          "family_i": "gemma3",
+          "family_j": "gemma3",
+          "i": 2,
+          "j": 3,
+          "pair_id": "(2,3)",
+          "relation": "same"
+        }
+      ],
+      "seed": 4,
+      "total_pairs": 6
+    },
+    {
+      "delta_cross_minus_same": -0.057654,
+      "judge_provenance": [
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-0",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 0,
+          "temperature": 0.6
+        },
+        {
+          "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+          "family": "qwen2",
+          "judge_id": "qwen2-qwen2.5:3b-1",
+          "model": "qwen2.5:3b",
+          "num_predict": 1,
+          "seed": 1,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-2",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 2,
+          "temperature": 0.6
+        },
+        {
+          "digest": "a2af6cc3eb7fa8be8504abaf9b04e88f17a119ec3f04a3addf55f92841195f5a",
+          "family": "gemma3",
+          "judge_id": "gemma3-gemma3:4b-3",
+          "model": "gemma3:4b",
+          "num_predict": 1,
+          "seed": 3,
+          "temperature": 0.6
+        }
+      ],
+      "mean_abs_cross_family": 0.0,
+      "mean_abs_same_family": 0.057654,
+      "n_cross_pairs": 4,
+      "n_same_pairs": 2,
+      "nonzero_pairs": 1,
+      "pair_group_summaries": [
+        {
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "mean_abs_corr": 0.0,
+          "n_pairs": 4,
+          "nonzero_pairs": 0,
+          "relation": "cross",
+          "std_abs_corr": 0.0
+        },
+        {
+          "ci_high": 0.115309,
+          "ci_low": 0.0,
+          "mean_abs_corr": 0.057654,
+          "n_pairs": 2,
+          "nonzero_pairs": 1,
+          "relation": "same",
+          "std_abs_corr": 0.081536
+        }
+      ],
+      "pair_records": [
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "qwen2",
+          "i": 0,
+          "j": 1,
+          "pair_id": "(0,1)",
+          "relation": "same"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 2,
+          "pair_id": "(0,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 0,
+          "j": 3,
+          "pair_id": "(0,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 2,
+          "pair_id": "(1,2)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.0,
+          "family_i": "qwen2",
+          "family_j": "gemma3",
+          "i": 1,
+          "j": 3,
+          "pair_id": "(1,3)",
+          "relation": "cross"
+        },
+        {
+          "abs_corr": 0.115309,
+          "family_i": "gemma3",
+          "family_j": "gemma3",
+          "i": 2,
+          "j": 3,
+          "pair_id": "(2,3)",
+          "relation": "same"
+        }
+      ],
+      "seed": 5,
+      "total_pairs": 6
+    }
+  ],
+  "provenance_label": "live empirical, n-limited (multi-seed)",
+  "replicates_per_model": 2,
+  "require_live": true,
+  "run_count": 6,
+  "same_pairs_per_run": 2,
+  "schema_version": 2,
+  "sign_stability": 1.0,
+  "source_config_hash": "e6e4c6e68324",
+  "std_delta": 0.011414,
+  "temperature": 0.6,
+  "timeout": 20.0,
+  "total_pairs_per_run": 6
+}

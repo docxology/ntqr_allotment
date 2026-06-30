@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>02_methods.md.web</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script data-template-mathjax-config>
+window.MathJax = window.MathJax || {};
+window.MathJax.chtml = Object.assign({}, window.MathJax.chtml, {
+  fontURL: "https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.0.0/chtml/woff2",
+  dynamicPrefix: "https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.0.0/chtml/dynamic"
+});
+</script>
+<script defer=""
+  src="https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-chtml.js"
+  type="text/javascript" integrity="sha384-2BWc4dVaHADUocwKrUrK9u3iDwHxVMKXWEcoRmUkXYSFKhAsgVAYClu9ydNuo5Oz" crossorigin="anonymous"></script>
+</head>
+<body>
+<h1 id="methods-instrument-assumptions-and-companion-track">Methods:
+instrument, assumptions, and companion track</h1>
+<h2
+id="synthetic-deterministic-track-seeded-panels-blind-estimates-oracle-scoring">Synthetic
+deterministic track: seeded panels, blind estimates, oracle scoring</h2>
+<p>The first methodological track is a seeded synthetic instrument. It
+generates known populations and corpora, hides the answer key from the
+<code>ntqr</code> estimator, and then scores the returned logically
+consistent evaluations against the supervised oracle that is available
+only because the data are synthetic.</p>
+<h3
+id="pipeline-panel-formation-precedes-no-answer-key-estimation">Pipeline:
+panel formation precedes no-answer-key estimation</h3>
+<p>The instrument runs strictly upstream-to-downstream and is
+deterministic end to end (every stochastic step is seeded with
+<code>numpy.random.default_rng</code>; figures use
+<code>MPLBACKEND=Agg</code>). One <strong>trial</strong> is:</p>
+<ol type="1">
+<li><strong>Generate</strong> a synthetic expert population of known
+properties.</li>
+<li><strong>Form</strong> a panel from that population with one of four
+strategies.</li>
+<li><strong>Judge</strong> a corpus of items whose ground-truth labels
+are <em>known to us but hidden from the estimator</em>.</li>
+<li><strong>Evaluate</strong> the panel with the <code>ntqr</code>
+package <em>without the answer key</em>.</li>
+<li><strong>Score</strong> the unsupervised estimate against the
+supervised <strong>oracle</strong> computed from the known labels.</li>
+</ol>
+<p><span class="citation"
+data-cites="fig:pipeline">[@fig:pipeline]</span> shows this
+upstream-to-downstream flow at a glance.</p>
+<figure id="fig:pipeline">
+<img src="../figures/method_pipeline_schematic.png" style="width:95.0%"
+alt="Left-to-right pipeline of the deterministic synthetic instrument (steps 1–5 in text; count tokens annotated from 96, 300, 8 so the figure cannot drift from the reported configuration): a known population is sampled → a panel is formed by one of four strategies → the panel judges a key-hidden corpus → the EIE evaluator runs blind over trios → only scoring reads the labels. The bracket marks the unsupervised region; the manipulated variable is the upstream formation rule. Explanatory schematic only; quantitative results are in the Results section." />
+<figcaption aria-hidden="true">Left-to-right pipeline of the
+deterministic synthetic instrument (steps 1–5 in text; count tokens
+annotated from <code>96</code>, <code>300</code>, <code>8</code> so the
+figure cannot drift from the reported configuration): a known population
+is sampled → a panel is formed by one of four strategies → the panel
+judges a key-hidden corpus → the EIE evaluator runs blind over trios →
+only scoring reads the labels. The bracket marks the unsupervised
+region; the manipulated variable is the upstream formation rule.
+Explanatory schematic only; quantitative results are in the Results
+section.</figcaption>
+</figure>
+<p>The key methodological move is step 5: because the ground truth is
+synthetic and therefore known, the unlabeled <code>ntqr</code>
+evaluation and the supervised oracle can be compared on equal footing.
+Recovery error is the L1-style distance between the two evaluations —
+the absolute prevalence error plus the mean absolute per-judge accuracy
+error. Throughout, “ground-truth-free” is project shorthand for this
+no-answer-key estimator path, not an expansion or alternative name for
+<code>ntqr</code>.</p>
+<p><strong>Synthetic expert population.</strong> Each expert is a noisy
+binary judge with label-conditional accuracies
+<code>accuracy_a = P(vote a | true a)</code> and
+<code>accuracy_b = P(vote b | true b)</code>, derived from a continuous
+<code>expertise</code> (mean precision) and a signed <code>bias</code>
+that skews errors toward one label. The population sampler draws
+expertise from a normal centered at <code>mean_expertise</code> with
+standard deviation <code>expertise_heterogeneity</code>, and draws bias
+with a sign <strong>correlated with each expert’s ideology</strong>
+(left → negative, right → positive). Because this only shifts each
+judge’s <em>marginal</em> accuracy by ideology — every judge still errs
+from an independent stream — it does not by itself make single-bloc
+panels more error-correlated than a representative draw; supplying that
+missing cross-judge error-correlation channel is the job of the
+composition-coupled confound introduced below. Each population in the
+sweep has 96 experts; each corpus has 300 items sampled at the
+configured prevalence.</p>
+<h3 id="panel-formation-strategies-four-upstream-rules">Panel-formation
+strategies: four upstream rules</h3>
+<p>All four strategies are deterministic given their seed.</p>
+<ul>
+<li><strong>representative_sortition</strong> — an auditable maximin
+lottery implemented on the open-source <code>allotment</code> engine (<a
+href="https://github.com/Citizen-Infra/allotment">Citizen-Infra
+(2024)</a>, the AGPL-3.0 sortition library this project imports and uses
+directly), which realizes the fair stratified-selection algorithm of <a
+href="https://doi.org/10.1038/s41586-021-03788-6">Flanigan et
+al. (2021)</a>. Ideology quotas are set by largest-remainder (Hamilton)
+apportionment so the panel mirrors the population’s ideology composition
+as closely as integer seats allow; the draw carries the engine’s SHA-256
+audit hash for reproducibility.</li>
+<li><strong>random_selection</strong> — a uniform draw without
+replacement. This is the simplest honest baseline and is treated as a
+first-class comparator throughout.</li>
+<li><strong>ideological_selection</strong> — fill the panel from a
+single ideology bloc first, spilling over only if the bloc is too small.
+This deliberately concentrates correlated biases and is the
+<em>non-representative</em> comparator.</li>
+<li><strong>expertise_threshold</strong> — select the top-k experts by
+expertise. This is the competence-first comparator and ignores
+representativeness entirely.</li>
+</ul>
+<h3
+id="ntqr-evaluation-trio-eie-oracle-scoring-and-majority-voting">NTQR
+evaluation: trio EIE, oracle scoring, and majority voting</h3>
+<p>The <code>ntqr</code> package’s exact error-independent evaluator is
+<strong>trio-only</strong>: it solves the error-independent algebraic
+system for <em>exactly three</em> binary judges, returning logically
+consistent (prevalence, per-judge accuracy) evaluations. The system
+admits up to two real solutions; complex or non-finite roots are dropped
+honestly rather than coerced. To resolve the two-fold ambiguity in the
+synthetic track we select the consistent solution <strong>closest to the
+oracle</strong> — this is the most charitable reading of the unlabeled
+estimate, so any residual error is a real failure to match the
+supervised oracle, not a sign ambiguity.</p>
+<p>We compute two <code>ntqr</code> evaluations per trio: the
+error-independent evaluation (EIE, our headline) and the majority-voting
+evaluation (a comparator that partitions solutions into crowd-right and
+crowd-wrong). The <strong>supervised oracle</strong> is read directly
+from the label-conditioned vote counts; it is always real and finite,
+and a degenerate oracle is treated as a contract violation that fails
+loudly.</p>
+<p><strong>Ensemble-of-trios for panels larger than three.</strong>
+Because the exact solver is trio-only, a panel of size greater than
+three is evaluated by <strong>ensemble-of-trios</strong>. We scan trios
+(combinations of panel members) in deterministic order, collecting up to
+8 <em>usable</em> trios — a trio is skipped if its vote pattern admits
+no real error-independent solution — and average their oracle-referenced
+errors. A single bad expert therefore does not starve the ensemble. If
+<em>every</em> trio in a panel is degenerate, the trial records an
+honest NaN (zero usable trios) so a sweep surfaces “no recovery possible
+here” rather than crashing or inventing a number. A panel of exactly
+three reduces to a single trio, so the ensemble result coincides with
+the single-trio result there.</p>
+<p>Historically, Borda- and Condorcet-style work asks how votes should
+be aggregated once a voting body exists; here, the formation rule is
+part of the experimental treatment. The Methods therefore keep two
+objects separate throughout: the upstream panel draw and the downstream
+no-answer-key estimator.</p>
+<h3
+id="companion-diagnostics-alarm-cost-ternary-feasibility-and-maximin-fairness">Companion
+diagnostics: alarm cost, ternary feasibility, and maximin fairness</h3>
+<p>Three companion tracks measure structural properties of the
+instrument rather than oracle-referenced recovery error.</p>
+<p><strong>Alarm scaling is a small-<span
+class="math inline">\(Q\)</span> constraint.</strong> The
+<code>ntqr</code> package also ships an <strong>alarm</strong>: it tests
+whether all judges can be simultaneously consistent with some answer key
+at a stated safety specification, a constraint system that gains more
+panel-size-indexed checks as judges are added. Unlike the trio
+evaluator, this project’s alarm path enumerates the answer-key simplex,
+and our local benchmark shows roughly <strong>cubic scaling in the
+corpus size <span class="math inline">\(Q\)</span></strong>. A shipped
+benchmark (<code>scripts/bench_alarm.py</code>) reproduces this scaling
+on demand; indicative single-machine timings rise from about 0.7 s at
+<span class="math inline">\(Q=20\)</span> to 8.9 s at <span
+class="math inline">\(Q=50\)</span> to 97.9 s at <span
+class="math inline">\(Q=100\)</span> (the exact constants vary with
+machine load — the cubic <em>scaling</em>, not the constants, is the
+robust local finding). This <span class="math inline">\(O(Q^3)\)</span>
+cost is a scaling limit on the statistical-power / alarm track as
+implemented here, so we report it as a finding and cap any alarm use at
+<span class="math inline">\(Q\leq30\)</span> (opt-in only); larger
+corpora must raise the cap deliberately.</p>
+<p><strong>The ternary <span class="math inline">\(R=3\)</span>
+axiom-consistency track (consistency only).</strong> A companion track
+(<code>src/ntqr_allotment/ternary.py</code>) extends the axiomatic
+surface from binary (<span class="math inline">\(R=2\)</span>) to
+ternary (<span class="math inline">\(R=3\)</span>) responses, but
+<strong>only at the level of axiom-consistency and feasibility — never
+<span class="math inline">\(R=3\)</span> recovery</strong>. It checks
+whether an observed three-way vote profile is <em>consistent</em> with
+the NTQR algebraic axioms (the response counts sum correctly and lie in
+the feasible simplex), not whether the unsupervised (prevalence,
+accuracy) state can be <em>solved</em>. Exact <span
+class="math inline">\(R=3\)</span> recovery is unsolved upstream and is
+explicitly <strong>out of scope / anti-vision</strong> for this work: we
+make no claim to recover ternary evaluations. The track exists so the
+consistency/feasibility axioms can be exercised and tested at <span
+class="math inline">\(R=3\)</span> without overstating what NTQR can do
+there.</p>
+<p><strong>N-judge alarm power is consistency-only.</strong> A second
+companion track (<code>src/ntqr_allotment/ensemble.py</code>)
+generalizes the single-trio consistency check to an
+<strong>N-judge</strong> observed-vote-count alarm and measures how the
+consistency signal scales with panel size
+(<code>alarm_power_curve</code>). In the current small-<span
+class="math inline">\(Q\)</span> diagnostic, the tight safety setting is
+already saturated across the plotted panel sizes, so the figure
+demonstrates that the N-judge alarm is executable and panel-size-indexed
+rather than establishing a monotone growth law. The underlying
+answer-key enumeration is the same <span
+class="math inline">\(O(Q^3)\)</span> cost described above, so the
+N-judge track is exercised only at <strong>small <span
+class="math inline">\(Q\)</span></strong>. It is a panel-size-indexed
+<em>consistency</em> signal, not a recovery method.</p>
+<p><strong>Maximin fairness is a selection metric.</strong> The
+representative-sortition strategy is an auditable maximin lottery, and a
+fairness track (<code>src/ntqr_allotment/fairness.py</code>)
+characterizes the allotment’s <strong>selection-probability
+distribution</strong> over the population — the probability each expert
+is seated across the lottery. The maximin objective is the
+<strong>minimum selection probability</strong>: a fairer lottery raises
+the floor on who can be seated. This track measures the representation
+properties of the draw itself and is independent of the downstream NTQR
+recovery numbers.</p>
+<h3 id="notation-cells-trios-and-inferential-units">Notation: cells,
+trios, and inferential units</h3>
+<p>The manuscript keeps each statistic tied to the unit that generated
+it; this is the guardrail that prevents synthetic, power, and live
+empirical claims from borrowing strength from one another. Table <span
+class="citation" data-cites="tbl:notation">@tbl:notation</span> is the
+compact ledger for symbols, estimators, inferential units, and artifact
+ownership.</p>
+<table id="tbl:notation">
+<caption>Notation and inferential units for the manuscript’s reported
+statistics.</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Surface / estimator</th>
+<th>Unit</th>
+<th>Aggregation and uncertainty</th>
+<th>Source artifact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(E, Q, \pi\)</span></td>
+<td>Experts, items, and label prevalence hidden from NTQR</td>
+<td>one seeded population/corpus</td>
+<td>profile metadata, config hash, seed list</td>
+<td><code>output/data/sweep_results.json</code></td>
+</tr>
+<tr>
+<td><span class="math inline">\(V_{ij}\)</span></td>
+<td>Binary vote matrix by panel member <span
+class="math inline">\(i\)</span> and item <span
+class="math inline">\(j\)</span></td>
+<td>one panel trial</td>
+<td>supervised oracle retained only for scoring</td>
+<td><code>src/ntqr_allotment/pipeline.py</code></td>
+</tr>
+<tr>
+<td><span
+class="math inline">\(\widehat{\theta}_{\mathrm{EIE}}\)</span></td>
+<td>NTQR error-independent evaluation</td>
+<td>one usable trio</td>
+<td>oracle-referenced recovery error</td>
+<td><code>src/ntqr_allotment/ntqr_eval.py</code></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\bar{e}_{\mathrm{trio}}\)</span></td>
+<td>Ensemble aggregation over usable trios</td>
+<td>up to 8 trios per panel</td>
+<td>NaN/sentinel if every trio is degenerate</td>
+<td><code>output/data/sweep_aggregated.csv</code></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\bar{e}_{s}\)</span></td>
+<td>Strategy ranking by weighted mean EIE error</td>
+<td>strategy over active profile cells</td>
+<td>pooled 95% CI, seed count, profile/hash</td>
+<td><code>output/data/sweep_aggregated.csv</code></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\Delta_{\mathrm{ideo-rep}}\)</span></td>
+<td>Ideological-minus-representative contrast</td>
+<td>active-profile regime cells</td>
+<td>observed-vs-predicted alignment, descriptive intervals</td>
+<td><code>output/data/analytical_predictions.json</code></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\rho_{\mathrm{NTQR}}\)</span></td>
+<td>Realized pairwise error correlation</td>
+<td>non-degenerate (<span class="math inline">\(\rho\)</span>, strategy)
+cell</td>
+<td>OLS slope with bootstrap CI over unique cells</td>
+<td><code>output/data/independence_sweep.csv</code></td>
+</tr>
+<tr>
+<td><span class="math inline">\(d, n, \mathrm{MDE}\)</span></td>
+<td>Two-sample power design quantities</td>
+<td>per-strategy EIE observations at fixed panel size</td>
+<td>Cohen’s <span class="math inline">\(d\)</span>, permutation <span
+class="math inline">\(p\)</span>, Holm correction, MDE, per-group
+observation budget</td>
+<td><code>output/data/power_analysis.csv</code></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\Delta_{\mathrm{age}}\)</span></td>
+<td>Live postdoctoral-review age-disparity stress test</td>
+<td>strategy x panel-size under one Gemma model</td>
+<td>older-minus-younger recommendation-rate difference, descriptive
+intervals</td>
+<td><code>output/data/postdoc_panel_results.json</code></td>
+</tr>
+<tr>
+<td><span class="math inline">\(A_{\mathrm{align}}\)</span></td>
+<td>Analytical-vs-Gemma postdoc alignment</td>
+<td>strategy x panel-size cells</td>
+<td>directional sign agreement and unresolved-cell count</td>
+<td><code>output/data/postdoc_panel_alignment.json</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="assumption-ledger-how-each-claim-can-fail">Assumption ledger:
+how each claim can fail</h3>
+<p>The analysis is organized as falsifiable claims rather than a single
+success story. Table <span class="citation"
+data-cites="tbl:falsification">@tbl:falsification</span> states what
+would count against each claim and which artifact carries the check. The
+rows map onto the Introduction’s hypotheses: the
+representative-vs-ideological, panel-size, tolerance-sweep, and
+real-Ollama rows are the negative-control checks for H2, H3, H4, and H5
+respectively; the NTQR-EIE-recovery row guards the estimator the whole
+study depends on (and so underpins H1, the strategy ranking tested
+directly in Results); and the null-and-significance row fixes the
+design-limited-vs-resolved interpretation discipline applied
+throughout.</p>
+<table id="tbl:falsification">
+<caption>Assumption and falsification ledger for the manuscript’s main
+claim families.</caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Claim family</th>
+<th>Load-bearing assumption</th>
+<th>Negative-control or falsification check</th>
+<th>Current interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NTQR EIE recovery</td>
+<td>The three-judge error-independent algebra is the right estimator for
+a usable trio.</td>
+<td>Complex/non-finite roots and every-degenerate panels are retained as
+failures, not coerced into numbers.</td>
+<td>Residual recovery error is scored only after a real logically
+consistent solution exists.</td>
+</tr>
+<tr>
+<td>Representative-vs-ideological contrast</td>
+<td>Bias concentration should affect oracle-referenced EIE error through
+error dependence.</td>
+<td>Cellwise ideological-minus-representative heatmap plus analytical
+directional checks can disagree with the predicted sign.</td>
+<td>Design-limited on the baseline grid (independent errors); resolved
+once the composition-coupled confound supplies the error channel (<span
+class="citation" data-cites="fig:blocphase">[@fig:blocphase]</span>),
+not a universal sortition win.</td>
+</tr>
+<tr>
+<td>Panel size</td>
+<td>Enlarging the panel averages more trios; whether that helps or
+hurts, and by what mechanism, is measured rather than assumed.</td>
+<td>Paired per-strategy size contrast can show error rising with panel
+size; the per-trio diagnostic locates the cause.</td>
+<td>The active profile falsifies a uniform “larger is better” rule and
+refutes the error-correlation explanation for it.</td>
+</tr>
+<tr>
+<td>Tolerance sweep</td>
+<td>Injected <span class="math inline">\(\rho\)</span> should be visible
+in NTQR-measured realized error correlation.</td>
+<td>The measured <span
+class="math inline">\(\rho_{\mathrm{NTQR}}\)</span> must rise with
+injected <span class="math inline">\(\rho\)</span> before any
+recovery-slope story is considered.</td>
+<td>The diagnostic works; the recovery slope is unresolved under global
+injection but resolves positive under the marginal-preserving
+composition-coupled instrument (<span class="citation"
+data-cites="fig:blocphase">[@fig:blocphase]</span>).</td>
+</tr>
+<tr>
+<td>Real-Ollama postdoc companion</td>
+<td>The same sampling mechanism should shape age-bias expression and
+ranking under one prompted local LLM.</td>
+<td>Gemma-only reviewer-panel rows can disagree with the analytical sign
+or remain unresolved by cell.</td>
+<td>Reported as n-limited empirical companion evidence, not human-review
+validation.</td>
+</tr>
+<tr>
+<td>Null and significance language</td>
+<td>A non-significant contrast is not evidence of no effect unless the
+design could detect the relevant effect size.</td>
+<td>Permutation p-values, Holm correction, MDE, and sample-size budgets
+are all reported together.</td>
+<td>Nulls are split into resolved, underpowered, and well-powered design
+statements.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sweep-profiles-profiles-seeds-and-aggregation-units">Sweep
+profiles: profiles, seeds, and aggregation units</h3>
+<p>The synthetic track is a deterministic grid sweep over the four
+strategies, panel sizes, expert stringency, bias spread, and the
+population/corpus parameters in <code>manuscript/config.yaml</code>.
+That file now defines named profiles: the reported sweep uses
+<code>manuscript_contrast</code> (config hash
+<code>fda4da941cf0</code>), while <code>smoke</code>,
+<code>manuscript_main</code>, <code>tolerance</code>,
+<code>power</code>, <code>panel_ladder</code>, and
+<code>research_broad</code> keep CI, legacy manuscript,
+assumption-tolerance, design-budget, finer panel-size, and broader
+sensitivity settings explicit. <code>live_postdoc_panel</code>
+separately stores the required-live Gemma model settings,
+reviewer/application counts, decode controls, and vote-cache path. Each
+reported grid cell is repeated over 96 seeds; per cell we report the
+mean EIE error, its sample standard deviation, and a 95% confidence
+interval. Degenerate cells (no usable trio) are excluded from
+aggregation via the same sentinel the emitter respects. A single seed is
+treated as an illustration, never a finding — all reported effects are
+seed-aggregated with confidence intervals. The aggregated table
+(<code>output/data/sweep_aggregated.csv</code>) and per-seed JSON
+(<code>output/data/sweep_results.json</code>) carry the profile name,
+config hash, seed list, and degenerate-row count; manuscript numbers are
+emitted from those artifacts by
+<code>src/ntqr_allotment/manuscript_variables.py</code>, so no result is
+hand-transcribed.</p>
+<h3
+id="controlled-correlation-sweep-injected-dependence-as-a-diagnostic">Controlled-correlation
+sweep: injected dependence as a diagnostic</h3>
+<p>The error-independence assumption is probed directly.
+<code>dependence.py</code>’s
+<code>sample_votes_correlated(experts, items, *, rho, seed)</code>
+injects a controllable shared-error latent of strength <span
+class="math inline">\(\rho\)</span>, and
+<code>measure_error_correlations</code> reports the <em>realized</em>
+pairwise and three-way correlation NTQR itself computes from the votes —
+so the knob (<span class="math inline">\(\rho\)</span>) and the measured
+quantity are independent. <code>independence_sweep.py</code> sweeps
+<span class="math inline">\(\rho\)</span> × strategy at the trio over
+multiple seeds and aggregates recovery error against realized
+correlation (<code>output/data/independence_sweep.csv</code>), yielding
+the error-correlation <strong>tolerance curve</strong> reported in
+Results. This correlation sweep uses its own smaller grid — 24 experts
+and 120 items, four injected <span class="math inline">\(\rho\)</span>
+levels by two strategies over up to six seeds per cell (eight
+non-degenerate (<span class="math inline">\(\rho\)</span>, strategy)
+cells) — deliberately fixing the panel at the trio (the exact solver’s
+unit) so panel size cannot confound a trio-level correlation study.</p>
+<h3
+id="composition-coupled-confound-when-group-membership-carries-shared-error">Composition-coupled
+confound: when group membership carries shared error</h3>
+<p>The tolerance sweep above injects correlation <em>globally</em>,
+identically for every panel, so it cannot test whether <em>how the panel
+is formed</em> changes the correlation the estimator sees.
+<code>bloc_confound.py</code> supplies that missing channel.
+<code>sample_votes_bloc_correlated(panel_experts, items, *, bloc_correlation, seed, axis)</code>
+drives each judge’s correctness through a Gaussian copula whose shared
+component is keyed on a grouping attribute: <span
+class="math inline">\(z_j = \sqrt{\rho}\,g_{\,\mathrm{group}(j)}
++ \sqrt{1-\rho}\,\varepsilon_j\)</span>, correct iff <span
+class="math inline">\(z_j &lt; \Phi^{-1}(\mathrm{acc}_j)\)</span>.
+Judges in the same group share the standard-normal stream <span
+class="math inline">\(g\)</span> (keyed by a stable hash of the group
+value, so it is identical across panels and worker processes); judges in
+different groups stay independent. Because <span
+class="math inline">\(z_j\)</span> is marginally standard normal, <span
+class="math inline">\(P(z_j &lt; \Phi^{-1}(\mathrm{acc})) =
+\mathrm{acc}\)</span> exactly per label: the construction is
+<strong>marginal-accuracy preserving</strong>, so any recovery change is
+attributable to error correlation rather than a confounded accuracy
+shift, and <span class="math inline">\(\rho=0\)</span> recovers the
+independent baseline. The inverse-normal <span
+class="math inline">\(\Phi^{-1}\)</span> uses a dependency-free Acklam
+rational approximation. <code>run_bloc_phase</code> sweeps strategy ×
+<span class="math inline">\(\rho\)</span> × bias-spread × stringency ×
+panel-size × seed (<code>scripts/run_bloc_phase.py</code>,
+<code>output/data/bloc_phase.csv</code>). The default
+<code>axis="ideology"</code> keys the confound on the axis
+representative sortition balances; a negative-control grid keys it on
+<code>axis="expertise_tier"</code>, an axis the lottery does not
+balance, to test whether the representative robustness is innate or
+conditional. Recovery is scored against the same supervised oracle as
+the main sweep, and the realized correlation is read back with the same
+<code>measure_error_correlations</code> diagnostic.</p>
+<h3
+id="herfindahl-exposure-concentration-predicts-shared-error-risk">Herfindahl
+exposure: concentration predicts shared-error risk</h3>
+<p>The fan-out is not arbitrary: keying the shared shock on the grouping
+axis makes a trio’s confound exposure equal to its same-group pair count
+— the Herfindahl index — so the composition-to-exposure relationship has
+a closed-form backbone. That backbone is a designed,
+internally-consistent property of this instrument, not an independent
+empirical law: the closed form follows <em>by construction</em> from how
+the confound is keyed. What the simulation then genuinely tests — the
+falsifiable link — is whether NTQR’s exact recovery actually degrades as
+that exposure rises. Let a panel have seat fractions <span
+class="math inline">\(p_b\)</span> across the confound’s grouping axis
+(here ideology, with <span class="math inline">\(B\)</span> groups). The
+probability that two seats drawn with replacement fall in the same group
+is the <strong>Herfindahl–Hirschman index</strong> <span
+class="math inline">\(H = \sum_b p_b^2\)</span>
+(<code>theory.herfindahl_index</code>); for distinct seats it is the
+finite-panel correction <span class="math inline">\(\sum_b
+c_b(c_b-1)/[N(N-1)]\)</span>
+(<code>theory.same_group_pair_probability</code>), and the expected
+number of same-group pairs among the three pairs of a trio is three
+times that. Because the shared error shock is keyed on the group, a
+trio’s exposure to it is exactly its same-group pair count. Holding
+competence fixed, the realized error-correlation NTQR measures is
+therefore monotone increasing in <span class="math inline">\(H\)</span>,
+and — since the exact error-independent solver is the one whose
+assumption that exposure violates — so is recovery error. <span
+class="math inline">\(H\)</span> is minimized at <span
+class="math inline">\(1/B\)</span> by a perfectly balanced panel and
+maximized at <span class="math inline">\(1\)</span> by a single-group
+panel, which is precisely the representative-versus-single-bloc axis.
+The maximin sortition quota makes this exact: a representative draw
+attains <span class="math inline">\(H = 1/B\)</span> (here <span
+class="math inline">\(1/3\)</span>), single-bloc selection attains <span
+class="math inline">\(H = 1\)</span>, and random selection sits between
+— an ordering that matches their measured error-correlation ordering
+cell for cell
+(<code>tests/test_theory.py::test_herfindahl_predicts_strategy_correlation_ordering</code>).</p>
+<p>This also licenses a <em>continuous</em> reading of
+representativeness rather than four discrete strategies.
+<code>bloc_confound.concentration_panel</code> forms a panel with a dial
+<span class="math inline">\(c\in[0,1]\)</span>: a fraction <span
+class="math inline">\(c\)</span> of seats massed in one group and the
+rest balanced. In the large-panel limit its Herfindahl index is <span
+class="math inline">\(H(c) = (c + \tfrac{1-c}{B})^2 +
+(B-1)\big(\tfrac{1-c}{B}\big)^2\)</span>
+(<code>theory.concentration_herfindahl</code>), monotone increasing from
+<span class="math inline">\(1/B\)</span> at <span
+class="math inline">\(c=0\)</span> to <span
+class="math inline">\(1\)</span> at <span
+class="math inline">\(c=1\)</span>. Sweeping <span
+class="math inline">\(c\)</span> at fixed coupling
+(<code>run_concentration_sweep</code>,
+<code>output/data/bloc_concentration.csv</code>) traces recovery error
+against the dial and tests the predicted monotonicity directly (<span
+class="citation" data-cites="fig:dial">[@fig:dial]</span>). The
+contribution is thus a closed-form chain — composition <span
+class="math inline">\(\to\)</span> Herfindahl exposure <span
+class="math inline">\(\to\)</span> realized error-correlation <span
+class="math inline">\(\to\)</span> no-answer-key recovery error —
+verified end to end in simulation, with the conditional caveat (the law
+is stated over <em>the confound’s</em> axis) built in. Operationally
+this suggests a panel diagnostic that needs no votes and no answer key:
+compute a <em>proposed</em> panel’s concentration index over the
+attribute a shared error might ride on. <em>If</em> a shared error
+exists <em>and</em> its axis is known, a lower index over that axis
+implies lower modeled shared-error exposure in this instrument. Whether
+a real shared error exists, and on which axis, is outside what this
+simulation establishes — so this is a modeling diagnostic, not a
+validated trust signal for real panels.</p>
+<h3
+id="statistical-power-separating-rankings-from-resolved-contrasts">Statistical
+power: separating rankings from resolved contrasts</h3>
+<p>Because the recurring nulls are computed on bounded per-strategy
+observation groups, a power layer (<code>power_analysis.py</code>,
+<code>power_study.py</code>) makes design adequacy explicit, following
+the standardized-effect and power/sample-size framework <a
+href="https://archive.org/details/statisticalpower0000cohe">Cohen
+(1988)</a>. This design-budget framing also matches the review-panel
+literature’s concern that reviewer counts and score precision are design
+parameters, not afterthoughts <a
+href="https://doi.org/10.1371/journal.pone.0002761">Kaplan et
+al. (2008)</a>. The pure-numpy toolkit provides a normal CDF/PPF checked
+against published constants, analytic two-sample power, Monte-Carlo
+<code>simulate_power</code> using the <em>actual</em> Welch-t /
+permutation test, <code>sample_size_for_power</code>, and a
+minimum-detectable-effect (MDE) solver; each primitive is bound to an
+independent reference (analytic vs simulation, Type-I rate vs alpha) and
+<strong>no retrospective observed power is ever reported</strong>.
+<code>power_study.py</code> applies this to every pairwise strategy
+contrast from the real per-seed sweep
+(<code>output/data/power_analysis.csv</code>), turning each soft null
+into an experiment budget (per-group observations at the analyzed
+trial/cell grain for 80% power). Separately,
+<code>statistics_analysis.strategy_separation</code> compares two
+strategies by their separately bootstrapped mean intervals and emits an
+explicit CI-overlap verdict (<code>separated</code> /
+<code>overlapping</code>) that must read <code>separated</code> before
+any “beats” wording is justified. Bootstrap intervals are used as
+descriptive uncertainty summaries, following the nonparametric bootstrap
+framing of <a href="https://doi.org/10.1201/9780429246593">Efron and
+Tibshirani (1993)</a>. Because the sweep compares every pair of
+strategies, the family of pairwise permutation p-values is corrected
+with the Holm-Bonferroni step-down procedure <a
+href="https://www.jstor.org/stable/4615733">Holm (1979)</a>
+(<code>statistics_analysis.holm_bonferroni</code>) before any
+significance count is reported, controlling the family-wise error rate
+without plain Bonferroni’s conservatism. The Gemma postdoctoral panel
+artifact is reported with descriptive intervals and cell-level
+directional alignment only; it is not folded into the synthetic power
+family and is not reported as retrospective observed power.</p>
+<h2
+id="real-ollama-reviewer-panel-track-single-model-live-companion">Real-Ollama
+reviewer-panel track: single-model live companion</h2>
+<p>The second methodological track uses one live local language model
+through Ollama: <code>gemma3:4b</code>. It is deliberately
+<strong>single-model</strong> and deliberately not a model-family
+comparison. The empirical question is whether the same sampling
+mechanisms studied analytically — representative sortition, random
+selection, same-bias bloc selection, and expertise-threshold selection —
+remain visible when one real local LLM is prompted as different
+postdoctoral-review panelists.</p>
+<p>The live track is therefore closer to an instrumented LLM-judge
+stress test than to an ethnography of human review. LLM-as-judge work
+has shown that prompted model judgments can be useful but also
+vulnerable to evaluator-specific artifacts such as position, verbosity,
+and self-enhancement biases <a
+href="https://arxiv.org/abs/2306.05685">Zheng et al. (2023)</a>;
+systematic position-bias tests likewise show that judge outputs can
+change with answer order rather than only answer quality <a
+href="https://doi.org/10.18653/v1/2025.ijcnlp-long.18">Shi et
+al. (2025)</a>. Broader language-model risk work likewise warns against
+treating fluent model output as an unmediated measurement of social
+reality <a href="https://doi.org/10.1145/3442188.3445922">Bender et
+al. (2021)</a>. We use one model, bounded decoding, serialized
+provenance, and synthetic applicant/reviewer metadata precisely so the
+empirical surface remains auditable and does not masquerade as
+human-review validation. The two tracks are kept strictly separate and
+their evidence is never pooled: the synthetic deterministic track
+remains the controlled spine, while the live track is a companion stress
+test with separate artifacts, a separate config hash
+(<code>5161ffe474b3</code>), and separate caveats — neither supplies
+evidence for the other’s claims.</p>
+<h3
+id="postdoctoral-corpus-protected-attribute-stress-test">Postdoctoral
+corpus: protected-attribute stress test</h3>
+<p>The empirical setting is a fictitious postdoctoral fellowship review
+panel. Each application has generated dossier text, a hidden latent
+quality label used only for oracle scoring, and synthetic age metadata
+in the range configured by <code>live_postdoc_panel</code>. True latent
+quality is generated independently of age by default. Age is therefore a
+nuisance/protected-attribute stress test: any age-conditioned
+recommendation shift is reviewer bias expression, not signal. We report
+the observable older-minus-younger recommendation-rate disparity as a
+diagnostic in the spirit of protected-attribute error-rate auditing <a
+href="https://papers.nips.cc/paper_files/paper/2016/hash/9d2682367c3935defcb1f9e247a97c0d-Abstract.html">Hardt
+et al. (2016)</a> (age is a probe, not an endorsement; see Ethics).</p>
+<h3 id="reviewer-profiles-expertise-and-age-bias-prompts">Reviewer
+profiles: expertise and age-bias prompts</h3>
+<p>Each synthetic reviewer has an expertise level and an irrelevant
+age-bias factor. Positive age bias means the reviewer erroneously favors
+older applicants; negative age bias means the reviewer erroneously
+favors younger applicants. Expertise controls sensitivity to merit
+evidence. The <code>ideological_selection</code> strategy key is kept
+internally for compatibility with the synthetic pipeline, but in the
+postdoctoral panel it is displayed as <strong>same-bias
+selection</strong>: a deliberately non-representative bloc that
+concentrates one bias direction.</p>
+<p><code>scripts/run_postdoc_panel.py</code> first runs the analytical
+postdoc vote model and then, unless explicitly asked for an offline
+smoke run, runs the live Gemma panel against Ollama with
+<code>--require-live</code>. The manuscript-facing configuration uses 12
+seeds, 48 synthetic reviewers, 72 fictitious applications per seed,
+panel sizes 3, 6, 4 sampling strategies, temperature 0.2,
+<code>num_predict=1</code>, and timeout 20.0 s. Vote-cache keys include
+the config hash, seed, reviewer id, application id, model digest, and
+decode parameters, so interrupted live runs can resume without mixing
+incompatible votes.</p>
+<h3 id="postdoc-aggregation-analytical-vs-gemma-alignment">Postdoc
+aggregation: analytical-vs-Gemma alignment</h3>
+<p>For each sampled panel, selected reviewers vote on the same
+fictitious applications. Panels of size greater than three are evaluated
+with the same ensemble-of-trios rule as the synthetic track: usable
+trios are passed through the exact three-classifier EIE and
+majority-vote evaluators, scored against the hidden oracle, and
+averaged. The live artifact records per-seed/per-strategy/per-size EIE
+error, majority-vote error, usable-trio counts, degeneracy counts,
+older-minus-younger recommendation-rate disparity, panel composition,
+model digest, decode parameters, and vote-cache provenance in
+<code>output/data/postdoc_panel_results.json</code>. The companion
+<code>output/data/postdoc_panel_alignment.json</code> compares
+analytical and Gemma directional signs cell by cell and marks unresolved
+cells explicitly. A generated local web explorer
+(<code>output/web/ntqr_explorer.html</code>) is a non-publishing
+reader/QA aid over these same source artifacts; it exposes filters and
+source tables but does not change the PDF claim boundary, and a
+statistic is eligible for manuscript prose only after it is regenerated
+into the static artifacts and the token/caption contract.</p>
+</body>
+</html>

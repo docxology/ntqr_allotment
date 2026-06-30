@@ -1,0 +1,8 @@
+\frametitle{References}
+The bibliography below is generated from
+\breaktt{manuscript/references.bib} by the render pipeline. This section
+is intentionally citation-driven rather than a manual numbered list so
+DOI/URL fields can render as links where the output format supports
+them.
+
+\nocite{dawid1979,ntqr08,allotment,stone2011,aristotle_politics,aristotle_athenian,aquinas_lots,contarini1599,montesquieu1748,rousseau1762,borda1781,condorcet1785,flanigan2021,cohen1988,efron1993,holm1979,raykar2010,karger2014,lamont2009,peters1982,cole1981,lee2013,pier2018,wenneras1997,ginther2011,kaplan2008,johnson2008,fang2016elife,merton1968,neumark2019,north2013,grofman1983,hong2004,fishkin2009,bollen2014,fang2016,avin2019,arvan2025,zheng2023,shi2025,tomkins2017,helmer2017,hardt2016,bender2021}

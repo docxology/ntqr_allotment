@@ -1,0 +1,51 @@
+\contentsline {section}{\numberline {1}Abstract}{2}{section.1}%
+\contentsline {section}{\numberline {2}Introduction: panel formation before blind evaluation}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Blind evaluation begins before the estimator}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Application review as the empirical stress test}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Sortition from civic lotteries to evaluator sampling}{4}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Falsifiable claims and negative controls}{4}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Methods: instrument, assumptions, and companion track}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Synthetic deterministic track: seeded panels, blind estimates, oracle scoring}{6}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Pipeline: panel formation precedes no-answer-key estimation}{6}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Panel-formation strategies: four upstream rules}{7}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}NTQR evaluation: trio EIE, oracle scoring, and majority voting}{7}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.4}Companion diagnostics: alarm cost, ternary feasibility, and maximin fairness}{7}{subsubsection.3.1.4}%
+\contentsline {subsubsection}{\numberline {3.1.5}Notation: cells, trios, and inferential units}{8}{subsubsection.3.1.5}%
+\contentsline {subsubsection}{\numberline {3.1.6}Assumption ledger: how each claim can fail}{9}{subsubsection.3.1.6}%
+\contentsline {subsubsection}{\numberline {3.1.7}Sweep profiles: profiles, seeds, and aggregation units}{10}{subsubsection.3.1.7}%
+\contentsline {subsubsection}{\numberline {3.1.8}Controlled-correlation sweep: injected dependence as a diagnostic}{10}{subsubsection.3.1.8}%
+\contentsline {subsubsection}{\numberline {3.1.9}Composition-coupled confound: when group membership carries shared error}{10}{subsubsection.3.1.9}%
+\contentsline {subsubsection}{\numberline {3.1.10}Herfindahl exposure: concentration predicts shared-error risk}{10}{subsubsection.3.1.10}%
+\contentsline {subsubsection}{\numberline {3.1.11}Statistical power: separating rankings from resolved contrasts}{11}{subsubsection.3.1.11}%
+\contentsline {subsection}{\numberline {3.2}Real-Ollama reviewer-panel track: single-model live companion}{11}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Postdoctoral corpus: protected-attribute stress test}{11}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Reviewer profiles: expertise and age-bias prompts}{12}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Postdoc aggregation: analytical-vs-Gemma alignment}{12}{subsubsection.3.2.3}%
+\contentsline {section}{\numberline {4}Results: what resolved and what stayed bounded}{13}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Synthetic deterministic results: controlled spine for H1-H4}{13}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}Formation strategy sets the recovery floor}{13}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2}Sortition only separates when the confound rides on the balanced axis}{13}{subsubsection.4.1.2}%
+\contentsline {subsubsection}{\numberline {4.1.3}NTQR beats majority voting only in selected regimes}{14}{subsubsection.4.1.3}%
+\contentsline {subsubsection}{\numberline {4.1.4}Larger panels are a neutral sampling knob here}{14}{subsubsection.4.1.4}%
+\contentsline {subsubsection}{\numberline {4.1.5}Global injected correlation is measurable but recovery-limited}{14}{subsubsection.4.1.5}%
+\contentsline {subsubsection}{\numberline {4.1.6}Composition-coupled correlation exposes the sortition mechanism}{19}{subsubsection.4.1.6}%
+\contentsline {subsubsection}{\numberline {4.1.7}Power budgets distinguish ranking from resolved contrasts}{20}{subsubsection.4.1.7}%
+\contentsline {subsubsection}{\numberline {4.1.8}Companion diagnostics bound cost, correlation, fairness, and consistency}{23}{subsubsection.4.1.8}%
+\contentsline {subsection}{\numberline {4.2}Real-Ollama postdoctoral panel results: live H5 companion}{27}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Gemma ranking asks the same sampling question under prompt labels}{27}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Same-bias panels expose age-conditioned recommendations}{27}{subsubsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.3}Analytical and Gemma cells stay juxtaposed, not pooled}{27}{subsubsection.4.2.3}%
+\contentsline {subsubsection}{\numberline {4.2.4}Synthetic strategy ranking does not transfer to the live track}{29}{subsubsection.4.2.4}%
+\contentsline {section}{\numberline {5}Discussion: claim boundaries and implications}{31}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Hypothesis verdicts before interpretation}{31}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Practical lesson: selection rule before panel size}{31}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Formation strategy is the measured lever}{32}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Design-limited nulls remain results}{32}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Independence explains why strategy ordering changes}{32}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}Error independence must be measured before interpretation}{33}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}Scholarship frames the stress test, not the evidence level}{33}{subsection.5.7}%
+\contentsline {subsection}{\numberline {5.8}Limitations: synthetic scope, single-model live evidence, historical analogy}{34}{subsection.5.8}%
+\contentsline {subsection}{\numberline {5.9}Synthetic and live tracks operate at different inference levels}{34}{subsection.5.9}%
+\contentsline {subsection}{\numberline {5.10}Data, code, and generated-artifact availability}{34}{subsection.5.10}%
+\contentsline {subsection}{\numberline {5.11}Ethics, protected attributes, and competing interests}{34}{subsection.5.11}%
+\contentsline {section}{\numberline {6}References}{35}{section.6}%
