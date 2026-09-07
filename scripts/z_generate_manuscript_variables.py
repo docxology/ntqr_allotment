@@ -7,7 +7,7 @@ auto-runs this before rendering, then renders from ``output/manuscript/`` when p
 
 It (1) computes every token via ``generate_variables`` (recomputed from the real
 artifacts under ``output/data/``), (2) checks that every ``{{TOKEN}}`` used in
-``manuscript/*.md`` is produced (no orphans), (3) writes
+``docs/manuscript/*.md`` is produced (no orphans), (3) writes
 ``output/manuscript_variables.json``, and (4) unless ``--check`` is passed, writes
 token-substituted copies of every manuscript file (and ``config.yaml``) under
 ``output/manuscript/`` for the renderer to consume.

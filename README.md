@@ -113,7 +113,7 @@ source. See `pyproject.toml`.
 Every reported number regenerates from `output/data/` artifacts; nothing in the
 manuscript is hand-transcribed (`manuscript_variables.py` emits the tokens and a
 zero-orphan gate enforces it). The analysis scripts run in a dependency-correct
-order declared by `analysis.scripts` in `manuscript/config.yaml` — producers
+order declared by `analysis.scripts` in `docs/manuscript/config.yaml` — producers
 first, then the token injector, then the figure consumers:
 
 ```bash

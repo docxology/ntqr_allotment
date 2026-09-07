@@ -19,7 +19,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 from pathlib import Path
 
@@ -30,20 +29,22 @@ from ntqr_allotment.cross_family import (
     build_pairwise_error_correlation_matrix,
     collect_live_family_votes,
     contrast_same_vs_cross_family,
+    count_nonzero_pairs,
+    group_summary_rows,
+    hash_payload,
+    live_judge_provenance,
     make_family_correlated_votes,
     model_family,
     ollama_panel_available,
+    offline_judge_provenance,
     pair_correlation_records,
+    pair_record_rows,
     summarize_pair_groups,
 )
-from ntqr_allotment.personas import OllamaJudge, PersonaSpec, provenance_for_judge
+from ntqr_allotment.personas import PersonaSpec
 
 _ROOT = Path(__file__).resolve().parent.parent
 
-
-def _hash_payload(payload: dict[str, object]) -> str:
-    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:12]
 
 
 def _panel_for_seed(args, seed, live):
@@ -76,44 +77,6 @@ def _panel_for_seed(args, seed, live):
             seed=seed,
         )
     return panel, corpus
-
-
-def _live_judge_provenance(
-    models, replicates_per_model, base_url, temperature, timeout, num_predict
-):
-    records = []
-    live_models = [m for m in models for _ in range(replicates_per_model)]
-    for idx, model in enumerate(live_models):
-        judge = OllamaJudge(
-            model=model,
-            base_url=base_url,
-            timeout=timeout,
-            temperature=temperature,
-            seed=idx,
-            num_predict=num_predict,
-        )
-        record = provenance_for_judge(judge).to_dict()
-        record["judge_id"] = f"{model_family(model)}-{model}-{idx}"
-        records.append(record)
-    return records
-
-
-def _offline_judge_provenance(models, replicates_per_model=2):
-    records = []
-    for idx, model in enumerate([m for m in models for _ in range(replicates_per_model)]):
-        family = model_family(model)
-        records.append(
-            {
-                "judge_id": f"{family}-{idx}",
-                "model": model,
-                "family": family,
-                "digest": None,
-                "temperature": 0.0,
-                "seed": idx,
-                "num_predict": 0,
-            }
-        )
-    return records
 
 
 def main() -> None:
@@ -162,16 +125,16 @@ def main() -> None:
     if args.require_live and not live:
         raise SystemExit("required live Ollama panel is unavailable")
     judge_provenance = (
-        _live_judge_provenance(
+        live_judge_provenance(
             args.models,
-            args.replicates_per_model,
-            args.base_url,
-            args.temperature,
-            args.timeout,
-            args.num_predict,
+            replicates_per_model=args.replicates_per_model,
+            base_url=args.base_url,
+            temperature=args.temperature,
+            timeout=args.timeout,
+            num_predict=args.num_predict,
         )
         if live
-        else _offline_judge_provenance(args.models, args.replicates_per_model)
+        else offline_judge_provenance(args.models, args.replicates_per_model)
     )
     run_settings = {
         "models": args.models,
@@ -194,9 +157,7 @@ def main() -> None:
         contrast = contrast_same_vs_cross_family(matrix)
         pair_records = pair_correlation_records(matrix)
         group_summaries = summarize_pair_groups(matrix, seed=seed)
-        nonzero_pairs = sum(
-            1 for value in matrix.pair_abs_corr.values() if abs(value) > 0.0
-        )
+        nonzero_pairs = count_nonzero_pairs(matrix)
         contrasts.append(contrast)
         per_run.append(
             {
@@ -208,20 +169,8 @@ def main() -> None:
                 "n_cross_pairs": contrast.n_cross_pairs,
                 "nonzero_pairs": nonzero_pairs,
                 "total_pairs": len(matrix.pair_abs_corr),
-                "pair_records": [
-                    {**record._asdict(), "abs_corr": round(record.abs_corr, 6)}
-                    for record in pair_records
-                ],
-                "pair_group_summaries": [
-                    {
-                        **summary._asdict(),
-                        "mean_abs_corr": round(summary.mean_abs_corr, 6),
-                        "std_abs_corr": round(summary.std_abs_corr, 6),
-                        "ci_low": round(summary.ci_low, 6),
-                        "ci_high": round(summary.ci_high, 6),
-                    }
-                    for summary in group_summaries
-                ],
+                "pair_records": pair_record_rows(pair_records),
+                "pair_group_summaries": group_summary_rows(group_summaries),
                 "judge_provenance": judge_provenance,
             }
         )
@@ -231,7 +180,7 @@ def main() -> None:
         "schema_version": 2,
         "live_ollama": live,
         "source_config_hash": live_config.config_hash,
-        "config_hash": _hash_payload(run_settings),
+        "config_hash": hash_payload(run_settings),
         "config_path": str(args.config.resolve().relative_to(_ROOT)),
         "models": list(args.models),
         "replicates_per_model": args.replicates_per_model,

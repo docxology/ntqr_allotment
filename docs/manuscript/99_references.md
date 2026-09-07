@@ -1,6 +1,6 @@
 # References
 
-The bibliography below is generated from `manuscript/references.bib` by the
+The bibliography below is generated from `docs/manuscript/references.bib` by the
 render pipeline. This section is intentionally citation-driven rather than a
 manual numbered list so DOI/URL fields can render as links where the output
 format supports them.

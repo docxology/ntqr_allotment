@@ -74,7 +74,7 @@ def main() -> None:
 
     ensure_deterministic_hashing()  # representative_sortition is hash-order sensitive
     parser = argparse.ArgumentParser()
-    parser.add_argument("--profile", help="experiment profile from manuscript/config.yaml")
+    parser.add_argument("--profile", help="experiment profile from docs/manuscript/config.yaml")
     parser.add_argument("--workers", type=int, default=1, help="parallel worker processes")
     parser.add_argument(
         "--trial-timeout-s",

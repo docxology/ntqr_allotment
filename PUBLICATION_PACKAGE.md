@@ -70,7 +70,7 @@ discovery.**
 | Figures | `output/figures/*.png` | Generated from source artifacts; captions in Results remain the claim boundary. |
 | Data artifacts | `output/data/*.json`, `output/data/*.csv` | Include with source archive when the platform supports supplemental files. |
 | Provenance manifest | `output/data/stego_manifest.json` | Pairs with stego PDF/cover. |
-| Source manuscript | `manuscript/*.md`, `manuscript/references.bib`, `manuscript/config.yaml` | Source-owned text and config. |
+| Source manuscript | `docs/manuscript/*.md`, `docs/manuscript/references.bib`, `docs/manuscript/config.yaml` | Source-owned text and config. |
 | Rendered manuscript inputs | `output/manuscript/*.md`, `output/pdf/_combined_manuscript.tex` | Useful for arXiv-style source packages. |
 
 ## Platform Preparation
@@ -79,7 +79,7 @@ discovery.**
 
 - Upload the main PDF, source archive, generated figures, generated data artifacts, and `PUBLICATION_PACKAGE.md`.
 - Add the stego PDF and `stego_manifest.json` as optional provenance companions with the plain-JSON caveat.
-- DOI minted and Zenodo record published (2026-06-30, concept 10.5281/zenodo.21083779 / version 10.5281/zenodo.21083780, deposition `21083780`, state `done`); the deposit carries only the final combined PDF, per publication policy for this release. `manuscript/config.yaml` updated (doi/version_doi/version_record/keywords), manuscript rerendered, stego rebuilt, gates rerun green.
+- DOI minted and Zenodo record published (2026-06-30, concept 10.5281/zenodo.21083779 / version 10.5281/zenodo.21083780, deposition `21083780`, state `done`); the deposit carries only the final combined PDF, per publication policy for this release. `docs/manuscript/config.yaml` updated (doi/version_doi/version_record/keywords), manuscript rerendered, stego rebuilt, gates rerun green.
 
 ### arXiv-style Preprint
 
@@ -125,7 +125,7 @@ token emits true mean; falsification-ledger cells updated.
 
 Refreshed 2026-06-30 after Zenodo DOI reservation (production, unpublished draft):
 concept DOI `10.5281/zenodo.21083779`, version DOI `10.5281/zenodo.21083780`
-written into `manuscript/config.yaml`, the title page, and the Discussion's
+written into `docs/manuscript/config.yaml`, the title page, and the Discussion's
 data-availability sentence; manuscript rerendered and stego rebuilt against the
 refreshed PDF.
 

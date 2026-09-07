@@ -18,7 +18,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 from pathlib import Path
 
@@ -28,21 +27,21 @@ from ntqr_allotment.cross_family import (
     build_pairwise_error_correlation_matrix,
     collect_live_family_votes,
     contrast_same_vs_cross_family,
+    count_nonzero_pairs,
+    group_summary_rows,
+    hash_payload,
+    live_judge_provenance,
     make_family_correlated_votes,
     model_family,
     ollama_panel_available,
+    offline_judge_provenance,
     pair_correlation_records,
+    pair_record_rows,
     summarize_pair_groups,
 )
-from ntqr_allotment.personas import OllamaJudge, PersonaSpec, provenance_for_judge
+from ntqr_allotment.personas import PersonaSpec
 
 _ROOT = Path(__file__).resolve().parent.parent
-
-
-def _hash_payload(payload: dict[str, object]) -> str:
-    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:12]
-
 
 def main() -> None:
     ap = argparse.ArgumentParser()
@@ -106,8 +105,13 @@ def main() -> None:
             num_predict=num_predict,
             progress_every=progress_every,
         )
-        judge_provenance = _live_judge_provenance(
-            live_models, base_url, temperature, timeout, num_predict
+        judge_provenance = live_judge_provenance(
+            models,
+            replicates_per_model=replicates_per_model,
+            base_url=base_url,
+            temperature=temperature,
+            timeout=timeout,
+            num_predict=num_predict,
         )
     else:
         families: list[str] = []
@@ -121,13 +125,13 @@ def main() -> None:
             shared_strength=shared_strength,
             seed=seed,
         )
-        judge_provenance = _offline_judge_provenance(models, replicates_per_model)
+        judge_provenance = offline_judge_provenance(models, replicates_per_model)
 
     matrix = build_pairwise_error_correlation_matrix(panel, corpus)
     contrast = contrast_same_vs_cross_family(matrix)
     pair_records = pair_correlation_records(matrix)
     group_summaries = summarize_pair_groups(matrix, seed=seed)
-    nonzero_pairs = sum(1 for value in matrix.pair_abs_corr.values() if abs(value) > 0.0)
+    nonzero_pairs = count_nonzero_pairs(matrix)
     run_settings = {
         "models": models,
         "replicates_per_model": replicates_per_model,
@@ -146,7 +150,7 @@ def main() -> None:
         "schema_version": 2,
         "live_ollama": live,
         "source_config_hash": live_config.config_hash,
-        "config_hash": _hash_payload(run_settings),
+        "config_hash": hash_payload(run_settings),
         "config_path": str(args.config.resolve().relative_to(_ROOT)),
         "models": models,
         "replicates_per_model": replicates_per_model,
@@ -165,20 +169,8 @@ def main() -> None:
         "families": list(matrix.families),
         "judge_provenance": judge_provenance,
         "pair_abs_corr": {k: round(v, 6) for k, v in matrix.pair_abs_corr.items()},
-        "pair_records": [
-            {**record._asdict(), "abs_corr": round(record.abs_corr, 6)}
-            for record in pair_records
-        ],
-        "pair_group_summaries": [
-            {
-                **summary._asdict(),
-                "mean_abs_corr": round(summary.mean_abs_corr, 6),
-                "std_abs_corr": round(summary.std_abs_corr, 6),
-                "ci_low": round(summary.ci_low, 6),
-                "ci_high": round(summary.ci_high, 6),
-            }
-            for summary in group_summaries
-        ],
+        "pair_records": pair_record_rows(pair_records),
+        "pair_group_summaries": group_summary_rows(group_summaries),
         "nonzero_pairs": nonzero_pairs,
         "total_pairs": len(matrix.pair_abs_corr),
         "mean_abs_same_family": round(contrast.mean_abs_same_family, 6),
@@ -199,48 +191,6 @@ def main() -> None:
     out_path.write_text(json.dumps(payload, indent=2))
     print(str(out_path))
     print(json.dumps(payload, indent=2))
-
-
-def _live_judge_provenance(
-    models: list[str],
-    base_url: str,
-    temperature: float,
-    timeout: float,
-    num_predict: int,
-) -> list[dict[str, object]]:
-    records: list[dict[str, object]] = []
-    for idx, model in enumerate(models):
-        judge = OllamaJudge(
-            model=model,
-            base_url=base_url,
-            timeout=timeout,
-            temperature=temperature,
-            seed=idx,
-            num_predict=num_predict,
-        )
-        record = provenance_for_judge(judge).to_dict()
-        record["judge_id"] = f"{model_family(model)}-{model}-{idx}"
-        records.append(record)
-    return records
-
-
-def _offline_judge_provenance(
-    models: list[str], replicates_per_model: int = 2
-) -> list[dict[str, object]]:
-    records: list[dict[str, object]] = []
-    for idx, model in enumerate([m for m in models for _ in range(replicates_per_model)]):
-        records.append(
-            {
-                "judge_id": f"{model_family(model)}-{idx}",
-                "model": model,
-                "family": model_family(model),
-                "digest": None,
-                "temperature": 0.0,
-                "seed": idx,
-                "num_predict": 0,
-            }
-        )
-    return records
 
 
 if __name__ == "__main__":

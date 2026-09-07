@@ -62,6 +62,7 @@ from __future__ import annotations
 
 import hashlib
 import math
+from collections import defaultdict
 from dataclasses import dataclass
 from itertools import combinations
 from multiprocessing import Pool
@@ -549,8 +550,216 @@ def _run_concentration_task(task: dict[str, Any]) -> ConcentrationTrialResult:
     return run_concentration_trial(**task)
 
 
+# --------------------------------------------------------------------------- #
+# Phase-sweep aggregation (moved verbatim from scripts/run_bloc_phase.py).    #
+# --------------------------------------------------------------------------- #
+
+#: Strategy ordering used by the phase-sweep grids and aggregate cells.
+PHASE_STRATEGIES: tuple[str, ...] = (
+    "expertise_threshold",
+    "representative_sortition",
+    "random_selection",
+    "ideological_selection",
+)
+
+
+def phase_mean(values: list[float]) -> float:
+    return float(sum(values) / len(values)) if values else float("nan")
+
+
+def phase_ci95(values: list[float]) -> float:
+    n = len(values)
+    if n <= 1:
+        return 0.0
+    mean = phase_mean(values)
+    var = sum((v - mean) ** 2 for v in values) / (n - 1)
+    return float(math.sqrt(var) / math.sqrt(n) * 1.96)
+
+
+def valid_phase_trials(rows: list) -> list:
+    return [r for r in rows if r.n_trios > 0 and math.isfinite(r.eie_error)]
+
+
+def aggregate_phase_cells(results: list) -> list[dict[str, object]]:
+    by_key: dict[tuple[str, float], list[float]] = defaultdict(list)
+    corr_by_key: dict[tuple[str, float], list[float]] = defaultdict(list)
+    for r in valid_phase_trials(results):
+        by_key[(r.strategy, r.bloc_correlation)].append(r.eie_error)
+    for r in results:
+        if math.isfinite(r.mean_abs_pair_corr):
+            corr_by_key[(r.strategy, r.bloc_correlation)].append(r.mean_abs_pair_corr)
+    rhos = sorted({r.bloc_correlation for r in results})
+    cells: list[dict[str, object]] = []
+    for strategy in PHASE_STRATEGIES:
+        for rho in rhos:
+            vals = by_key.get((strategy, rho), [])
+            corr = corr_by_key.get((strategy, rho), [])
+            cells.append(
+                {
+                    "strategy": strategy,
+                    "bloc_correlation": rho,
+                    "n": len(vals),
+                    "eie_mean": phase_mean(vals),
+                    "eie_ci95": phase_ci95(vals),
+                    "corr_mean": phase_mean(corr),
+                }
+            )
+    return cells
+
+
+def phase_cell_mean(cells: list[dict[str, object]], strategy: str, rho: float) -> float:
+    for c in cells:
+        if c["strategy"] == strategy and abs(float(c["bloc_correlation"]) - rho) < 1e-9:
+            return float(c["eie_mean"])
+    return float("nan")
+
+
+def phase_cell_mean_by(cells: list[dict[str, object]], key: str, value: float) -> float:
+    for c in cells:
+        if abs(float(c[key]) - value) < 1e-9:
+            return float(c["eie_mean"])
+    return float("nan")
+
+
+def phase_headline(cells: list[dict[str, object]], rho_lo: float, rho_hi: float) -> dict[str, object]:
+    def sep(rho: float) -> float:
+        return phase_cell_mean(cells, "ideological_selection", rho) - phase_cell_mean(
+            cells, "representative_sortition", rho
+        )
+
+    return {
+        "rho_lo": rho_lo,
+        "rho_hi": rho_hi,
+        "sep_lo": sep(rho_lo),
+        "sep_hi": sep(rho_hi),
+        "representative_lo": phase_cell_mean(cells, "representative_sortition", rho_lo),
+        "representative_hi": phase_cell_mean(cells, "representative_sortition", rho_hi),
+        "ideological_lo": phase_cell_mean(cells, "ideological_selection", rho_lo),
+        "ideological_hi": phase_cell_mean(cells, "ideological_selection", rho_hi),
+        "random_lo": phase_cell_mean(cells, "random_selection", rho_lo),
+        "random_hi": phase_cell_mean(cells, "random_selection", rho_hi),
+    }
+
+
+def phase_robustness(results: list, rho_hi: float) -> dict[str, object]:
+    """Per-regime paired check at high coupling: ideological vs representative.
+
+    Matches each (bias_std, mean_expertise, panel_size, seed) cell across the two
+    strategies and tests whether the ideological-minus-representative gap is
+    positive per regime -- guarding the pooled headline against a Simpson reversal.
+    """
+    def keyed(strategy: str) -> dict[tuple, float]:
+        out: dict[tuple, float] = {}
+        for r in valid_phase_trials(results):
+            if r.strategy == strategy and abs(r.bloc_correlation - rho_hi) < 1e-9:
+                out[(r.bias_std, r.mean_expertise, r.panel_size, r.seed)] = r.eie_error
+        return out
+
+    ideo = keyed("ideological_selection")
+    rep = keyed("representative_sortition")
+    diffs = [ideo[k] - rep[k] for k in ideo.keys() & rep.keys()]
+    n = len(diffs)
+    positive = sum(1 for d in diffs if d > 0)
+    mean_diff = phase_mean(diffs)
+    return {
+        "rho_hi": rho_hi,
+        "n_paired": n,
+        "n_ideo_gt_rep": positive,
+        "frac_ideo_gt_rep": (positive / n) if n else float("nan"),
+        "paired_mean_diff": mean_diff,
+        "paired_ci95": phase_ci95(diffs),
+    }
+
+
+def phase_degeneracy(results: list, rho_hi: float) -> dict[str, dict[str, float]]:
+    out: dict[str, dict[str, float]] = {}
+    for strategy in PHASE_STRATEGIES:
+        rows = [r for r in results if r.strategy == strategy and abs(r.bloc_correlation - rho_hi) < 1e-9]
+        if not rows:
+            continue
+        degenerate = sum(1 for r in rows if r.n_trios == 0)
+        out[strategy] = {
+            "n_cells": len(rows),
+            "degenerate_frac": degenerate / len(rows),
+            "mean_n_trios": phase_mean([float(r.n_trios) for r in rows]),
+        }
+    return out
+
+
+def aggregate_concentration_cells(results: list) -> list[dict[str, object]]:
+    """Aggregate concentration-dial trials by concentration level."""
+    by_c: dict[float, list[float]] = defaultdict(list)
+    corr_by_c: dict[float, list[float]] = defaultdict(list)
+    for r in results:
+        if r.n_trios > 0 and math.isfinite(r.eie_error):
+            by_c[r.concentration].append(r.eie_error)
+        if math.isfinite(r.mean_abs_pair_corr):
+            corr_by_c[r.concentration].append(r.mean_abs_pair_corr)
+    cells = []
+    for c in sorted(by_c.keys() | corr_by_c.keys()):
+        vals = by_c.get(c, [])
+        cells.append(
+            {
+                "concentration": c,
+                "n": len(vals),
+                "eie_mean": phase_mean(vals),
+                "eie_ci95": phase_ci95(vals),
+                "corr_mean": phase_mean(corr_by_c.get(c, [])),
+            }
+        )
+    return cells
+
+
+def monotone_up_fraction(cells: list[dict[str, object]]) -> float:
+    """Fraction of adjacent concentration steps where mean EIE error increases."""
+    ordered = sorted(cells, key=lambda c: float(c["concentration"]))
+    means = [float(c["eie_mean"]) for c in ordered if math.isfinite(float(c["eie_mean"]))]
+    if len(means) < 2:
+        return float("nan")
+    ups = sum(1 for a, b in zip(means, means[1:]) if b >= a)
+    return ups / (len(means) - 1)
+
+
+def build_bloc_phase_summary(
+    main_results: list,
+    control_results: list,
+    concentration_results: list,
+    rho_lo: float,
+    rho_hi: float,
+) -> dict[str, object]:
+    """Assemble the ``bloc_phase_summary.json`` payload (schema and key order fixed).
+
+    ``main_results``/``control_results`` are lists of :class:`BlocTrialResult`
+    (main grid keyed on ``ideology``; control on ``expertise_tier``);
+    ``concentration_results`` a list of :class:`ConcentrationTrialResult`.
+    """
+    main_cells = aggregate_phase_cells(main_results)
+    control_cells = aggregate_phase_cells(control_results)
+    conc_cells = aggregate_concentration_cells(concentration_results)
+    return {
+        "strategies": list(PHASE_STRATEGIES),
+        "cells": main_cells,
+        "headline": phase_headline(main_cells, rho_lo, rho_hi),
+        "negative_control": {
+            "axis": "expertise_tier",
+            "cells": control_cells,
+            "headline": phase_headline(control_cells, rho_lo, rho_hi),
+        },
+        "robustness": phase_robustness(main_results, rho_hi),
+        "degeneracy": phase_degeneracy(main_results, rho_hi),
+        "concentration": {
+            "bloc_correlation": rho_hi,
+            "cells": conc_cells,
+            "eie_balanced": phase_cell_mean_by(conc_cells, "concentration", 0.0),
+            "eie_concentrated": phase_cell_mean_by(conc_cells, "concentration", 1.0),
+            "monotone_increasing_fraction": monotone_up_fraction(conc_cells),
+        },
+    }
+
+
 __all__ = [
     "CONFOUND_AXES",
+    "PHASE_STRATEGIES",
     "sample_votes_bloc_correlated",
     "BlocTrialResult",
     "run_bloc_trial",
@@ -560,4 +769,17 @@ __all__ = [
     "ConcentrationTrialResult",
     "run_concentration_trial",
     "run_concentration_sweep",
+    "phase_mean",
+    "phase_ci95",
+    "valid_phase_trials",
+    "aggregate_phase_cells",
+    "phase_cell_mean",
+    "phase_cell_mean_by",
+    "phase_headline",
+    "phase_robustness",
+    "phase_degeneracy",
+    "aggregate_concentration_cells",
+    "monotone_up_fraction",
+    "build_bloc_phase_summary",
 ]
+

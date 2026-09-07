@@ -22,6 +22,7 @@ from ntqr_allotment.cross_family import (
     build_pairwise_error_correlation_matrix,
     collect_live_family_votes,
     contrast_same_vs_cross_family,
+    count_nonzero_pairs,
     make_family_correlated_votes,
     model_family,
     ollama_panel_available,
@@ -391,3 +392,14 @@ def test_aggregate_contrasts_independent_regime_unstable_sign():
 def test_aggregate_contrasts_rejects_empty():
     with pytest.raises(ValueError, match="non-empty"):
         aggregate_contrasts([])
+
+
+def test_count_nonzero_pairs_ignores_exactly_zero_pairs() -> None:
+    """The nonzero-pair count excludes pairs whose measured |corr| is exactly 0."""
+    matrix = PairwiseCorrelationMatrix(
+        judge_ids=("j0", "j1", "j2"),
+        families=("qwen2", "qwen2", "gemma3"),
+        pair_abs_corr={"(0,1)": 0.0, "(0,2)": 0.25, "(1,2)": 0.5},
+    )
+
+    assert count_nonzero_pairs(matrix) == 2

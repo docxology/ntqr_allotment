@@ -43,6 +43,8 @@ deterministic.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import sys
 from dataclasses import dataclass
 from itertools import combinations
@@ -51,8 +53,8 @@ from typing import NamedTuple, Sequence
 import numpy as np
 
 from .corpus import CorpusItem
+from .personas import OllamaJudge, PersonaSpec, provenance_for_judge
 from .dependence import measure_error_correlations
-from .personas import OllamaJudge, PersonaSpec
 from .statistics_analysis import mean_ci_summary
 
 
@@ -563,6 +565,95 @@ def _collect_live_votes_impl(  # pragma: no cover - requires a live Ollama serve
     return tagged
 
 
+# --------------------------------------------------------------------------- #
+# Artifact shaping (moved from scripts/run_cross_family*.py).                  #
+# --------------------------------------------------------------------------- #
+
+def count_nonzero_pairs(matrix: PairwiseCorrelationMatrix) -> int:
+    """Number of judge pairs with any nonzero measured |error-correlation|."""
+    return sum(1 for value in matrix.pair_abs_corr.values() if abs(value) > 0.0)
+
+
+def pair_record_rows(
+    pair_records: Sequence[PairCorrelationRecord],
+) -> list[dict[str, object]]:
+    """Serialize per-pair records for JSON artifacts (6-dp rounding)."""
+    return [
+        {**record._asdict(), "abs_corr": round(record.abs_corr, 6)}
+        for record in pair_records
+    ]
+
+
+def group_summary_rows(
+    group_summaries: Sequence[PairGroupSummary],
+) -> list[dict[str, object]]:
+    """Serialize per-group summaries for JSON artifacts (6-dp rounding)."""
+    return [
+        {
+            **summary._asdict(),
+            "mean_abs_corr": round(summary.mean_abs_corr, 6),
+            "std_abs_corr": round(summary.std_abs_corr, 6),
+            "ci_low": round(summary.ci_low, 6),
+            "ci_high": round(summary.ci_high, 6),
+        }
+        for summary in group_summaries
+    ]
+
+
+def hash_payload(payload: dict[str, object]) -> str:
+    """Stable 12-hex digest of a run-settings mapping (artifact provenance)."""
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:12]
+
+
+def live_judge_provenance(
+    models: Sequence[str],
+    *,
+    replicates_per_model: int,
+    base_url: str,
+    temperature: float,
+    timeout: float,
+    num_predict: int,
+) -> list[dict[str, object]]:
+    """Provenance records for a live Ollama panel (one judge per model replicate)."""
+    records: list[dict[str, object]] = []
+    live_models = [m for m in models for _ in range(replicates_per_model)]
+    for idx, model in enumerate(live_models):
+        judge = OllamaJudge(
+            model=model,
+            base_url=base_url,
+            timeout=timeout,
+            temperature=temperature,
+            seed=idx,
+            num_predict=num_predict,
+        )
+        record = provenance_for_judge(judge).to_dict()
+        record["judge_id"] = f"{model_family(model)}-{model}-{idx}"
+        records.append(record)
+    return records
+
+
+def offline_judge_provenance(
+    models: Sequence[str], replicates_per_model: int = 2
+) -> list[dict[str, object]]:
+    """Provenance records for the deterministic offline panel."""
+    records: list[dict[str, object]] = []
+    for idx, model in enumerate([m for m in models for _ in range(replicates_per_model)]):
+        family = model_family(model)
+        records.append(
+            {
+                "judge_id": f"{family}-{idx}",
+                "model": model,
+                "family": family,
+                "digest": None,
+                "temperature": 0.0,
+                "seed": idx,
+                "num_predict": 0,
+            }
+        )
+    return records
+
+
 __all__ = [
     "model_family",
     "TaggedJudgeVotes",
@@ -579,4 +670,11 @@ __all__ = [
     "make_family_correlated_votes",
     "ollama_panel_available",
     "collect_live_family_votes",
+    "count_nonzero_pairs",
+    "pair_record_rows",
+    "group_summary_rows",
+    "hash_payload",
+    "live_judge_provenance",
+    "offline_judge_provenance",
 ]
+

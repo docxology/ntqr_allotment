@@ -16,7 +16,11 @@ import pytest
 
 from ntqr_allotment.bloc_confound import (
     BlocPhaseGrid,
+    BlocTrialResult,
+    ConcentrationTrialResult,
+    PHASE_STRATEGIES,
     _norm_ppf,
+    build_bloc_phase_summary,
     concentration_panel,
     run_bloc_trial,
     run_concentration_trial,
@@ -305,3 +309,98 @@ def test_phase_grid_validation_and_task_count() -> None:
             panel_sizes=(6,),
             seeds=(0,),
         )
+
+
+def _bloc_trial(
+    strategy: str,
+    rho: float,
+    seed: int,
+    n_trios: int,
+    eie: float,
+    *,
+    corr: float = 0.0,
+) -> BlocTrialResult:
+    return BlocTrialResult(
+        strategy=strategy,
+        bloc_correlation=rho,
+        bias_std=0.3,
+        mean_expertise=0.72,
+        panel_size=6,
+        n_items=300,
+        seed=seed,
+        n_trios=n_trios,
+        eie_error=eie,
+        mv_error=eie,
+        mean_abs_pair_corr=corr,
+    )
+
+
+def _concentration_trial(concentration: float, seed: int, eie: float) -> ConcentrationTrialResult:
+    return ConcentrationTrialResult(
+        concentration=concentration,
+        bloc_correlation=0.9,
+        bias_std=0.3,
+        mean_expertise=0.72,
+        panel_size=6,
+        n_items=300,
+        seed=seed,
+        n_trios=2,
+        eie_error=eie,
+        mv_error=eie,
+        mean_abs_pair_corr=0.0,
+    )
+
+
+def test_build_bloc_phase_summary_schema_and_values() -> None:
+    """The summary contract (consumed by manuscript_variables tokens) survives the
+    move of the aggregation logic from scripts/run_bloc_phase.py into src.
+    """
+    main_results = [
+        _bloc_trial("representative_sortition", 0.0, 1, 2, 0.10),
+        _bloc_trial("representative_sortition", 0.0, 2, 2, 0.20),
+        _bloc_trial("ideological_selection", 0.0, 1, 2, 0.12),
+        _bloc_trial("ideological_selection", 0.0, 2, 2, 0.18),
+        _bloc_trial("representative_sortition", 0.9, 1, 2, 0.10),
+        _bloc_trial("representative_sortition", 0.9, 2, 2, 0.20),
+        # Degenerate cell (no usable trios): excluded from means, counted in degeneracy.
+        _bloc_trial("representative_sortition", 0.9, 3, 0, float("nan")),
+        _bloc_trial("ideological_selection", 0.9, 1, 2, 0.30),
+        _bloc_trial("ideological_selection", 0.9, 2, 2, 0.40),
+    ]
+    control_results = [
+        _bloc_trial("representative_sortition", 0.0, 1, 2, 0.10),
+        _bloc_trial("ideological_selection", 0.0, 1, 2, 0.30),
+    ]
+    conc_results = [
+        _concentration_trial(0.0, 1, 0.20),
+        _concentration_trial(0.0, 2, 0.40),
+        _concentration_trial(1.0, 1, 0.60),
+    ]
+
+    summary = build_bloc_phase_summary(main_results, control_results, conc_results, 0.0, 0.9)
+
+    assert summary["strategies"] == list(PHASE_STRATEGIES)
+    # Headline: strategies collapse at rho=0 and fan out at rho=0.9.
+    assert summary["headline"]["sep_lo"] == pytest.approx(0.0, abs=1e-12)
+    assert summary["headline"]["sep_hi"] == pytest.approx(0.20)
+    # Degenerate trial excluded from cell means but counted in degeneracy.
+    rep_hi = next(
+        c
+        for c in summary["cells"]
+        if c["strategy"] == "representative_sortition" and c["bloc_correlation"] == pytest.approx(0.9)
+    )
+    assert rep_hi["n"] == 2
+    assert rep_hi["eie_mean"] == pytest.approx(0.15)
+    assert summary["degeneracy"]["representative_sortition"]["degenerate_frac"] == pytest.approx(1 / 3)
+    assert summary["degeneracy"]["representative_sortition"]["mean_n_trios"] == pytest.approx(4 / 3)
+    # Per-regime pairing at high coupling: every paired regime has ideo > rep.
+    assert summary["robustness"]["n_paired"] == 2
+    assert summary["robustness"]["n_ideo_gt_rep"] == 2
+    assert summary["robustness"]["paired_mean_diff"] == pytest.approx(0.20)
+    # Negative control axis is carried verbatim.
+    assert summary["negative_control"]["axis"] == "expertise_tier"
+    assert summary["negative_control"]["headline"]["sep_lo"] == pytest.approx(0.20)
+    # Concentration dial: mean error rises from balanced to concentrated.
+    assert summary["concentration"]["eie_balanced"] == pytest.approx(0.30)
+    assert summary["concentration"]["eie_concentrated"] == pytest.approx(0.60)
+    assert summary["concentration"]["monotone_increasing_fraction"] == pytest.approx(1.0)

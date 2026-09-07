@@ -100,7 +100,7 @@ def main() -> None:
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", default="manuscript/config.yaml")
+    parser.add_argument("--config", default="docs/manuscript/config.yaml")
     parser.add_argument("--offline", action="store_true")
     parser.add_argument("--require-live", dest="require_live", action="store_true")
     parser.add_argument("--allow-unavailable-live", dest="require_live", action="store_false")
