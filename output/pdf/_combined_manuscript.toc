@@ -12,14 +12,14 @@
 \contentsline {subsubsection}{\numberline {3.1.4}Companion diagnostics: alarm cost, ternary feasibility, and maximin fairness}{7}{subsubsection.3.1.4}%
 \contentsline {subsubsection}{\numberline {3.1.5}Notation: cells, trios, and inferential units}{8}{subsubsection.3.1.5}%
 \contentsline {subsubsection}{\numberline {3.1.6}Assumption ledger: how each claim can fail}{9}{subsubsection.3.1.6}%
-\contentsline {subsubsection}{\numberline {3.1.7}Sweep profiles: profiles, seeds, and aggregation units}{10}{subsubsection.3.1.7}%
+\contentsline {subsubsection}{\numberline {3.1.7}Sweep profiles: profiles, seeds, and aggregation units}{9}{subsubsection.3.1.7}%
 \contentsline {subsubsection}{\numberline {3.1.8}Controlled-correlation sweep: injected dependence as a diagnostic}{10}{subsubsection.3.1.8}%
 \contentsline {subsubsection}{\numberline {3.1.9}Composition-coupled confound: when group membership carries shared error}{10}{subsubsection.3.1.9}%
 \contentsline {subsubsection}{\numberline {3.1.10}Herfindahl exposure: concentration predicts shared-error risk}{10}{subsubsection.3.1.10}%
 \contentsline {subsubsection}{\numberline {3.1.11}Statistical power: separating rankings from resolved contrasts}{11}{subsubsection.3.1.11}%
 \contentsline {subsection}{\numberline {3.2}Real-Ollama reviewer-panel track: single-model live companion}{11}{subsection.3.2}%
 \contentsline {subsubsection}{\numberline {3.2.1}Postdoctoral corpus: protected-attribute stress test}{11}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Reviewer profiles: expertise and age-bias prompts}{12}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.2}Reviewer profiles: expertise and age-bias prompts}{11}{subsubsection.3.2.2}%
 \contentsline {subsubsection}{\numberline {3.2.3}Postdoc aggregation: analytical-vs-Gemma alignment}{12}{subsubsection.3.2.3}%
 \contentsline {section}{\numberline {4}Results: what resolved and what stayed bounded}{13}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Synthetic deterministic results: controlled spine for H1-H4}{13}{subsection.4.1}%

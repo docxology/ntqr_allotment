@@ -7,6 +7,15 @@ paper:
     image: "figures/ntqr_cover.png"
     title: "Sortition-to-NTQR schematic cover"
     description: "Deterministic schematic cover showing the pipeline from audited lottery through trios to NTQR agreement diagnostics and strategy ranking."
+    alt: "Schematic cover: an audited lottery feeds randomly formed expert trios whose agreement diagnostics rank NTQR evaluation strategies"
+
+render:
+  formats:
+    pdf: true
+    html: true
+    slides: false
+    docx: false
+    epub: true
 
 authors:
   - name: "Daniel Ari Friedman"
@@ -20,6 +29,18 @@ publication:
   doi: "10.5281/zenodo.21083779"
   version_doi: "10.5281/zenodo.21083780"
   version_record: "https://zenodo.org/records/21083780"
+
+keywords:
+  - "sortition"
+  - "NTQR"
+  - "unlabeled evaluation"
+  - "expert panels"
+  - "peer review"
+  - "error independence"
+  - "statistical power"
+  - "panel formation"
+  - "synthetic evaluation"
+  - "LLM reviewers"
 
 # Stage-02 analysis script order (dependency-correct). Without this allowlist the
 # infra runs scripts/*.py in lexicographic order, which puts figure/consumer

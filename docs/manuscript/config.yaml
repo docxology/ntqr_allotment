@@ -7,6 +7,15 @@ paper:
     image: "figures/ntqr_cover.png"
     title: "Sortition-to-NTQR schematic cover"
     description: "Deterministic schematic cover showing the pipeline from audited lottery through trios to NTQR agreement diagnostics and strategy ranking."
+    alt: "Schematic cover: an audited lottery feeds randomly formed expert trios whose agreement diagnostics rank NTQR evaluation strategies"
+
+render:
+  formats:
+    pdf: true
+    html: true
+    slides: false
+    docx: false
+    epub: true
 
 authors:
   - name: "Daniel Ari Friedman"

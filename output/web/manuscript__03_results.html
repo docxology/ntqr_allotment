@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8" />
-  <meta name="generator" content="pandoc 3.10" />
+  <meta name="generator" content="pandoc 3.11" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>03_results.md.web</title>
   <style>
@@ -41,7 +41,6 @@
       body {
         background-color: transparent;
         color: black;
-        font-size: 12pt;
       }
       p, h2, h3 {
         orphans: 3;
@@ -179,12 +178,458 @@ window.MathJax.chtml = Object.assign({}, window.MathJax.chtml, {
   fontURL: "https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.0.0/chtml/woff2",
   dynamicPrefix: "https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.0.0/chtml/dynamic"
 });
+var templateMathOutput = window.MathJax.output || {};
+window.MathJax.output = Object.assign({}, templateMathOutput, {
+  displayOverflow: "linebreak",
+  linebreaks: Object.assign({}, templateMathOutput.linebreaks, {
+    inline: true,
+    width: "100%",
+    lineleading: 0.5
+  })
+});
+window.normalizeTemplateMathJaxAria = function () {
+  document.querySelectorAll("mjx-speech[aria-roledescription]").forEach(function (node) {
+    var roleDescription = node.getAttribute("aria-roledescription") || "";
+    if (/[-]/.test(roleDescription)) {
+      node.setAttribute("aria-roledescription", "mathematical expression");
+    }
+  });
+};
+window.MathJax.startup = Object.assign({}, window.MathJax.startup, {
+  ready: function () {
+    var measuredWidth = document.documentElement.clientWidth;
+    var reflowQueued = false;
+    window.MathJax.startup.defaultReady();
+    window.templateMathJaxReflowPromise = window.MathJax.startup.promise.then(
+      window.normalizeTemplateMathJaxAria
+    );
+    function reflowDisplayMath() {
+      if (reflowQueued || document.documentElement.clientWidth === measuredWidth) return;
+      reflowQueued = true;
+      window.templateMathJaxReflowPromise = window.templateMathJaxReflowPromise
+        .catch(function () { /* A later resize may retry a failed render. */ })
+        .then(async function () {
+          var width = document.documentElement.clientWidth;
+          try {
+            // MathJax 4 MathItem.STATE.METRICS = 110. The default RERENDER
+            // state retains old container metrics and cannot reflow on zoom.
+            await window.MathJax.startup.document.rerenderPromise(110);
+            window.normalizeTemplateMathJaxAria();
+            window.templateMathJaxReflowError = null;
+          } catch (error) {
+            window.templateMathJaxReflowError = String(error);
+            console.error("MathJax viewport reflow failed", error);
+            throw error;
+          } finally {
+            measuredWidth = width;
+            reflowQueued = false;
+          }
+        })
+        .then(reflowDisplayMath);
+      // Keep failure observable to callers without an unhandled rejection.
+      window.templateMathJaxReflowPromise.catch(function () {});
+    }
+    window.addEventListener("resize", reflowDisplayMath);
+    // Also cover a resize that happened during the initial asynchronous render.
+    window.templateMathJaxReflowPromise.then(reflowDisplayMath);
+  }
+});
 </script>
 <script defer=""
-  src="https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-chtml.js"
-  type="text/javascript" integrity="sha384-2BWc4dVaHADUocwKrUrK9u3iDwHxVMKXWEcoRmUkXYSFKhAsgVAYClu9ydNuo5Oz" crossorigin="anonymous"></script>
+  type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-chtml.js" integrity="sha384-2BWc4dVaHADUocwKrUrK9u3iDwHxVMKXWEcoRmUkXYSFKhAsgVAYClu9ydNuo5Oz" crossorigin="anonymous"></script>
+
+<link data-template-favicon rel="icon" href="favicon.ico">
+
+<style>
+:root {
+  --brand-1: #5b6ee0;
+  --web-bg: #f8f8f8;
+  --web-surface: #ffffff;
+  --web-text: #2c3e50;
+  --web-border: #bdc3c7;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --brand-1: #7e8ce8;
+    --web-bg: #0f1420;
+    --web-surface: #161c2b;
+    --web-text: #e6eaf2;
+    --web-border: #2a3447;
+  }
+}
+.theorem-box {
+  border-left: 4px solid var(--brand-1);
+  background: var(--web-surface);
+  padding: 0.6em 1em;
+  margin: 1.1em 0;
+  border-radius: 0 4px 4px 0;
+}
+.theorem-box.definition { border-left-style: dashed; }
+.theorem-box > p:first-child { margin-top: 0; }
+.theorem-box > p:last-child { margin-bottom: 0; }
+.figure-long-description {
+  border: 1px solid var(--web-border);
+  border-radius: 4px;
+  margin-block: 0.75rem;
+  padding: 0.5rem 0.75rem;
+}
+.figure-long-description > summary { cursor: pointer; font-weight: 700; }
+.figure-long-description > p { max-width: 80ch; overflow-wrap: anywhere; }
+.figure-exact-values { max-width: 80ch; overflow-wrap: anywhere; }
+code { overflow-wrap: anywhere; word-break: break-word; }
+pre {
+  max-width: 100%;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+pre code { overflow-wrap: inherit; white-space: inherit; word-break: inherit; }
+div.sourceCode { max-width: 100%; overflow: visible; }
+pre.sourceCode { background: #2c3e50; color: #ecf0f1; }
+pre.sourceCode code,
+pre.sourceCode code span { color: inherit; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+mjx-container[display="true"] { max-width: 100%; overflow: visible; }
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+.table-scroll:focus-visible {
+  outline: 3px solid var(--brand-1);
+  outline-offset: 3px;
+}
+.table-scroll > table { margin-block: 0; min-width: 100%; width: max-content; }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+body {
+  font-family: 'Liberation Serif', 'Times New Roman', serif;
+  line-height: 1.6;
+  width: min(100%, 800px);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f8f8;
+  color: #1a1a1a;
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+main,
+nav,
+section,
+article,
+figure,
+figcaption {
+  min-width: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 0.65rem 0.9rem;
+  transform: translateY(-120%);
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: sans-serif;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.skip-link:visited {
+  color: #ffffff;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  body {
+    width: 100%;
+    max-width: 100%;
+    padding: 16px;
+  }
+
+  figure img {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 800px) {
+  body {
+    width: 100%;
+    max-width: 100vw;
+    margin: 0 auto;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 5px;
+  overflow-wrap: anywhere;
+}
+
+code {
+  background-color: #ecf0f1;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Liberation Mono', 'Courier New', monospace;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+pre {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 15px;
+  border-radius: 5px;
+  max-width: 100%;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+pre code {
+  overflow-wrap: inherit;
+  white-space: inherit;
+  word-break: inherit;
+}
+
+div.sourceCode {
+  max-width: 100%;
+  overflow: visible;
+}
+
+pre.sourceCode {
+  background: #2c3e50;
+  color: #ecf0f1;
+}
+
+pre.sourceCode code,
+pre.sourceCode code span {
+  color: inherit;
+}
+
+pre > code.sourceCode {
+  white-space: pre-wrap;
+}
+
+pre > code.sourceCode > span {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+
+.table-scroll:focus-visible {
+  outline: 3px solid #1f6f8b;
+  outline-offset: 3px;
+}
+
+.table-scroll > table {
+  margin-block: 0;
+  min-width: 100%;
+  width: max-content;
+}
+
+figure {
+  max-width: 100%;
+  margin: 1.5rem 0;
+}
+
+th, td {
+  border: 1px solid #bdc3c7;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #1f6f8b;
+  color: white;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #bdc3c7;
+  border-radius: 5px;
+  margin: 20px 0;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+a {
+  color: #b91c1c;
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.14em;
+  overflow-wrap: anywhere;
+}
+
+a:visited {
+  color: #8f1d1d;
+}
+
+a:hover {
+  text-decoration-thickness: 0.14em;
+}
+
+a:focus-visible {
+  outline: 3px solid #1f6f8b;
+  outline-offset: 3px;
+}
+
+.toc {
+  background-color: #ecf0f1;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+}
+
+.toc a,
+#TOC a {
+  color: #b91c1c;
+  display: inline-block;
+  min-height: 28px;
+  line-height: 1.5;
+  padding-block: 2px;
+}
+
+.toc li,
+#TOC li {
+  margin-block: 1px;
+}
+
+.math {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 1.1em;
+}
+
+mjx-container[display="true"] {
+  display: block;
+  max-width: 100%;
+  overflow: visible;
+  padding-bottom: 0.25rem;
+}
+
+.figure {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.figure img {
+  max-width: 100%;
+  height: auto;
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* A reading column keeps prose comfortable, but dense scientific figures need
+   a larger inspection surface.  The rendered image remains responsive and the
+   explicit link opens its source-resolution asset without changing the PDF. */
+.figure-full-size-link {
+  color: inherit;
+  display: block;
+  max-width: 100%;
+  text-align: center;
+}
+
+.figure-full-size-link img {
+  cursor: zoom-in;
+  margin-bottom: 0.45rem;
+}
+
+.figure-full-size-label {
+  color: #1f6f8b;
+  display: inline-block;
+  font-family: sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+}
+
+.figure-full-size-link:focus-visible {
+  outline: 3px solid #1f6f8b;
+  outline-offset: 4px;
+}
+
+@media (min-width: 1000px) {
+  /* Wide figure links stay within the viewport but extend beyond the prose
+     column. Do not clip their labels at the narrower body boundary. */
+  body {
+    overflow-x: visible;
+  }
+
+  .figure-full-size-link {
+    left: 50%;
+    max-width: none;
+    position: relative;
+    transform: translateX(-50%);
+    width: min(1080px, calc(100vw - 3rem));
+  }
+}
+
+.figure-caption {
+  font-style: italic;
+  color: #4b5563;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.figure-long-description,
+.figure-exact-values {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+</style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<main id="main-content" tabindex="-1">
 <h1 id="results-what-resolved-and-what-stayed-bounded">Results: what
 resolved and what stayed bounded</h1>
 <p>Numbers below are token-injected by
@@ -227,7 +672,7 @@ quarter of the error of any other rule — while representative sortition,
 random selection, and single-bloc ideological selection are
 <strong>statistically indistinguishable from one another</strong>,
 clustered at 0.147–0.148:</p>
-<table>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Scrollable data table"><table data-responsive-table="true">
 <thead>
 <tr>
 <th>Strategy</th>
@@ -257,11 +702,11 @@ clustered at 0.147–0.148:</p>
 <td>±0.015</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figure id="fig:ranking">
-<img src="../figures/strategy_ranking.png" style="width:75.0%"
-alt="Horizontal bars give the mean oracle-referenced EIE recovery error for each of the four panel-formation strategies, ordered best (lowest, top) to worst (highest, bottom); the whiskers are 95% confidence intervals over 96 seeds and the value beside each bar is the mean +/- half-interval, all from source output/data/sweep_aggregated.csv (profile manuscript_contrast, hash fda4da941cf0). Read it as the ceiling each upstream choice imposes on the downstream blind estimator: competence-first selection sits far left (near-zero error) while the other three strategies cluster together to its right. Claim: the upstream formation rule, not the estimator, sets the no-answer-key error ceiling, and the competence-first-vs-rest gap dwarfs anything the estimator does on a fixed panel; caveat: only the competence-first separation is resolved — representative, random, and single-bloc selection are statistically indistinguishable from one another, as the power/separation layer certifies." />
-<figcaption aria-hidden="true">Horizontal bars give the mean
+<a class="figure-full-size-link" href="../figures/strategy_ranking.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Horizontal bars give the mean oracle-referenced EIE recovery error"><img src="../figures/strategy_ranking.png" style="width:75.0%"
+alt="Horizontal bars give the mean oracle-referenced EIE recovery error for each of the four panel-formation strategies, ordered best (lowest, top) to worst (highest, bottom); the whiskers are 95% confidence intervals over 96 seeds and the value beside each bar is the mean +/- half-interval, all from source output/data/sweep_aggregated.csv (profile manuscript_contrast, hash fda4da941cf0). Read it as the ceiling each upstream choice imposes on the downstream blind estimator: competence-first selection sits far left (near-zero error) while the other three strategies cluster together to its right. Claim: the upstream formation rule, not the estimator, sets the no-answer-key error ceiling, and the competence-first-vs-rest gap dwarfs anything the estimator does on a fixed panel; caveat: only the competence-first separation is resolved — representative, random, and single-bloc selection are statistically indistinguishable from one another, as the power/separation layer certifies." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Horizontal bars give the mean
 oracle-referenced EIE recovery error for each of the four
 panel-formation strategies, ordered best (lowest, top) to worst
 (highest, bottom); the whiskers are 95% confidence intervals over 96
@@ -307,9 +752,9 @@ directly: expert stringency (<code>mean_expertise</code>), ideological
 bias spread (<code>bias_std</code>), and sortition size
 (<code>panel_size</code>).</p>
 <figure id="fig:repideo">
-<img src="../figures/rep_vs_ideo_heatmap.png" style="width:92.0%"
-alt="Faceted heatmaps of the single-bloc-minus-representative EIE error contrast across expert stringency (mean expertise, rows), ideological bias spread (columns), and panel size (one facet per size), from source output/data/sweep_aggregated.csv (profile manuscript_contrast, hash fda4da941cf0), with analytical sign predictions overlaid from output/data/analytical_predictions.json. Colour encodes the signed contrast on a diverging scale centred at zero: positive (red) cells mean the representative draw recovers with lower error than the single-bloc draw in that regime, negative (blue) the reverse. Statistic: cell-level mean contrast over 96 seeds; stars mark descriptive 95% intervals excluding zero. Read across a row to see how stringency modulates the gap and down a column to see the effect of bias concentration. Claim: the representative-vs-single-bloc distinction is not a single number but is regime-dependent, becoming visible only as bias, stringency, and size are jointly varied; caveat: the intervals are descriptive and synthetic-profile bounded, and they are deliberately not pooled with the real Ollama evidence, which lives in the separate Gemma postdoc companion in [@fig:postdocrank], [@fig:postdocbias], and [@fig:postdocalign]." />
-<figcaption aria-hidden="true">Faceted heatmaps of the
+<a class="figure-full-size-link" href="../figures/rep_vs_ideo_heatmap.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Faceted heatmaps of the single-bloc-minus-representative EIE error contrast across expert…"><img src="../figures/rep_vs_ideo_heatmap.png" style="width:92.0%"
+alt="Faceted heatmaps of the single-bloc-minus-representative EIE error contrast across expert stringency (mean expertise, rows), ideological bias spread (columns), and panel size (one facet per size), from source output/data/sweep_aggregated.csv (profile manuscript_contrast, hash fda4da941cf0), with analytical sign predictions overlaid from output/data/analytical_predictions.json. Colour encodes the signed contrast on a diverging scale centred at zero: positive (red) cells mean the representative draw recovers with lower error than the single-bloc draw in that regime, negative (blue) the reverse. Statistic: cell-level mean contrast over 96 seeds; stars mark descriptive 95% intervals excluding zero. Read across a row to see how stringency modulates the gap and down a column to see the effect of bias concentration. Claim: the representative-vs-single-bloc distinction is not a single number but is regime-dependent, becoming visible only as bias, stringency, and size are jointly varied; caveat: the intervals are descriptive and synthetic-profile bounded, and they are deliberately not pooled with the real Ollama evidence, which lives in the separate Gemma postdoc companion in [@fig:postdocrank], [@fig:postdocbias], and [@fig:postdocalign]." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Faceted heatmaps of the
 single-bloc-minus-representative EIE error contrast across expert
 stringency (mean expertise, rows), ideological bias spread (columns),
 and panel size (one facet per size), from source
@@ -355,9 +800,9 @@ data-cites="fig:prepost">[@fig:prepost]</span> plots
 is closer to the supervised oracle than the majority-vote baseline for
 that regime.</p>
 <figure id="fig:prepost">
-<img src="../figures/pre_post_ntqr_heatmap.png" style="width:95.0%"
-alt="Faceted heatmaps contrasting the post-NTQR error-independent estimate against the pre-NTQR supervised majority-vote baseline, broken out by strategy, panel size, expert stringency, and bias spread, from source output/data/analytical_predictions.json, derived in turn from output/data/sweep_aggregated.csv (profile manuscript_contrast, hash fda4da941cf0). Colour encodes the signed difference on a diverging scale: negative (blue) cells are where the blind NTQR recovery lands closer to the oracle than the majority-vote baseline did, positive (red) where it does not. Statistic: cell-level mean difference over 96 seeds; metric is eie_mean - mv_mean, so the figure isolates what the estimator adds (or costs) on top of naive voting. Claim: panel size and bias act on each formation strategy differently before and after NTQR recovery, so there is no uniform pre/post improvement; caveat: this is oracle-referenced simulation on synthetic labels, not a live-judge validation claim." />
-<figcaption aria-hidden="true">Faceted heatmaps contrasting the
+<a class="figure-full-size-link" href="../figures/pre_post_ntqr_heatmap.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Faceted heatmaps contrasting the post-NTQR error-independent estimate against the pre-NTQR…"><img src="../figures/pre_post_ntqr_heatmap.png" style="width:95.0%"
+alt="Faceted heatmaps contrasting the post-NTQR error-independent estimate against the pre-NTQR supervised majority-vote baseline, broken out by strategy, panel size, expert stringency, and bias spread, from source output/data/analytical_predictions.json, derived in turn from output/data/sweep_aggregated.csv (profile manuscript_contrast, hash fda4da941cf0). Colour encodes the signed difference on a diverging scale: negative (blue) cells are where the blind NTQR recovery lands closer to the oracle than the majority-vote baseline did, positive (red) where it does not. Statistic: cell-level mean difference over 96 seeds; metric is eie_mean - mv_mean, so the figure isolates what the estimator adds (or costs) on top of naive voting. Claim: panel size and bias act on each formation strategy differently before and after NTQR recovery, so there is no uniform pre/post improvement; caveat: this is oracle-referenced simulation on synthetic labels, not a live-judge validation claim." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Faceted heatmaps contrasting the
 post-NTQR error-independent estimate against the pre-NTQR supervised
 majority-vote baseline, broken out by strategy, panel size, expert
 stringency, and bias spread, from source
@@ -383,10 +828,10 @@ prediction that ideological-minus-representative EIE should be positive.
 The same JSON artifact also records the monotone checks for bias and
 expertise.</p>
 <figure id="fig:theoryalign">
-<img src="../figures/theory_vs_observed_alignment.png"
+<a class="figure-full-size-link" href="../figures/theory_vs_observed_alignment.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Audit heatmap of how often the analytical directional predictions match the regenerated…"><img src="../figures/theory_vs_observed_alignment.png"
 style="width:72.0%"
-alt="Audit heatmap of how often the analytical directional predictions match the regenerated synthetic cells, from source output/data/analytical_predictions.json. Each cell of a panel-size x bias-spread slice reports the count of expertise levels whose observed contrast sign agrees with the predicted sign; darker cells mean more of the expertise levels in that slice align with the prediction. Statistic: aligned expertise-level cells per panel-size x bias slice, over source sweep profile manuscript_contrast, 96 seeds. The figure exists to make the analytical layer falsifiable rather than rhetorical: a prediction that systematically disagreed with the data would show as pale cells. Claim: analytical expectations are checked against regenerated artifacts rather than asserted in prose; caveat: the predictions are directional and order constraints only, not closed-form numerical EIE laws, so partial agreement is expected and is reported honestly." />
-<figcaption aria-hidden="true">Audit heatmap of how often the analytical
+alt="Audit heatmap of how often the analytical directional predictions match the regenerated synthetic cells, from source output/data/analytical_predictions.json. Each cell of a panel-size x bias-spread slice reports the count of expertise levels whose observed contrast sign agrees with the predicted sign; darker cells mean more of the expertise levels in that slice align with the prediction. Statistic: aligned expertise-level cells per panel-size x bias slice, over source sweep profile manuscript_contrast, 96 seeds. The figure exists to make the analytical layer falsifiable rather than rhetorical: a prediction that systematically disagreed with the data would show as pale cells. Claim: analytical expectations are checked against regenerated artifacts rather than asserted in prose; caveat: the predictions are directional and order constraints only, not closed-form numerical EIE laws, so partial agreement is expected and is reported honestly." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Audit heatmap of how often the analytical
 directional predictions match the regenerated synthetic cells, from
 source <code>output/data/analytical_predictions.json</code>. Each cell
 of a panel-size x bias-spread slice reports the count of expertise
@@ -410,7 +855,7 @@ data-cites="fig:powercurve">[@fig:powercurve]</span> plots EIE error
 against panel/ensemble size for each strategy. If size were a clean
 power knob, every curve would fall from size 3 to size 6. It does
 not:</p>
-<table>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Scrollable data table"><table data-responsive-table="true">
 <thead>
 <tr>
 <th>Strategy</th>
@@ -445,11 +890,11 @@ not:</p>
 <td>error rises</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <figure id="fig:powercurve">
-<img src="../figures/power_curve.png" style="width:75.0%"
-alt="One line per panel-formation strategy tracing mean EIE recovery error against panel/ensemble size (3, 6, 9, 12 members), from source output/data/sweep_results.json, aggregated over 96 seeds with per-point 95% confidence intervals and a colour-matched end-label summarising each curve’s trio-to-six-seat direction. If size were a clean power knob every curve would fall monotonically left to right; instead the curves cross. Read the vertical spread at any size as the strategy gap and each curve’s slope as the strategy-specific effect of adding experts. Claim: a paired regime-controlled test (paired_size_contrast) resolves a trio-to-six-seat size effect for three of the four strategies, but every resolved increase is tiny and single-bloc is within noise, so size is essentially neutral at this grid and the dominant lever is which strategy forms the panel; caveat: this pooled curve marginalizes over sixteen regimes and is bounded to the active sweep profile." />
-<figcaption aria-hidden="true">One line per panel-formation strategy
+<a class="figure-full-size-link" href="../figures/power_curve.png" target="_blank" rel="noopener" aria-label="Open full-size figure, One line per panel-formation strategy tracing mean EIE recovery error against panel/ensemble…"><img src="../figures/power_curve.png" style="width:75.0%"
+alt="One line per panel-formation strategy tracing mean EIE recovery error against panel/ensemble size (3, 6, 9, 12 members), from source output/data/sweep_results.json, aggregated over 96 seeds with per-point 95% confidence intervals and a colour-matched end-label summarising each curve’s trio-to-six-seat direction. If size were a clean power knob every curve would fall monotonically left to right; instead the curves cross. Read the vertical spread at any size as the strategy gap and each curve’s slope as the strategy-specific effect of adding experts. Claim: a paired regime-controlled test (paired_size_contrast) resolves a trio-to-six-seat size effect for three of the four strategies, but every resolved increase is tiny and single-bloc is within noise, so size is essentially neutral at this grid and the dominant lever is which strategy forms the panel; caveat: this pooled curve marginalizes over sixteen regimes and is bounded to the active sweep profile." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>One line per panel-formation strategy
 tracing mean EIE recovery error against panel/ensemble size (3, 6, 9, 12
 members), from source <code>output/data/sweep_results.json</code>,
 aggregated over 96 seeds with per-point 95% confidence intervals and a
@@ -505,9 +950,9 @@ error strongly enough to pin the remaining cost on worse judges. We
 therefore report the small paired size deltas after ruling out the main
 correlation explanation, not as an affirmative aggregation effect.</p>
 <figure id="fig:triocond">
-<img src="../figures/trio_conditioning.png" style="width:90.0%"
-alt="Two-panel per-trio mechanism diagnostic for the panel-size contrast, from source output/data/trio_conditioning.json (17,126 usable trios over 12 seeds of the reported regime grid). Panel A plots the mean absolute pairwise error-correlation of the usable trios against panel size, one line per formation strategy, with a dashed reference at zero (the value the error-independent solver assumes); every line holds the small 0.0087-to-0.0105 baseline rather than rising, so enlarging the panel does not pull in more error-correlated trios. Panel B plots the within-strategy Pearson correlation between a trio’s recovery error and its absolute error-correlation; the bars are positive (up to +0.70 for competence-first), so correlation genuinely predicts per-trio error — it simply does not grow with size. Statistic: mean absolute error-correlation by size (A) and within-strategy Pearson of per-trio error against absolute error-correlation (B), measured over the same usable trios the ensemble-of-trios averages. Claim: the diagnostic rules out a size-growing error-correlation mechanism; caveat: it does not identify a positive mechanism and remains a 12-seed structural diagnostic on synthetic labels, not a headline confidence interval." />
-<figcaption aria-hidden="true">Two-panel per-trio mechanism diagnostic
+<a class="figure-full-size-link" href="../figures/trio_conditioning.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Two-panel per-trio mechanism diagnostic"><img src="../figures/trio_conditioning.png" style="width:90.0%"
+alt="Two-panel per-trio mechanism diagnostic for the panel-size contrast, from source output/data/trio_conditioning.json (17,126 usable trios over 12 seeds of the reported regime grid). Panel A plots the mean absolute pairwise error-correlation of the usable trios against panel size, one line per formation strategy, with a dashed reference at zero (the value the error-independent solver assumes); every line holds the small 0.0087-to-0.0105 baseline rather than rising, so enlarging the panel does not pull in more error-correlated trios. Panel B plots the within-strategy Pearson correlation between a trio’s recovery error and its absolute error-correlation; the bars are positive (up to +0.70 for competence-first), so correlation genuinely predicts per-trio error — it simply does not grow with size. Statistic: mean absolute error-correlation by size (A) and within-strategy Pearson of per-trio error against absolute error-correlation (B), measured over the same usable trios the ensemble-of-trios averages. Claim: the diagnostic rules out a size-growing error-correlation mechanism; caveat: it does not identify a positive mechanism and remains a 12-seed structural diagnostic on synthetic labels, not a headline confidence interval." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Two-panel per-trio mechanism diagnostic
 for the panel-size contrast, from source
 <code>output/data/trio_conditioning.json</code> (17,126 usable trios
 over 12 seeds of the reported regime grid). Panel A plots the mean
@@ -547,9 +992,9 @@ highest. The injection knob does what it claims — it manufactures
 measurable error-correlation, and NTQR’s own correlation diagnostic
 registers it.</p>
 <figure id="fig:tolerance">
-<img src="../figures/error_vs_correlation.png" style="width:75.0%"
-alt="Oracle-referenced EIE error (y-axis) versus the realized pairwise error correlation \rho_{\mathrm{NTQR}} that the NTQR estimator itself measures from the votes (x-axis), shown as a scatter with one point per non-degenerate (\rho, strategy) cell of the tolerance sweep, from source output/data/independence_sweep.csv. The x-axis is the quantity the exact solver assumes is zero; the controlled injection knob moves points rightward, which verifies the diagnostic, while the y-axis tests whether more correlation actually costs recovery accuracy. Claim: injected \rho creates measurable NTQR error correlation (points do move right), but the fitted recovery-error trend is unresolved at this grid; statistic: OLS error-vs-correlation slope -0.145 with 95% bootstrap CI [-4.335, 0.911], which crosses zero; caveat: this figure supports the correlation diagnostic only, not a resolved recovery-effect law." />
-<figcaption aria-hidden="true">Oracle-referenced EIE error (y-axis)
+<a class="figure-full-size-link" href="../figures/error_vs_correlation.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Oracle-referenced EIE error (y-axis) versus the realized pairwise error correlation…"><img src="../figures/error_vs_correlation.png" style="width:75.0%"
+alt="Oracle-referenced EIE error (y-axis) versus the realized pairwise error correlation \rho_{\mathrm{NTQR}} that the NTQR estimator itself measures from the votes (x-axis), shown as a scatter with one point per non-degenerate (\rho, strategy) cell of the tolerance sweep, from source output/data/independence_sweep.csv. The x-axis is the quantity the exact solver assumes is zero; the controlled injection knob moves points rightward, which verifies the diagnostic, while the y-axis tests whether more correlation actually costs recovery accuracy. Claim: injected \rho creates measurable NTQR error correlation (points do move right), but the fitted recovery-error trend is unresolved at this grid; statistic: OLS error-vs-correlation slope -0.145 with 95% bootstrap CI [-4.335, 0.911], which crosses zero; caveat: this figure supports the correlation diagnostic only, not a resolved recovery-effect law." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Oracle-referenced EIE error (y-axis)
 versus the realized pairwise error correlation <span
 class="math inline">\(\rho_{\mathrm{NTQR}}\)</span> that the NTQR
 estimator itself measures from the votes (x-axis), shown as a scatter
@@ -702,9 +1147,9 @@ balancing the wrong axis does not.</strong> That is a statement about
 sortition design in simulation, not a blanket endorsement of
 representative panels.</p>
 <figure id="fig:blocphase">
-<img src="../figures/bloc_phase_diagram.png" style="width:95.0%"
-alt="Two-panel bloc-confound phase diagram from source output/data/bloc_phase_summary.json, aggregated over bias-spread, stringency, panel-size, and seed regimes. Left: mean oracle-referenced EIE recovery error (y) versus within-bloc error coupling \rho (x), one line per panel-formation strategy with 95% CI bands; the lines coincide at \rho=0 (the reproduced baseline collapse) and fan out as \rho rises, representative sortition staying flat while single-bloc ideological selection climbs. Right: the NTQR-measured realized trio error correlation (y) versus \rho — the mechanism — showing representative sortition suppressing the shared confound (flat, low) while single-bloc selection concentrates it (steeply rising). Claim: composition-coupled error correlation makes panel-formation rule the dominant lever on recovery, with representativeness protective specifically when the panel balances the axis the confound rides on; caveat: synthetic, marginal-preserving simulation against a known oracle, and the protection is axis-conditional as the expertise-tier negative control demonstrates." />
-<figcaption aria-hidden="true">Two-panel bloc-confound phase diagram
+<a class="figure-full-size-link" href="../figures/bloc_phase_diagram.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Two-panel bloc-confound phase diagram from source output/data/bloc_phase_summary.json…"><img src="../figures/bloc_phase_diagram.png" style="width:95.0%"
+alt="Two-panel bloc-confound phase diagram from source output/data/bloc_phase_summary.json, aggregated over bias-spread, stringency, panel-size, and seed regimes. Left: mean oracle-referenced EIE recovery error (y) versus within-bloc error coupling \rho (x), one line per panel-formation strategy with 95% CI bands; the lines coincide at \rho=0 (the reproduced baseline collapse) and fan out as \rho rises, representative sortition staying flat while single-bloc ideological selection climbs. Right: the NTQR-measured realized trio error correlation (y) versus \rho — the mechanism — showing representative sortition suppressing the shared confound (flat, low) while single-bloc selection concentrates it (steeply rising). Claim: composition-coupled error correlation makes panel-formation rule the dominant lever on recovery, with representativeness protective specifically when the panel balances the axis the confound rides on; caveat: synthetic, marginal-preserving simulation against a known oracle, and the protection is axis-conditional as the expertise-tier negative control demonstrates." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Two-panel bloc-confound phase diagram
 from source <code>output/data/bloc_phase_summary.json</code>, aggregated
 over bias-spread, stringency, panel-size, and seed regimes. Left: mean
 oracle-referenced EIE recovery error (y) versus within-bloc error
@@ -741,9 +1186,9 @@ index over the confound axis, a closed-form combinatorial statistic,
 sets its shared-confound exposure and hence its no-answer-key recovery
 error.</p>
 <figure id="fig:dial">
-<img src="../figures/bloc_concentration_dial.png" style="width:70.0%"
-alt="Single-panel concentration-dial figure from source output/data/bloc_phase_summary.json (concentration block), aggregated over bias-spread, stringency, and seed regimes at fixed within-bloc coupling. The x-axis is the single-bloc concentration dial c (the panel’s Herfindahl index runs 1/B at c=0 to 1 at c=1). Left y-axis (circles, with 95% CI band): mean oracle-referenced EIE recovery error; right y-axis (squares): the NTQR-measured realized trio error correlation. Recovery error rises monotonically with concentration, while the realized correlation rises and then saturates once the scored trio becomes single-bloc. Claim: recovery error is a graded function of panel concentration over the confound axis, tracing the closed-form Herfindahl prediction rather than a binary representative-vs-single-bloc split; caveat: synthetic, marginal-accuracy-preserving simulation at one coupling level against a known oracle, and the protection implied by low concentration is axis-conditional — it holds only for the axis the confound rides on, as the expertise-tier negative control in [@fig:blocphase] shows." />
-<figcaption aria-hidden="true">Single-panel concentration-dial figure
+<a class="figure-full-size-link" href="../figures/bloc_concentration_dial.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Single-panel concentration-dial figure from source output/data/bloc_phase_summary.json"><img src="../figures/bloc_concentration_dial.png" style="width:70.0%"
+alt="Single-panel concentration-dial figure from source output/data/bloc_phase_summary.json (concentration block), aggregated over bias-spread, stringency, and seed regimes at fixed within-bloc coupling. The x-axis is the single-bloc concentration dial c (the panel’s Herfindahl index runs 1/B at c=0 to 1 at c=1). Left y-axis (circles, with 95% CI band): mean oracle-referenced EIE recovery error; right y-axis (squares): the NTQR-measured realized trio error correlation. Recovery error rises monotonically with concentration, while the realized correlation rises and then saturates once the scored trio becomes single-bloc. Claim: recovery error is a graded function of panel concentration over the confound axis, tracing the closed-form Herfindahl prediction rather than a binary representative-vs-single-bloc split; caveat: synthetic, marginal-accuracy-preserving simulation at one coupling level against a known oracle, and the protection implied by low concentration is axis-conditional — it holds only for the axis the confound rides on, as the expertise-tier negative control in [@fig:blocphase] shows." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Single-panel concentration-dial figure
 from source <code>output/data/bloc_phase_summary.json</code>
 (concentration block), aggregated over bias-spread, stringency, and seed
 regimes at fixed within-bloc coupling. The x-axis is the single-bloc
@@ -801,9 +1246,9 @@ effect sizes, never retrospective observed power (<span class="citation"
 data-cites="fig:diagnosis">[@fig:diagnosis]</span>,
 <code>output/data/power_analysis.csv</code>).</p>
 <figure id="fig:diagnosis">
-<img src="../figures/power_design_diagnosis.png" style="width:80.0%"
-alt="Design-adequacy diagnosis for every pairwise strategy contrast, from source output/data/power_analysis.csv: each row plots the observed standardized effect size (Cohen’s d) against the minimum detectable effect (MDE) at 80% power, annotated with the permutation p-value and the per-group observation budgets needed to resolve an effect of that size. A contrast whose observed |d| sits below its MDE marker is design-limited: the study could not have detected it even if it were real, so its non-significance is a statement about sample size, not about the absence of an effect. Claim: 16 of 28 contrasts are design-limited at the current observation count, which is why several neighboring-rank comparisons remain inconclusive; caveat: the budgets are keyed to the observed effect magnitudes and are prospective design targets, not retrospective observed power evidence." />
-<figcaption aria-hidden="true">Design-adequacy diagnosis for every
+<a class="figure-full-size-link" href="../figures/power_design_diagnosis.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Design-adequacy diagnosis for every pairwise strategy contrast, from source…"><img src="../figures/power_design_diagnosis.png" style="width:80.0%"
+alt="Design-adequacy diagnosis for every pairwise strategy contrast, from source output/data/power_analysis.csv: each row plots the observed standardized effect size (Cohen’s d) against the minimum detectable effect (MDE) at 80% power, annotated with the permutation p-value and the per-group observation budgets needed to resolve an effect of that size. A contrast whose observed |d| sits below its MDE marker is design-limited: the study could not have detected it even if it were real, so its non-significance is a statement about sample size, not about the absence of an effect. Claim: 16 of 28 contrasts are design-limited at the current observation count, which is why several neighboring-rank comparisons remain inconclusive; caveat: the budgets are keyed to the observed effect magnitudes and are prospective design targets, not retrospective observed power evidence." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Design-adequacy diagnosis for every
 pairwise strategy contrast, from source
 <code>output/data/power_analysis.csv</code>: each row plots the observed
 standardized effect size (Cohen’s <span
@@ -821,9 +1266,9 @@ prospective design targets, not retrospective observed power
 evidence.</figcaption>
 </figure>
 <figure id="fig:powervn">
-<img src="../figures/power_vs_n.png" style="width:72.0%"
-alt="Analytic two-sample power 1-\beta (y-axis) versus samples-per-group n (x-axis, log scale), shown as a family of curves with one curve per representative Cohen’s d value, computed from source output/data/power_analysis.csv / src/ntqr_allotment/power_analysis.py; the horizontal dashed line marks the 80% power target at the chosen \alpha, and where each curve crosses it gives the n that effect size requires. Read it as a budgeting tool: the smaller the standardized effect, the further right its curve crosses the dashed line, i.e. the more per-group observations are needed. Claim: small standardized effects require many more seeds per group than the current design provides, which is the mechanism behind the design-limited nulls; caveat: this is a prospective design-budget curve and an MDE visual, not retrospective observed power." />
-<figcaption aria-hidden="true">Analytic two-sample power <span
+<a class="figure-full-size-link" href="../figures/power_vs_n.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Analytic two-sample power 1-\beta (y-axis) versus samples-per-group n"><img src="../figures/power_vs_n.png" style="width:72.0%"
+alt="Analytic two-sample power 1-\beta (y-axis) versus samples-per-group n (x-axis, log scale), shown as a family of curves with one curve per representative Cohen’s d value, computed from source output/data/power_analysis.csv / src/ntqr_allotment/power_analysis.py; the horizontal dashed line marks the 80% power target at the chosen \alpha, and where each curve crosses it gives the n that effect size requires. Read it as a budgeting tool: the smaller the standardized effect, the further right its curve crosses the dashed line, i.e. the more per-group observations are needed. Claim: small standardized effects require many more seeds per group than the current design provides, which is the mechanism behind the design-limited nulls; caveat: this is a prospective design-budget curve and an MDE visual, not retrospective observed power." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Analytic two-sample power <span
 class="math inline">\(1-\beta\)</span> (y-axis) versus samples-per-group
 <span class="math inline">\(n\)</span> (x-axis, log scale), shown as a
 family of curves with one curve per representative Cohen’s <span
@@ -861,9 +1306,9 @@ class="math inline">\(Q\leq30\)</span>. We report it as a finding: the
 alarm is usable as a small-corpus consistency check, not as a
 sweep-scale primitive.</p>
 <figure id="fig:alarm">
-<img src="../figures/alarm_cost_curve.png" style="width:70.0%"
-alt="Measured alarm wall-clock time (seconds) versus corpus size Q on log-log axes, from source output/data/alarm_timings.csv, with a cubic O(Q^3) reference line overlaid. On log-log axes a power law is a straight line whose slope is its exponent, so the measured points tracking the reference slope is the visual evidence that the answer-key-enumeration alarm scales cubically in Q. The practical consequence is a hard ceiling: the wall-clock cost rises steeply enough that the alarm is usable only as a small-corpus consistency check. Claim: at the current implementation the alarm is small-corpus only and is therefore opt-in and capped; caveat: the absolute wall-clock constants are machine-local and load-dependent, so it is the cubic scaling, not the individual timings, that is the robust finding." />
-<figcaption aria-hidden="true">Measured alarm wall-clock time (seconds)
+<a class="figure-full-size-link" href="../figures/alarm_cost_curve.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Measured alarm wall-clock time (seconds) versus corpus size Q on log-log axes, from source…"><img src="../figures/alarm_cost_curve.png" style="width:70.0%"
+alt="Measured alarm wall-clock time (seconds) versus corpus size Q on log-log axes, from source output/data/alarm_timings.csv, with a cubic O(Q^3) reference line overlaid. On log-log axes a power law is a straight line whose slope is its exponent, so the measured points tracking the reference slope is the visual evidence that the answer-key-enumeration alarm scales cubically in Q. The practical consequence is a hard ceiling: the wall-clock cost rises steeply enough that the alarm is usable only as a small-corpus consistency check. Claim: at the current implementation the alarm is small-corpus only and is therefore opt-in and capped; caveat: the absolute wall-clock constants are machine-local and load-dependent, so it is the cubic scaling, not the individual timings, that is the robust finding." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Measured alarm wall-clock time (seconds)
 versus corpus size <span class="math inline">\(Q\)</span> on log-log
 axes, from source <code>output/data/alarm_timings.csv</code>, with a
 cubic <span class="math inline">\(O(Q^3)\)</span> reference line
@@ -899,9 +1344,9 @@ satisfy the NTQR axioms and is never an <span
 class="math inline">\(R=3\)</span> recovery claim (out of scope) — so it
 yields a pass/fail check rather than a plotted number.</p>
 <figure id="fig:strategycorr">
-<img src="../figures/strategy_correlation.png" style="width:70.0%"
-alt="Bar chart of the mean realized pairwise error correlation that each panel-formation strategy induces among its judges, measured by NTQR’s own supervised estimator over the tolerance sweep, from source output/data/independence_sweep.csv. Higher bars mean the strategy seats judges whose mistakes are more correlated, which is precisely the error-independence assumption the exact trio solver leans on. Single-bloc selection is the tallest bar, consistent with its design as the deliberately correlated comparator, while representative and random draws sit lower. Read this as a structural property of the draw itself, upstream of any recovery number. Caveat: this is a structural diagnostic of the formed panel, not a recovery-effect claim about downstream EIE error." />
-<figcaption aria-hidden="true">Bar chart of the mean realized pairwise
+<a class="figure-full-size-link" href="../figures/strategy_correlation.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Bar chart of the mean realized pairwise error correlation that each panel-formation strategy…"><img src="../figures/strategy_correlation.png" style="width:70.0%"
+alt="Bar chart of the mean realized pairwise error correlation that each panel-formation strategy induces among its judges, measured by NTQR’s own supervised estimator over the tolerance sweep, from source output/data/independence_sweep.csv. Higher bars mean the strategy seats judges whose mistakes are more correlated, which is precisely the error-independence assumption the exact trio solver leans on. Single-bloc selection is the tallest bar, consistent with its design as the deliberately correlated comparator, while representative and random draws sit lower. Read this as a structural property of the draw itself, upstream of any recovery number. Caveat: this is a structural diagnostic of the formed panel, not a recovery-effect claim about downstream EIE error." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Bar chart of the mean realized pairwise
 error correlation that each panel-formation strategy induces among its
 judges, measured by NTQR’s own supervised estimator over the tolerance
 sweep, from source <code>output/data/independence_sweep.csv</code>.
@@ -915,9 +1360,9 @@ Caveat: this is a structural diagnostic of the formed panel, not a
 recovery-effect claim about downstream EIE error.</figcaption>
 </figure>
 <figure id="fig:fairness">
-<img src="../figures/fairness_maximin.png" style="width:70.0%"
-alt="Per-candidate selection probabilities under the representative maximin sortition lottery, computed from src/ntqr_allotment/fairness.py over the feasible panel draws. Each bar is one expert’s probability of being seated across the lottery; the maximin objective explicitly maximises the smallest of these probabilities, so the figure should be read by its floor (the shortest bar) rather than its average — a fairer lottery lifts the worst-off candidate’s chance of selection. This characterises the representation properties of the draw and is fully independent of any downstream evaluation number. Caveat: this describes panel-formation fairness only, not NTQR recovery error." />
-<figcaption aria-hidden="true">Per-candidate selection probabilities
+<a class="figure-full-size-link" href="../figures/fairness_maximin.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Per-candidate selection probabilities under the representative maximin sortition lottery…"><img src="../figures/fairness_maximin.png" style="width:70.0%"
+alt="Per-candidate selection probabilities under the representative maximin sortition lottery, computed from src/ntqr_allotment/fairness.py over the feasible panel draws. Each bar is one expert’s probability of being seated across the lottery; the maximin objective explicitly maximises the smallest of these probabilities, so the figure should be read by its floor (the shortest bar) rather than its average — a fairer lottery lifts the worst-off candidate’s chance of selection. This characterises the representation properties of the draw and is fully independent of any downstream evaluation number. Caveat: this describes panel-formation fairness only, not NTQR recovery error." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Per-candidate selection probabilities
 under the representative maximin sortition lottery, computed from
 <code>src/ntqr_allotment/fairness.py</code> over the feasible panel
 draws. Each bar is one expert’s probability of being seated across the
@@ -930,9 +1375,9 @@ downstream evaluation number. Caveat: this describes panel-formation
 fairness only, not NTQR recovery error.</figcaption>
 </figure>
 <figure id="fig:alarmpower">
-<img src="../figures/alarm_power.png" style="width:70.0%"
-alt="N-judge alarm firing rate as a function of panel size at small corpus size Q, computed live from src/ntqr_allotment/ensemble.py. The alarm fires when no single answer key can make all seated judges simultaneously axiom-consistent at the stated safety specification; the curve shows how often that happens as the panel grows. At the tight safety setting plotted here the rate is already saturated across the panel sizes shown, so the figure demonstrates that the N-judge alarm is executable and panel-size-indexed rather than establishing a monotone growth law (a looser setting would be needed to see a rising curve). Caveat: the alarm track is a consistency signal only, never a recovery method, and is bounded by the same O(Q^3) answer-key enumeration, which confines it to small Q." />
-<figcaption aria-hidden="true">N-judge alarm firing rate as a function
+<a class="figure-full-size-link" href="../figures/alarm_power.png" target="_blank" rel="noopener" aria-label="Open full-size figure, N-judge alarm firing rate as a function of panel size at small corpus size Q , computed live…"><img src="../figures/alarm_power.png" style="width:70.0%"
+alt="N-judge alarm firing rate as a function of panel size at small corpus size Q, computed live from src/ntqr_allotment/ensemble.py. The alarm fires when no single answer key can make all seated judges simultaneously axiom-consistent at the stated safety specification; the curve shows how often that happens as the panel grows. At the tight safety setting plotted here the rate is already saturated across the panel sizes shown, so the figure demonstrates that the N-judge alarm is executable and panel-size-indexed rather than establishing a monotone growth law (a looser setting would be needed to see a rising curve). Caveat: the alarm track is a consistency signal only, never a recovery method, and is bounded by the same O(Q^3) answer-key enumeration, which confines it to small Q." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>N-judge alarm firing rate as a function
 of panel size at small corpus size <span
 class="math inline">\(Q\)</span>, computed live from
 <code>src/ntqr_allotment/ensemble.py</code>. The alarm fires when no
@@ -969,9 +1414,9 @@ For the three-seat panels, representative sortition has EIE 0.225,
 same-bias selection has 0.228, expertise-threshold selection has 0.347,
 and random selection has 0.262.</p>
 <figure id="fig:postdocrank">
-<img src="../figures/postdoc_strategy_ranking.png" style="width:80.0%"
-alt="Side-by-side strategy ranking for the analytical vote model (square markers) and the live Gemma reviewer panel (circle markers), one row per sampling strategy, from source output/data/postdoc_panel_results.json. Metric: oracle-referenced EIE error (lower is better), aggregated by track, sampling strategy, and panel size, with descriptive intervals over 12 seeds. The two marker shapes are juxtaposed, never pooled, so the reader can see where the live model echoes the analytical ordering and where it departs; the horizontal gap between a strategy’s square and circle is exactly that analytical-vs-live divergence. Claim: the live single-model panel is analysed as a within-model sampling-strategy stress test, not as an LLM-family comparison; caveat: it uses synthetic applications and age metadata only, one local Gemma model, and carries no human-review validation." />
-<figcaption aria-hidden="true">Side-by-side strategy ranking for the
+<a class="figure-full-size-link" href="../figures/postdoc_strategy_ranking.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Side-by-side strategy ranking for the analytical vote model"><img src="../figures/postdoc_strategy_ranking.png" style="width:80.0%"
+alt="Side-by-side strategy ranking for the analytical vote model (square markers) and the live Gemma reviewer panel (circle markers), one row per sampling strategy, from source output/data/postdoc_panel_results.json. Metric: oracle-referenced EIE error (lower is better), aggregated by track, sampling strategy, and panel size, with descriptive intervals over 12 seeds. The two marker shapes are juxtaposed, never pooled, so the reader can see where the live model echoes the analytical ordering and where it departs; the horizontal gap between a strategy’s square and circle is exactly that analytical-vs-live divergence. Claim: the live single-model panel is analysed as a within-model sampling-strategy stress test, not as an LLM-family comparison; caveat: it uses synthetic applications and age metadata only, one local Gemma model, and carries no human-review validation." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Side-by-side strategy ranking for the
 analytical vote model (square markers) and the live Gemma reviewer panel
 (circle markers), one row per sampling strategy, from source
 <code>output/data/postdoc_panel_results.json</code>. Metric:
@@ -1006,9 +1451,9 @@ board, meaning this model favors younger synthetic applicants; the
 experiment measures that illegitimate behavior to compare bias
 containment across sampling rules (age is a probe; see Ethics).</p>
 <figure id="fig:postdocbias">
-<img src="../figures/postdoc_age_bias_heatmap.png" style="width:72.0%"
-alt="Heatmap of the older-minus-younger recommendation-rate disparity expressed by the live Gemma reviewer panel, by sampling strategy (rows) and panel size (columns), from source output/data/postdoc_panel_results.json. Because true latent quality is generated independently of age, any non-zero cell is reviewer age-bias expression rather than signal: positive values mean older synthetic applicants are recommended more often, negative values mean younger applicants are. Metric: age-conditioned recommendation-rate difference, aggregated over 12 seeds; read down a column to compare how each sampling rule amplifies or dampens the irrelevant age signal. Claim: same-bias (single-bloc) sampling is the explicit bias-amplification stress test among the strategies; caveat: all applicants and ages are synthetic, and this figure does not validate Gemma or endorse age-aware real review." />
-<figcaption aria-hidden="true">Heatmap of the older-minus-younger
+<a class="figure-full-size-link" href="../figures/postdoc_age_bias_heatmap.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Heatmap of the older-minus-younger recommendation-rate disparity expressed by the live Gemma…"><img src="../figures/postdoc_age_bias_heatmap.png" style="width:72.0%"
+alt="Heatmap of the older-minus-younger recommendation-rate disparity expressed by the live Gemma reviewer panel, by sampling strategy (rows) and panel size (columns), from source output/data/postdoc_panel_results.json. Because true latent quality is generated independently of age, any non-zero cell is reviewer age-bias expression rather than signal: positive values mean older synthetic applicants are recommended more often, negative values mean younger applicants are. Metric: age-conditioned recommendation-rate difference, aggregated over 12 seeds; read down a column to compare how each sampling rule amplifies or dampens the irrelevant age signal. Claim: same-bias (single-bloc) sampling is the explicit bias-amplification stress test among the strategies; caveat: all applicants and ages are synthetic, and this figure does not validate Gemma or endorse age-aware real review." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Heatmap of the older-minus-younger
 recommendation-rate disparity expressed by the live Gemma reviewer
 panel, by sampling strategy (rows) and panel size (columns), from source
 <code>output/data/postdoc_panel_results.json</code>. Because true latent
@@ -1038,10 +1483,10 @@ of two freely varying signals. This is the intended bridge between the
 synthetic and live tracks: same causal question, shared sampling
 vocabulary, separate evidence levels.</p>
 <figure id="fig:postdocalign">
-<img src="../figures/postdoc_empirical_alignment.png"
+<a class="figure-full-size-link" href="../figures/postdoc_empirical_alignment.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Cell-by-cell alignment grid comparing the analytical age-disparity direction with the live…"><img src="../figures/postdoc_empirical_alignment.png"
 style="width:72.0%"
-alt="Cell-by-cell alignment grid comparing the analytical age-disparity direction with the live Gemma direction, one cell per strategy x panel-size combination, from source output/data/postdoc_panel_alignment.json. Each cell is marked agree, disagree, or unresolved (a zero-sign cell on either track), so the figure functions as the explicit bridge between the controlled and the live track while keeping their uncertainties separate. Statistic: sign agreement between the analytical and live age-disparity directions; resolved-cell agreement 0.500 over 8 resolved cells. Because every live disparity sign is negative in this run, the agreement rate is a weak directional check rather than an independent match, and should be read as such. Claim: the analytical and empirical tracks can be compared cell by cell without pooling their uncertainty; caveat: single-model live evidence is descriptive and n-limited." />
-<figcaption aria-hidden="true">Cell-by-cell alignment grid comparing the
+alt="Cell-by-cell alignment grid comparing the analytical age-disparity direction with the live Gemma direction, one cell per strategy x panel-size combination, from source output/data/postdoc_panel_alignment.json. Each cell is marked agree, disagree, or unresolved (a zero-sign cell on either track), so the figure functions as the explicit bridge between the controlled and the live track while keeping their uncertainties separate. Statistic: sign agreement between the analytical and live age-disparity directions; resolved-cell agreement 0.500 over 8 resolved cells. Because every live disparity sign is negative in this run, the agreement rate is a weak directional check rather than an independent match, and should be read as such. Claim: the analytical and empirical tracks can be compared cell by cell without pooling their uncertainty; caveat: single-model live evidence is descriptive and n-limited." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Cell-by-cell alignment grid comparing the
 analytical age-disparity direction with the live Gemma direction, one
 cell per strategy x panel-size combination, from source
 <code>output/data/postdoc_panel_alignment.json</code>. Each cell is
@@ -1080,9 +1525,9 @@ magnitudes, because the two tracks own different oracles and different
 uncertainty, so the figure is a qualitative non-transfer result rather
 than a pooled effect size.</p>
 <figure id="fig:trackinversion">
-<img src="../figures/track_ranking_inversion.png" style="width:80.0%"
-alt="Cross-track strategy-ranking inversion at the matched three-seat grain, shown as a slope chart, from source output/data/sweep_aggregated.csv (synthetic POWER_*_SIZE3, left column) and source output/data/postdoc_panel_results.json (live POSTDOC_*_EIE, right column). Each strategy is a coloured line connecting its rank under the synthetic track to its rank under the live track; lines that cross are strategies whose standing reverses, and the steepest crossers are expertise threshold (synthetic best to live worst) and single-bloc selection (synthetic worst to live rank-two), while representative sortition is near-best on both tracks. The y-axis is ordinal rank, with the raw error annotated at each node so the reader can see that the live top three are tightly bunched while expertise threshold is the lone outlier. Statistic: ordinal EIE-error rank per track over 96 synthetic seeds and 12 live seeds; ranks compared, magnitudes not pooled (the two tracks own different oracles and uncertainty). Claim: the formation rule that is best blind on synthetic data is worst under one local Gemma model, so the synthetic ranking does not transfer to the live single-model panel; caveat: single-model live evidence is descriptive and n-limited, not a human-review validation." />
-<figcaption aria-hidden="true">Cross-track strategy-ranking inversion at
+<a class="figure-full-size-link" href="../figures/track_ranking_inversion.png" target="_blank" rel="noopener" aria-label="Open full-size figure, Cross-track strategy-ranking inversion at the matched three-seat grain, shown as a slope…"><img src="../figures/track_ranking_inversion.png" style="width:80.0%"
+alt="Cross-track strategy-ranking inversion at the matched three-seat grain, shown as a slope chart, from source output/data/sweep_aggregated.csv (synthetic POWER_*_SIZE3, left column) and source output/data/postdoc_panel_results.json (live POSTDOC_*_EIE, right column). Each strategy is a coloured line connecting its rank under the synthetic track to its rank under the live track; lines that cross are strategies whose standing reverses, and the steepest crossers are expertise threshold (synthetic best to live worst) and single-bloc selection (synthetic worst to live rank-two), while representative sortition is near-best on both tracks. The y-axis is ordinal rank, with the raw error annotated at each node so the reader can see that the live top three are tightly bunched while expertise threshold is the lone outlier. Statistic: ordinal EIE-error rank per track over 96 synthetic seeds and 12 live seeds; ranks compared, magnitudes not pooled (the two tracks own different oracles and uncertainty). Claim: the formation rule that is best blind on synthetic data is worst under one local Gemma model, so the synthetic ranking does not transfer to the live single-model panel; caveat: single-model live evidence is descriptive and n-limited, not a human-review validation." /><span class="figure-full-size-label" aria-hidden="true">Open full-size figure</span></a>
+<figcaption>Cross-track strategy-ranking inversion at
 the matched three-seat grain, shown as a slope chart, from source
 <code>output/data/sweep_aggregated.csv</code> (synthetic
 <code>POWER_*_SIZE3</code>, left column) and source
@@ -1121,5 +1566,6 @@ inherit from the persona label. This is a hypothesis about the
 mechanism, not a measured causal claim, and it is the empirical reason
 the manuscript keeps the synthetic and live tracks at distinct inference
 levels rather than reporting a single cross-track strategy winner.</p>
+</main>
 </body>
 </html>

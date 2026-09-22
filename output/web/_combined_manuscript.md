@@ -41,8 +41,9 @@ and documentation are openly available at the public repository
 
 
 
----
-
+```{=latex}
+\newpage
+```
 
 
 # Introduction: panel formation before blind evaluation
@@ -64,7 +65,7 @@ judgments rather than gold labels
 [Karger et al. (2014)](https://doi.org/10.1287/opre.2013.1235). A parallel line
 estimates classifier accuracy *without any labels* by exploiting the structure of
 agreements among multiple predictors — logic- and constraint-based
-[platanios2014] and spectral [parisi2014] — and, like the exact NTQR solver, these
+[@platanios2014] and spectral [@parisi2014] — and, like the exact NTQR solver, these
 methods lean on an **error-independence** (or low-rank residual-dependence)
 assumption whose violation is exactly the failure mode we make tunable here. The
 `ntqr` package (v0.8) frames the problem as algebraic logic for unsupervised
@@ -72,7 +73,7 @@ evaluation from unlabeled decision data
 [Corrada-Emmanuel (2026)](https://pypi.org/project/ntqr/). Our
 generative model for *violating* that assumption — same-group judges sharing a
 latent shock through a Gaussian copula on a probit-thresholded competence variable —
-is the standard construction for correlated binary outcomes [emrich1991; nelsen2006],
+is the standard construction for correlated binary outcomes [@emrich1991; @nelsen2006],
 which lets us preserve each judge's marginal accuracy exactly while dialing
 cross-judge error correlation.
 Given the joint pattern of agreements and
@@ -267,8 +268,9 @@ the sortition result honest — not a manufactured sortition win — are the con
 
 
 
----
-
+```{=latex}
+\newpage
+```
 
 
 # Methods: instrument, assumptions, and companion track
@@ -686,8 +688,9 @@ it is regenerated into the static artifacts and the token/caption contract.
 
 
 
----
-
+```{=latex}
+\newpage
+```
 
 
 # Results: what resolved and what stayed bounded
@@ -1161,8 +1164,9 @@ single cross-track strategy winner.
 
 
 
----
-
+```{=latex}
+\newpage
+```
 
 
 # Discussion: claim boundaries and implications
@@ -1508,8 +1512,9 @@ interests.
 
 
 
----
-
+```{=latex}
+\newpage
+```
 
 
 # References
