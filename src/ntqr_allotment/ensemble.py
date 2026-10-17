@@ -41,17 +41,14 @@ from __future__ import annotations
 import math
 from typing import Sequence
 
-from ntqr import Labels
-from ntqr.alarms import SingleClassifierAxiomsAlarm
 from ntqr.r2.datasketches import (
     ObservedVoteCounts,
     classifier_label_votes,
     classifiers_labels_votes,
 )
-from ntqr.r2.evaluations import SingleClassifierEvaluations
-from ntqr.r2.raxioms import SingleClassifierAxioms
 
 from .experts import Expert, Item, sample_votes
+from .ntqr_eval import _validate_votes, alarm_misaligned
 
 #: Same cost characteristic as ``ntqr_eval.ALARM_DEFAULT_MAX_Q``: the alarm
 #: enumerates the answer-key simplex with cost ~O(Q^3), so the power curve runs
@@ -70,7 +67,7 @@ def observed_vote_counts(votes_by_judge: Sequence[Sequence[str]]) -> ObservedVot
     n_judges = len(votes_by_judge)
     if n_judges < 2:
         raise ValueError("an ensemble needs at least 2 judges")
-    n_items = len(votes_by_judge[0])
+    n_items = _validate_votes(votes_by_judge)
     if n_items == 0:
         raise ValueError("judges must vote on at least one item")
     if any(len(v) != n_items for v in votes_by_judge):
@@ -158,14 +155,6 @@ def panel_agreement_moments(votes_by_judge: Sequence[Sequence[str]]) -> dict[str
     return out
 
 
-def _responses_for(votes_by_judge: Sequence[Sequence[str]]) -> list[list[int]]:
-    """Per-judge ``[count_a, count_b]`` response vectors (each sums to Q)."""
-    return [
-        [sum(1 for v in votes if v == "a"), sum(1 for v in votes if v == "b")]
-        for votes in votes_by_judge
-    ]
-
-
 def _alarm_fires(
     votes_by_judge: Sequence[Sequence[str]],
     *,
@@ -173,11 +162,7 @@ def _alarm_fires(
     q: int,
 ) -> bool:
     """Run the N-judge axioms alarm; True iff the panel is jointly misaligned."""
-    labels = Labels(("a", "b"))
-    axioms = [SingleClassifierAxioms(labels, i) for i in range(len(votes_by_judge))]
-    alarm = SingleClassifierAxiomsAlarm(q, axioms, SingleClassifierEvaluations)
-    alarm.set_safety_specification(list(safety))
-    return bool(alarm.are_misaligned(_responses_for(votes_by_judge)))
+    return alarm_misaligned(votes_by_judge, safety_factors=safety, max_q=q)
 
 
 def alarm_power_curve(

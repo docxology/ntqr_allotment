@@ -18,6 +18,7 @@ from typing import Mapping, Sequence
 import numpy as np
 
 from .experts import Expert
+from .artifacts import write_json
 from .ntqr_eval import (
     closest_solution,
     error_independent_solutions,
@@ -752,8 +753,7 @@ def _load_vote_cache(cache_path: Path | None) -> dict[str, str]:
 def _save_vote_cache(cache_path: Path | None, cache: Mapping[str, str]) -> None:
     if cache_path is None:
         return
-    cache_path.parent.mkdir(parents=True, exist_ok=True)
-    cache_path.write_text(json.dumps(cache, indent=2, sort_keys=True), encoding="utf-8")
+    write_json(cache_path, dict(cache))
 
 
 def _reviewer_population_metadata(rows: Sequence[Mapping[str, object]]) -> dict[str, object]:

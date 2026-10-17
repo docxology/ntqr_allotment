@@ -223,3 +223,5 @@ that their hash matches `output/data/stego_manifest.json`, and that the embedded
 
 Project code: see repository. Note `allotment` is AGPL-3.0; this is a
 local-only research project and is not distributed as a combined work.
+
+See [study validation and resumable artifacts](docs/reliability.md) for strict panel/trial inputs, failure reasons, paired aggregation, and content-bound atomic vote caches.

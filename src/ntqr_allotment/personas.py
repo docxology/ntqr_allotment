@@ -19,13 +19,14 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Protocol, Sequence
 
 import requests
 
 from .corpus import CorpusItem
+from .artifacts import write_json
 from .experts import Expert
 from .ntqr_eval import (
     Evaluation,
@@ -252,6 +253,11 @@ class OllamaJudge:
     #: reuses prior votes. A persistent failure still raises after the retries.
     max_retries: int = 4
 
+    def cache_identity(self) -> dict:
+        """Bind cached votes to the endpoint, model tag and decode configuration."""
+        return {"kind": "ollama-v1", "base_url": self.base_url, "model": self.model,
+                "temperature": self.temperature, "seed": self.seed, "num_predict": self.num_predict}
+
     def available(self) -> bool:
         """True iff the Ollama server answers AND this judge's model is pulled.
 
@@ -339,6 +345,11 @@ class DeterministicJudge:
     def __post_init__(self) -> None:
         self._truth = {it.text: it.true_label for it in self.corpus}
 
+    def cache_identity(self) -> dict:
+        """The seed and labeled corpus are part of this synthetic judge's identity."""
+        truth_hash = hashlib.sha256(json.dumps(self._truth, sort_keys=True).encode()).hexdigest()
+        return {"kind": "deterministic-v1", "seed": self.seed, "truth_sha256": truth_hash}
+
     def judge(self, persona: PersonaSpec, item_text: str) -> str:
         truth = self._truth[item_text]
         h = hashlib.sha256(f"{self.seed}|{persona.id}|{item_text}".encode()).digest()
@@ -350,31 +361,46 @@ class DeterministicJudge:
 
 
 def judge_corpus(
-    judge: Judge,
-    persona: PersonaSpec,
-    items: Sequence[CorpusItem],
-    *,
-    cache_path: str | Path | None = None,
+    judge: Judge, persona: PersonaSpec, items: Sequence[CorpusItem], *,
+    cache_path: str | Path | None = None, cache_namespace: str | None = None,
 ) -> tuple[str, ...]:
-    """Collect one persona's votes over the corpus, optionally caching to JSON."""
+    """Collect votes with content-bound, atomic checkpoints after each response.
+
+    Legacy persona-id/item-index keys are retained but never reused without
+    provenance. Custom judges supply cache_identity() or an explicit namespace.
+    A namespace may also bind an Ollama model digest in addition to its tag.
+    """
     cache: dict[str, str] = {}
-    path = Path(cache_path) if cache_path else None
+    path = Path(cache_path) if cache_path is not None else None
     if path is not None and path.exists():
-        cache = json.loads(path.read_text())
+        cache = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(cache, dict):
+            raise ValueError("vote cache must contain a JSON object")
+    identity = None
+    if path is not None:
+        identify = getattr(judge, "cache_identity", None)
+        if not callable(identify) and cache_namespace is None:
+            raise ValueError("cacheable judges must provide cache_identity() or cache_namespace")
+        identity = {"judge": identify() if callable(identify) else None, "namespace": cache_namespace}
     votes: list[str] = []
-    dirty = False
-    for it in items:
-        key = f"{persona.id}|{it.index}"
-        if key in cache:
-            votes.append(cache[key])
-            continue
-        v = judge.judge(persona, it.text)
-        cache[key] = v
-        votes.append(v)
-        dirty = True
-    if path is not None and dirty:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(cache, indent=2, sort_keys=True))
+    for item in items:
+        key = None
+        if path is not None:
+            payload = {"persona": asdict(persona), "prompts": persona.build_prompt(item.text),
+                       "item_index": item.index, "item_text": item.text, "identity": identity}
+            key = "v2:" + hashlib.sha256(json.dumps(payload, sort_keys=True, allow_nan=False).encode()).hexdigest()
+        if key is not None and key in cache:
+            vote = cache[key]
+        else:
+            vote = judge.judge(persona, item.text)
+            if vote not in ("a", "b"):
+                raise ValueError("judge must return a binary label 'a' or 'b'")
+            if key is not None:
+                cache[key] = vote
+                write_json(path, cache)
+        if vote not in ("a", "b"):
+            raise ValueError("cached vote must be a binary label 'a' or 'b'")
+        votes.append(vote)
     return tuple(votes)
 
 

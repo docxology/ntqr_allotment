@@ -14,6 +14,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from itertools import combinations
+import math
 from typing import Sequence
 
 from .experts import Expert, Item, generate_population, sample_items, sample_votes
@@ -49,6 +50,30 @@ class TrialConfig:
     seed: int = 0
     compute_alarm: bool = False
     alarm_q: int = 25  # corpus prefix used for the (opt-in, O(Q^3)) alarm
+
+    def __post_init__(self) -> None:
+        if self.strategy not in STRATEGIES:
+            raise ValueError(f"invalid strategy: {self.strategy}")
+        if type(self.n_experts) is not int or self.n_experts < 3:
+            raise ValueError("n_experts must be an integer >= 3")
+        if type(self.panel_size) is not int or not 3 <= self.panel_size <= self.n_experts:
+            raise ValueError("panel_size must be an integer between 3 and n_experts")
+        if type(self.n_items) is not int or self.n_items < 1:
+            raise ValueError("n_items must be a positive integer")
+        for name in ("prevalence_a", "mean_expertise"):
+            value = getattr(self, name)
+            if not math.isfinite(value) or not 0 <= value <= 1:
+                raise ValueError(f"{name} must be finite and in [0, 1]")
+        for name in ("expertise_heterogeneity", "bias_std"):
+            value = getattr(self, name)
+            if not math.isfinite(value) or value < 0:
+                raise ValueError(f"{name} must be finite and nonnegative")
+        if type(self.seed) is not int or self.seed < 0:
+            raise ValueError("seed must be a nonnegative integer")
+        if type(self.alarm_q) is not int or self.alarm_q < 1:
+            raise ValueError("alarm_q must be a positive integer")
+        if type(self.compute_alarm) is not bool:
+            raise ValueError("compute_alarm must be boolean")
 
 
 @dataclass(frozen=True)
@@ -135,10 +160,10 @@ def run_trial_ensemble(
 ) -> EnsembleTrialResult:
     if config.panel_size < 3:
         raise ValueError("panel_size must be >= 3 (the exact NTQR solver needs a trio)")
-    if n_trios < 1:
-        raise ValueError("n_trios must be >= 1")
-    if max_scan < n_trios:
-        raise ValueError("max_scan must be >= n_trios")
+    if type(n_trios) is not int or n_trios < 1:
+        raise ValueError("n_trios must be an integer >= 1")
+    if type(max_scan) is not int or max_scan < n_trios:
+        raise ValueError("max_scan must be an integer >= n_trios")
 
     items, panel, panel_votes = _prepare_trial(config)
 

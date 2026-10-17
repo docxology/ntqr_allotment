@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import csv
-import json
 import argparse
+from collections import Counter
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
 from ntqr_allotment.solver import runtime_provenance
+from ntqr_allotment.artifacts import write_json
 from ntqr_allotment.config import ExperimentProfile, load_experiment_profile
 from ntqr_allotment.sweeps import (
     aggregate,
@@ -111,6 +112,7 @@ def main() -> None:
             "config_path": str(config_path.relative_to(root)),
             "seed_list": list(grid.seeds),
             "degenerate_rows": sum(1 for row in rows if row.n_trios == 0),
+            "failure_counts": dict(Counter(row.failure_reason for row in rows if row.failure_reason)),
             "row_count": len(rows),
             "aggregate_count": len(aggregates),
             "workers": args.workers,
@@ -126,10 +128,7 @@ def main() -> None:
         "ranking": ranking,
         "rep_vs_ideo": [asdict(effect) for effect in effects],
     }
-    json_path.write_text(
-        json.dumps(payload, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
+    write_json(json_path, payload)
     _write_aggregates_csv(csv_path, aggregates, profile)
 
     print(json_path.resolve())

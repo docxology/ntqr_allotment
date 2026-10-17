@@ -6,6 +6,7 @@ import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from types import SimpleNamespace
 
 import yaml
 
@@ -410,7 +411,7 @@ def _grid_from_experiment(profile_name: str, experiment: dict[str, Any]) -> Swee
         if key not in experiment:
             raise ValueError(f"profile {profile_name}: missing experiment.{key}")
 
-    grid = SweepGrid(
+    grid_values = dict(
         strategies=_tuple_axis(profile_name, experiment, "strategies"),
         panel_sizes=_tuple_axis(profile_name, experiment, "panel_sizes"),
         mean_expertises=_tuple_axis(profile_name, experiment, "mean_expertises"),
@@ -424,8 +425,8 @@ def _grid_from_experiment(profile_name: str, experiment: dict[str, Any]) -> Swee
         n_experts=int(experiment["n_experts"]),
         n_trios=int(experiment["n_trios"]),
     )
-    _validate_grid_ranges(profile_name, grid)
-    return grid
+    _validate_grid_ranges(profile_name, SimpleNamespace(**grid_values))
+    return SweepGrid(**grid_values)
 
 
 def _tuple_axis(profile_name: str, experiment: dict[str, Any], key: str) -> tuple[Any, ...]:
@@ -440,7 +441,7 @@ def _validate_grid_ranges(profile_name: str, grid: SweepGrid) -> None:
         raise ValueError(f"profile {profile_name}: seeds must be unique")
     for strategy in grid.strategies:
         if strategy not in STRATEGIES:
-            raise ValueError(f"profile {profile_name}: invalid strategy {strategy}")
+            raise ValueError(f"profile {profile_name}: invalid strategies value: {strategy}")
     for panel_size in grid.panel_sizes:
         if int(panel_size) < 3:
             raise ValueError(f"profile {profile_name}: panel_sizes must be >= 3")

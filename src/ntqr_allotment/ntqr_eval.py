@@ -41,6 +41,10 @@ _PATTERNS = [(a, b, c) for a in "ab" for b in "ab" for c in "ab"]
 _REAL_TOLERANCE = 1e-9
 
 
+class NoPhysicalSolutionError(ValueError):
+    """Valid observations do not admit a complete physical evaluation."""
+
+
 @dataclass(frozen=True)
 class Evaluation:
     """A single (prevalence, per-judge mean-accuracy) point in evaluation space."""
@@ -62,7 +66,7 @@ def _validate_votes(votes_by_judge: Sequence[Sequence[str]], *, trio: bool = Fal
     """Validate the binary observation boundary once for all evaluator paths."""
     if trio and len(votes_by_judge) != 3:
         raise ValueError("the exact NTQR solver requires exactly 3 judges")
-    if not votes_by_judge:
+    if len(votes_by_judge) == 0:
         raise ValueError("at least one judge is required")
     n_items = len(votes_by_judge[0])
     if n_items == 0:
@@ -193,7 +197,7 @@ def supervised_oracle(
     sup = SupervisedEvaluation(tlvc)
     oracle = _to_evaluation(sup.evaluation_float)
     if oracle is None:
-        raise ValueError(
+        raise NoPhysicalSolutionError(
             "supervised oracle returned a degenerate (complex/non-finite) "
             "solution; this should be impossible from labeled counts"
         )
@@ -208,7 +212,7 @@ def closest_solution(solutions: Sequence[Evaluation], oracle: Evaluation) -> Eva
     that may encounter degenerate trios must check ``solutions`` first and skip.
     """
     if not solutions:
-        raise ValueError("no real solution to select from")
+        raise NoPhysicalSolutionError("no real solution to select from")
     return min(solutions, key=lambda s: s.error_vs(oracle))
 
 
@@ -243,6 +247,10 @@ def alarm_misaligned(
             f"alarm corpus Q={q} exceeds max_q={max_q}; this NTQR alarm path is "
             f"~O(Q^3). Cap the item count or raise max_q deliberately."
         )
+    # A factor of one demands strictly better than 100% label accuracy.
+    # This safety specification is impossible for every answer key.
+    if 1 in safety_factors:
+        return True
     labels = Labels(("a", "b"))
     axioms = [SingleClassifierAxioms(labels, i) for i in range(len(votes_by_judge))]
     alarm = SingleClassifierAxiomsAlarm(q, axioms, SingleClassifierEvaluations)
@@ -253,6 +261,7 @@ def alarm_misaligned(
 
 __all__ = [
     "Evaluation",
+    "NoPhysicalSolutionError",
     "trio_vote_counts",
     "trio_label_vote_counts",
     "error_independent_solutions",

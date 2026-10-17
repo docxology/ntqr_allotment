@@ -7,11 +7,14 @@ from itertools import product
 from math import sqrt
 from multiprocessing import Pool
 from types import FrameType
+from contextlib import contextmanager
+import threading
 from typing import Any
 
 import numpy as np
 
 from .pipeline import TrialConfig, run_trial_ensemble
+from .ntqr_eval import NoPhysicalSolutionError
 from .sortition import STRATEGIES
 
 DEGENERATE_ERROR = -1.0
@@ -48,13 +51,20 @@ class SweepGrid:
         for axis_name, axis_values in axes.items():
             if not axis_values:
                 raise ValueError(f"{axis_name} must be non-empty")
+            if len(set(axis_values)) != len(axis_values):
+                raise ValueError(f"{axis_name} must not contain duplicate values")
         for strategy in self.strategies:
             if strategy not in STRATEGIES:
                 raise ValueError(f"invalid strategies value: {strategy}")
         if self.n_experts <= 0:
             raise ValueError("n_experts must be positive")
-        if self.n_trios < 1:
+        if type(self.n_trios) is not int or self.n_trios < 1:
             raise ValueError("n_trios must be >= 1")
+
+        # Validate the full design before starting any solver work.
+        self.cells()
+        if any(type(seed) is not int or seed < 0 for seed in self.seeds):
+            raise ValueError("seeds must contain nonnegative integers")
 
     def cells(self) -> list[TrialConfig]:
         cells: list[TrialConfig] = []
@@ -99,6 +109,7 @@ class SweepRow:
     n_trios: int
     eie_error: float
     mv_error: float
+    failure_reason: str | None = None
 
     def config_key(self) -> tuple[Any, ...]:
         return (
@@ -145,7 +156,7 @@ def _is_degenerate_error(value: float) -> bool:
     return not math.isfinite(value) or value < 0.0
 
 
-def _degenerate_row(config: TrialConfig) -> SweepRow:
+def _degenerate_row(config: TrialConfig, reason: str = "no_physical_solution") -> SweepRow:
     return SweepRow(
         strategy=config.strategy,
         panel_size=config.panel_size,
@@ -159,6 +170,7 @@ def _degenerate_row(config: TrialConfig) -> SweepRow:
         n_trios=0,
         eie_error=DEGENERATE_ERROR,
         mv_error=DEGENERATE_ERROR,
+        failure_reason=reason,
     )
 
 
@@ -188,33 +200,41 @@ def _raise_timeout(_signum: int, _frame: FrameType | None) -> None:
     raise TrialTimeoutError("trial evaluation exceeded timeout")
 
 
-class _trial_time_limit:
-    def __init__(self, seconds: float | None):
-        self.seconds = seconds
-        self._old_handler: Any = None
-        self._old_timer: tuple[float, float] | None = None
+def _validate_timeout(seconds: float | None) -> None:
+    if seconds is not None:
+        if isinstance(seconds, bool) or not math.isfinite(seconds) or seconds <= 0:
+            raise ValueError("trial_timeout_s must be finite and positive")
+        if not hasattr(signal, "SIGALRM") or not hasattr(signal, "setitimer"):
+            raise ValueError("trial timeouts require POSIX interval timers")
 
-    def __enter__(self) -> None:
-        if self.seconds is None or self.seconds <= 0:
-            return
-        self._old_handler = signal.signal(signal.SIGALRM, _raise_timeout)
-        self._old_timer = signal.setitimer(signal.ITIMER_REAL, self.seconds)
 
-    def __exit__(self, *_exc: object) -> None:
-        if self.seconds is None or self.seconds <= 0:
-            return
+@contextmanager
+def _trial_time_limit(seconds: float | None):
+    if seconds is None:
+        yield
+        return
+    if threading.current_thread() is not threading.main_thread():
+        raise ValueError("trial timeouts require the main thread")
+    if signal.getitimer(signal.ITIMER_REAL)[0] > 0:
+        raise ValueError("trial timeouts cannot replace an existing interval timer")
+    old_handler = signal.getsignal(signal.SIGALRM)
+    try:
+        signal.signal(signal.SIGALRM, _raise_timeout)
+        # Keep installation inside try: even an immediate alarm must restore state.
+        signal.setitimer(signal.ITIMER_REAL, seconds)
+        yield
+    finally:
         signal.setitimer(signal.ITIMER_REAL, 0.0)
-        if self._old_handler is not None:
-            signal.signal(signal.SIGALRM, self._old_handler)
-        if self._old_timer is not None and self._old_timer[0] > 0:
-            signal.setitimer(signal.ITIMER_REAL, *self._old_timer)
+        signal.signal(signal.SIGALRM, old_handler)
 
 
 def _run_sweep_config(config: TrialConfig, n_trios: int, trial_timeout_s: float | None) -> SweepRow:
     try:
         with _trial_time_limit(trial_timeout_s):
             result = run_trial_ensemble(config, n_trios=n_trios)
-    except (ValueError, TrialTimeoutError):
+    except TrialTimeoutError:
+        return _degenerate_row(config, "timeout")
+    except NoPhysicalSolutionError:
         return _degenerate_row(config)
     if (
         result.n_trios == 0
@@ -244,6 +264,7 @@ def _run_sweep_task(task: tuple[TrialConfig, int, float | None]) -> SweepRow:
 
 
 def run_sweep(grid: SweepGrid, *, trial_timeout_s: float | None = None) -> list[SweepRow]:
+    _validate_timeout(trial_timeout_s)
     rows: list[SweepRow] = []
     for config in _trial_configs(grid):
         rows.append(_run_sweep_config(config, grid.n_trios, trial_timeout_s))
@@ -256,7 +277,8 @@ def run_sweep_parallel(
     workers: int = 1,
     trial_timeout_s: float | None = None,
 ) -> list[SweepRow]:
-    if workers < 1:
+    _validate_timeout(trial_timeout_s)
+    if type(workers) is not int or workers < 1:
         raise ValueError("workers must be >= 1")
     if workers == 1:
         return run_sweep(grid, trial_timeout_s=trial_timeout_s)
@@ -307,8 +329,11 @@ def aggregate(rows: list[SweepRow]) -> list[Aggregate]:
     aggregates: list[Aggregate] = []
     for config_key in sorted(grouped):
         group_rows = grouped[config_key]
-        eie_values = [row.eie_error for row in group_rows]
-        mv_values = [row.mv_error for row in group_rows]
+        usable = [row for row in group_rows if row.n_trios > 0
+                  and not _is_degenerate_error(row.eie_error)
+                  and not _is_degenerate_error(row.mv_error)]
+        eie_values = [row.eie_error for row in usable]
+        mv_values = [row.mv_error for row in usable]
         eie_mean, eie_std, eie_ci95 = _mean_std_ci(eie_values)
         mv_mean, mv_std, mv_ci95 = _mean_std_ci(mv_values)
         n = sum(1 for value in eie_values if not _is_degenerate_error(value))

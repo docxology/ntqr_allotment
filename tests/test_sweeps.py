@@ -219,8 +219,8 @@ def test_n_experts_nonpositive_raises():
     with pytest.raises(ValueError, match="n_experts must be positive"):
         SweepGrid(**kwargs)
     # negative control: a positive count builds fine
-    kwargs["n_experts"] = 1
-    assert SweepGrid(**kwargs).n_experts == 1
+    kwargs["n_experts"] = 3
+    assert SweepGrid(**kwargs).n_experts == 3
 
 
 def test_n_trios_below_one_raises():
@@ -267,29 +267,12 @@ def test_sweep_row_regime_key_drops_strategy():
 
 
 # ---------------------------------------------------------------------------
-# run_sweep degenerate path when run_trial_ensemble raises ValueError
-# (lines 177-179). A panel_size < 3 cell builds a valid TrialConfig (no
-# construction-time guard) but run_trial_ensemble raises -> degenerate row.
+# Invalid study designs are configuration errors, not measured degeneracy.
 # ---------------------------------------------------------------------------
 
-def test_run_sweep_degenerate_on_ensemble_value_error():
-    bad_grid = SweepGrid(
-        strategies=("random_selection",),
-        panel_sizes=(2,),  # < 3 -> run_trial_ensemble raises ValueError
-        mean_expertises=(0.72,),
-        expertise_heterogeneities=(0.08,),
-        bias_stds=(0.30,),
-        n_items_values=(90,),
-        prevalence_as=(0.5,),
-        seeds=(0,),
-        n_experts=32,
-        n_trios=2,
-    )
-    rows = run_sweep(bad_grid)
-    assert len(rows) == 1
-    assert rows[0].eie_error == DEGENERATE_ERROR
-    assert rows[0].mv_error == DEGENERATE_ERROR
-    assert rows[0].n_trios == 0
+def test_invalid_sweep_design_is_rejected_before_execution():
+    with pytest.raises(ValueError, match="panel_size"):
+        SweepGrid(**{**_grid_kwargs(), "panel_sizes": (2,)})
     # negative control: a panel_size >= 3 cell yields a real, non-degenerate row
     good_grid = SweepGrid(
         strategies=("random_selection",),

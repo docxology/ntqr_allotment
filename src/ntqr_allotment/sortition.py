@@ -47,6 +47,16 @@ class PanelDraw:
     feasibility_warnings: tuple[str, ...] = ()
 
 
+def _validate_population(experts: Sequence[Expert], panel_size: int | None = None) -> None:
+    """All strategies use a nonempty population with unique candidate identities."""
+    if len(experts) == 0:
+        raise ValueError("expert population must be non-empty")
+    if len({expert.id for expert in experts}) != len(experts):
+        raise ValueError("expert ids must be unique")
+    if panel_size is not None and (type(panel_size) is not int or not 1 <= panel_size <= len(experts)):
+        raise ValueError("panel_size must be an integer between 1 and the population size")
+
+
 def _composition(experts_by_id: dict[str, Expert], ids: Sequence[str]) -> dict[str, dict[str, int]]:
     comp: dict[str, dict[str, int]] = {"ideology": {}, "expertise_tier": {}}
     for eid in ids:
@@ -62,6 +72,10 @@ def _largest_remainder(counts: dict[str, int], total: int) -> dict[str, int]:
     Largest-remainder (Hamilton) apportionment -> integer seats summing to
     ``total`` that mirror the population proportions as closely as possible.
     """
+    if type(total) is not int or total < 0:
+        raise ValueError("total seats must be a nonnegative integer")
+    if any(type(value) is not int or value < 0 for value in counts.values()):
+        raise ValueError("population counts must be nonnegative integers")
     pop = sum(counts.values())
     if pop == 0:
         raise ValueError("empty population")
@@ -76,6 +90,7 @@ def _largest_remainder(counts: dict[str, int], total: int) -> dict[str, int]:
 
 def build_pool(experts: Sequence[Expert]) -> Pool:
     """Turn an expert population into an ``allotment`` candidate pool."""
+    _validate_population(experts)
     ideologies = sorted({e.ideology for e in experts})
     tiers = sorted({e.expertise_tier for e in experts})
     candidates = [
@@ -103,7 +118,10 @@ def representative_sortition(
     panel_count: int = _DEFAULT_PANEL_COUNT,
 ) -> PanelDraw:
     """Auditable maximin lottery with ideology quotas mirroring the population."""
+    _validate_population(experts, panel_size)
     experts_by_id = {e.id: e for e in experts}
+    if type(panel_count) is not int or panel_count < 1:
+        raise ValueError("panel_count must be a positive integer")
     pool = build_pool(experts)
     ideo_counts: dict[str, int] = {}
     for e in experts:
@@ -131,6 +149,7 @@ def representative_sortition(
 
 def random_selection(experts: Sequence[Expert], panel_size: int, *, seed: int) -> PanelDraw:
     """Uniform draw without replacement (the simplest honest baseline)."""
+    _validate_population(experts, panel_size)
     experts_by_id = {e.id: e for e in experts}
     rng = np.random.default_rng(seed)
     ids = tuple(str(x) for x in rng.choice([e.id for e in experts], size=panel_size, replace=False))
@@ -150,11 +169,14 @@ def ideological_selection(
     ideology: str | None = None,
 ) -> PanelDraw:
     """Pick from a single ideology bucket -> a deliberately correlated panel."""
+    _validate_population(experts, panel_size)
     experts_by_id = {e.id: e for e in experts}
     rng = np.random.default_rng(seed)
     if ideology is None:
         ideologies = sorted({e.ideology for e in experts})
         ideology = ideologies[seed % len(ideologies)]
+    if ideology not in {e.ideology for e in experts}:
+        raise ValueError(f"unknown ideology: {ideology}")
     pref = [e.id for e in experts if e.ideology == ideology]
     rest = [e.id for e in experts if e.ideology != ideology]
     rng.shuffle(pref)
@@ -171,6 +193,7 @@ def ideological_selection(
 
 def expertise_threshold(experts: Sequence[Expert], panel_size: int, *, seed: int) -> PanelDraw:
     """Competence-first: select the top-k experts by expertise."""
+    _validate_population(experts, panel_size)
     experts_by_id = {e.id: e for e in experts}
     ranked = sorted(experts, key=lambda e: (e.expertise, e.id), reverse=True)
     ids = tuple(e.id for e in ranked[:panel_size])

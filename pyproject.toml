@@ -42,6 +42,11 @@ allotment = { git = "https://github.com/Citizen-Infra/allotment", rev = "723b42c
 ntqr = { path = "vendor/ntqr-0.9-py2.py3-none-any.whl" }
 
 [tool.pytest.ini_options]
+# Known upstream PuLP 3 notices; the dependency is explicitly constrained below 4.
+filterwarnings = [
+    'ignore:Constructing LpVariable.*:DeprecationWarning:pulp\..*',
+    'ignore:PULP_CBC_CMD is deprecated.*:DeprecationWarning:pulp\..*',
+]
 pythonpath = [".", "src"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]

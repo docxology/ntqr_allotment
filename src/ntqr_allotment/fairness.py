@@ -20,13 +20,19 @@ from typing import Sequence
 import numpy as np
 
 from allotment.domain import QuotaConfig, QuotaTarget
-from allotment.selection_core.audit import run_draw
+from allotment.selection_core.audit import run_draw as _upstream_run_draw
 from allotment.selection_core.maximin import solve_maximin_weights
 from allotment.selection_core.panels import generate_feasible_panels
 
 from .experts import Expert
 from .solver import configure_cbc
 from .sortition import _largest_remainder, build_pool
+
+
+def run_draw(pool, config, panel_count: int, seed: int):
+    """Convenience entry point using the configured native CBC executable."""
+    configure_cbc()
+    return _upstream_run_draw(pool, config, panel_count, seed)
 
 
 def multi_feature_quota_config(

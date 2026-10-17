@@ -14,3 +14,5 @@ NTQR allotment — ground-truth-free evaluation of noisy classifiers (v0.1.0 pub
 
 
 - [Dependencies and NTQR 0.9 migration](dependencies.md): pins, native CBC, API compatibility and verification.
+
+- [Valid study designs and resumable artifacts](reliability.md): input validation, failure provenance, paired support, native CBC and cache identities.
