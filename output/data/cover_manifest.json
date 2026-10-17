@@ -105,8 +105,8 @@
   "profile_name": "manuscript_contrast",
   "schema_version": 1,
   "semantic_role": "schematic front-matter cover for the sortition-to-NTQR evaluation pipeline",
-  "source_config": "manuscript/config.yaml",
-  "source_config_hash": "57be59457599",
+  "source_config": "docs/manuscript/config.yaml",
+  "source_config_hash": "be866381d01a",
   "visual_contract": {
     "editable_layers": "title, author, affiliation, ORCID, DOI, and source notes remain renderer-owned text",
     "forbidden_claims": "no exact performance values, DOI identifiers, or source claims are baked into the raster",

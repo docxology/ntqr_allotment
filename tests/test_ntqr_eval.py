@@ -301,3 +301,41 @@ def test_majority_voting_solutions_differ_from_error_independent() -> None:
     assert eie_prev == [0.4444, 0.5556]
     assert mv_prev == [0.4167, 0.5833]
     assert eie_prev != mv_prev
+
+
+@pytest.mark.parametrize("votes", [[], [()], [("a",), ("b", "a")], [("c",)]])
+def test_alarm_rejects_invalid_observations(votes):
+    with pytest.raises(ValueError):
+        alarm_misaligned(votes)
+
+
+@pytest.mark.parametrize("votes", [[(), (), ()], [("a",), ("b",), ("c",)]])
+def test_solver_rejects_empty_or_nonbinary_votes(votes):
+    with pytest.raises(ValueError):
+        error_independent_solutions(votes)
+
+
+def test_labeled_counts_reject_misaligned_items():
+    with pytest.raises(ValueError, match="items must align"):
+        trio_label_vote_counts([("a",), ("a",), ("a",)], [])
+
+
+def test_labeled_counts_reject_invalid_truth():
+    with pytest.raises(ValueError, match="true labels"):
+        trio_label_vote_counts([("a",), ("a",), ("a",)], [Item(0, "c")])
+
+
+@pytest.mark.parametrize("factors", [(0, 2), (2,), (2, 2, 2), (2.5, 2), (True, 2)])
+def test_alarm_rejects_invalid_safety_factors(factors):
+    with pytest.raises(ValueError, match="safety_factors"):
+        alarm_misaligned([("a", "b")], safety_factors=factors)
+
+
+def test_evaluation_distance_rejects_different_panels():
+    with pytest.raises(ValueError, match="same number"):
+        Evaluation(0.5, (0.8,)).error_vs(Evaluation(0.5, (0.8, 0.9)))
+
+
+def test_published_ntqr09_is_installed():
+    import ntqr
+    assert ntqr.__version__ == "0.9"

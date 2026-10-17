@@ -6,7 +6,7 @@
 #     README.md that is absent from the sdist tarball), so `uv` cannot lock it
 #     from the index. We vendor the published wheel under vendor/ and point
 #     `[tool.uv.sources]` at the local file -> deterministic, fully locked,
-#     survives `uv run` re-sync. Verified with uv 0.11.6 / CPython 3.12.13.
+#     survives `uv run` re-sync. Verified with uv 0.13.1 / CPython 3.12.13.
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
@@ -21,11 +21,14 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "numpy>=1.26.0",
+    "sympy>=1.14.0",
+    "pillow>=10.0",
     "matplotlib>=3.8.0",
     "pyyaml>=6.0",
     "requests>=2.31.0",   # Ollama HTTP client (no SDK dependency)
-    "ntqr>=0.8",
+    "ntqr==0.9",
     "allotment",
+    "pulp>=3.3.2,<4",
 ]
 
 [project.optional-dependencies]
@@ -35,8 +38,8 @@ dev = [
 ]
 
 [tool.uv.sources]
-allotment = { git = "https://github.com/Citizen-Infra/allotment" }
-ntqr = { path = "vendor/ntqr-0.8-py2.py3-none-any.whl" }
+allotment = { git = "https://github.com/Citizen-Infra/allotment", rev = "723b42c8588386a18bfabf2ccc9cc0af3784a9e9" }
+ntqr = { path = "vendor/ntqr-0.9-py2.py3-none-any.whl" }
 
 [tool.pytest.ini_options]
 pythonpath = [".", "src"]
@@ -62,3 +65,6 @@ exclude_lines = [
     "if __name__ == .__main__.:",
     "raise NotImplementedError",
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -25,6 +25,7 @@ from allotment.selection_core.maximin import solve_maximin_weights
 from allotment.selection_core.panels import generate_feasible_panels
 
 from .experts import Expert
+from .solver import configure_cbc
 from .sortition import _largest_remainder, build_pool
 
 
@@ -90,6 +91,7 @@ def maximin_fairness(
     """
     pool = build_pool(experts)
     config = multi_feature_quota_config(experts, panel_size, features=features)
+    configure_cbc()
     panels = generate_feasible_panels(pool, config, panel_count, random.Random(seed))
     candidate_ids = [c.id for c in pool.candidates]
     weights = solve_maximin_weights(panels, candidate_ids)

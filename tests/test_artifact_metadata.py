@@ -14,7 +14,7 @@ from ntqr_allotment.config import (
 
 def test_sweep_artifacts_match_active_config_profile() -> None:
     repo_root = Path(__file__).resolve().parents[1]
-    profile = load_experiment_profile(repo_root / "manuscript" / "config.yaml")
+    profile = load_experiment_profile(repo_root / "docs" / "manuscript" / "config.yaml")
     sweep_json = repo_root / "output" / "data" / "sweep_results.json"
     sweep_csv = repo_root / "output" / "data" / "sweep_aggregated.csv"
 
@@ -97,7 +97,7 @@ def test_postdoc_panel_artifact_carries_live_gemma_metadata() -> None:
     assert payload["config"]["require_live"] is True
     # Bind the artifact's sampling shape to the live config so it tracks the
     # configured sample size (e.g. the 12-seed run) instead of a stale literal.
-    cfg = load_live_postdoc_panel_config(repo_root / "manuscript" / "config.yaml")
+    cfg = load_live_postdoc_panel_config(repo_root / "docs" / "manuscript" / "config.yaml")
     assert payload["config"]["seed_list"] == list(cfg.seeds)
     assert payload["config"]["n_reviewers"] == cfg.n_reviewers
     assert payload["config"]["n_applications"] == cfg.n_applications
@@ -114,7 +114,7 @@ def test_postdoc_panel_artifact_carries_live_gemma_metadata() -> None:
 def test_front_matter_metadata_is_template_readable() -> None:
     repo_root = Path(__file__).resolve().parents[1]
     config = yaml.safe_load(
-        (repo_root / "manuscript/config.yaml").read_text(encoding="utf-8")
+        (repo_root / "docs/manuscript/config.yaml").read_text(encoding="utf-8")
     )
 
     assert "authors" in config
@@ -149,7 +149,7 @@ def test_cover_manifest_contract_and_data_figure_boundary() -> None:
     assert payload["schema_version"] == 1
     assert payload["cover_image"] == "output/figures/ntqr_cover.png"
     assert payload["manifest"] == "output/data/cover_manifest.json"
-    assert payload["source_config"] == "manuscript/config.yaml"
+    assert payload["source_config"] == "docs/manuscript/config.yaml"
     assert len(payload["source_config_hash"]) == 12
     assert "large_page" in payload["concept_references"]
     assert "mobile_portrait" in payload["concept_references"]

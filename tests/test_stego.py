@@ -129,7 +129,7 @@ def _write_minimal_repo_outputs(root: Path) -> None:
     (root / "output/figures").mkdir(parents=True)
     (root / "output/pdf").mkdir(parents=True)
     (root / "output/data").mkdir(parents=True)
-    (root / "manuscript").mkdir()
+    (root / "docs/manuscript").mkdir(parents=True)
     Image.new("RGB", (220, 220), "#fbf7ef").save(root / "output/figures/ntqr_cover.png")
     Image.new("RGB", (20, 20), "#336699").save(root / "output/figures/strategy_ranking.png")
     (root / "output/pdf/NTQR_allotment_combined.pdf").write_bytes(
@@ -137,4 +137,4 @@ def _write_minimal_repo_outputs(root: Path) -> None:
     )
     (root / "output/data/cover_manifest.json").write_text('{"schema_version":1}\n')
     (root / "output/manuscript_variables.json").write_text('{"N_SEEDS":"12"}\n')
-    (root / "manuscript/config.yaml").write_text("paper:\n  title: NTQR\n")
+    (root / "docs/manuscript/config.yaml").write_text("paper:\n  title: NTQR\n")

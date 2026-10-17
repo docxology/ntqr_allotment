@@ -63,7 +63,7 @@ def render_cover(
     root = Path(repo_root)
     cover_path = output_path or root / "output" / "figures" / COVER_FILENAME
     manifest = manifest_path or root / "output" / "data" / MANIFEST_FILENAME
-    config_path = root / "manuscript" / "config.yaml"
+    config_path = root / "docs" / "manuscript" / "config.yaml"
     config_hash = _file_hash(config_path)
     profile = load_experiment_profile(config_path)
     cases = _cover_cases(profile)

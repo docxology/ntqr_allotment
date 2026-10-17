@@ -30,7 +30,7 @@ WORKERS = 12
 
 
 def _configs() -> tuple[list[TrialConfig], int]:
-    grid = load_experiment_profile(ROOT / "manuscript" / "config.yaml", "manuscript_contrast").grid
+    grid = load_experiment_profile(ROOT / "docs" / "manuscript" / "config.yaml", "manuscript_contrast").grid
     configs: list[TrialConfig] = []
     for strat, size, me, het, bias, n_items, prev, seed in product(
         grid.strategies,

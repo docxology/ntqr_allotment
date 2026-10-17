@@ -43,10 +43,19 @@ except ModuleNotFoundError:
 TOKEN_RE = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
 
 
+def source_markdown(manuscript_dir: Path) -> list[Path]:
+    """Select render sources; directory guides are not manuscript sections."""
+    if not manuscript_dir.is_dir():
+        raise FileNotFoundError(f"manuscript source directory missing: {manuscript_dir}")
+    files = sorted(manuscript_dir.glob("[0-9]*.md"))
+    preamble = manuscript_dir / "preamble.md"
+    return files + ([preamble] if preamble.is_file() else [])
+
+
 def used_tokens(manuscript_dir: Path) -> set[str]:
     """Every {{TOKEN}} referenced across the manuscript markdown."""
     tokens: set[str] = set()
-    for md in sorted(manuscript_dir.glob("*.md")):
+    for md in source_markdown(manuscript_dir):
         tokens.update(TOKEN_RE.findall(md.read_text(encoding="utf-8")))
     return tokens
 
@@ -64,7 +73,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    manuscript_dir = PROJECT_ROOT / "manuscript"
+    manuscript_dir = PROJECT_ROOT / "docs" / "manuscript"
     output_dir = PROJECT_ROOT / "output"
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -77,16 +86,16 @@ def main() -> int:
         return 1
 
     vars_path = output_dir / "manuscript_variables.json"
-    vars_path.write_text(json.dumps(variables, indent=2, sort_keys=True), encoding="utf-8")
     print(str(vars_path))
     print(f"tokens generated: {len(variables)} | tokens used in prose: {len(used)} | orphans: 0")
 
     if args.check:
         return 0
 
+    vars_path.write_text(json.dumps(variables, indent=2, sort_keys=True), encoding="utf-8")
     injected_dir = output_dir / "manuscript"
     injected_dir.mkdir(parents=True, exist_ok=True)
-    for md in sorted(manuscript_dir.glob("*.md")):
+    for md in source_markdown(manuscript_dir):
         out = injected_dir / md.name
         out.write_text(inject(md.read_text(encoding="utf-8"), variables), encoding="utf-8")
         print(str(out))

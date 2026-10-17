@@ -363,7 +363,7 @@ def test_no_orphan_token_in_manuscript() -> None:
     """
     repo_root = Path(__file__).resolve().parents[1]
     manuscript_tokens: set[str] = set()
-    for manuscript_path in sorted((repo_root / "manuscript").glob("*.md")):
+    for manuscript_path in sorted((repo_root / "docs" / "manuscript").glob("[0-9]*.md")):
         manuscript_tokens |= _scan_tokens(manuscript_path.read_text(encoding="utf-8"))
 
     producible = _producible_tokens(repo_root)
@@ -386,7 +386,7 @@ def test_no_orphan_gate_catches_a_fake_token() -> None:
 
 def test_results_source_ledger_is_not_blanket_sweep_only() -> None:
     repo_root = Path(__file__).resolve().parents[1]
-    text = (repo_root / "manuscript" / "03_results.md").read_text(encoding="utf-8")
+    text = (repo_root / "docs" / "manuscript" / "03_results.md").read_text(encoding="utf-8")
 
     assert "All numbers below are emitted from the aggregated sweep" not in text
     assert "postdoc_panel_results.json" in text
@@ -396,7 +396,7 @@ def test_results_source_ledger_is_not_blanket_sweep_only() -> None:
 
 def test_postdoc_figures_are_standalone_blocks() -> None:
     repo_root = Path(__file__).resolve().parents[1]
-    text = (repo_root / "manuscript" / "03_results.md").read_text(encoding="utf-8")
+    text = (repo_root / "docs" / "manuscript" / "03_results.md").read_text(encoding="utf-8")
     figure_lines = [
         line for line in text.splitlines() if "#fig:postdoc" in line
     ]
@@ -407,7 +407,7 @@ def test_postdoc_figures_are_standalone_blocks() -> None:
 
 def test_manuscript_avoids_live_source_overreach() -> None:
     repo_root = Path(__file__).resolve().parents[1]
-    discussion = (repo_root / "manuscript" / "04_discussion.md").read_text(
+    discussion = (repo_root / "docs" / "manuscript" / "04_discussion.md").read_text(
         encoding="utf-8"
     )
 
@@ -417,7 +417,7 @@ def test_manuscript_avoids_live_source_overreach() -> None:
 
 def test_postdoc_live_caveat_is_single_model_not_family_comparison() -> None:
     repo_root = Path(__file__).resolve().parents[1]
-    text = (repo_root / "manuscript" / "03_results.md").read_text(encoding="utf-8")
+    text = (repo_root / "docs" / "manuscript" / "03_results.md").read_text(encoding="utf-8")
     rendered = (repo_root / "output" / "manuscript" / "03_results.md").read_text(
         encoding="utf-8"
     )

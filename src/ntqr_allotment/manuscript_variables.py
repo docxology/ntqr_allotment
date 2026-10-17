@@ -252,7 +252,7 @@ def _derive_grid_tokens(csv_path: Path) -> dict[str, str]:
                 except ValueError:
                     pass
     n_trios = GRID_TOKENS["N_TRIOS"]
-    cfg = Path(csv_path).resolve().parents[2] / "manuscript" / "config.yaml"
+    cfg = Path(csv_path).resolve().parents[2] / "docs" / "manuscript" / "config.yaml"
     if cfg.exists():
         data = yaml.safe_load(cfg.read_text()) or {}
         profiles = data.get("experiment_profiles") or {}

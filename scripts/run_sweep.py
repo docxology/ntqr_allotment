@@ -7,6 +7,7 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
+from ntqr_allotment.solver import runtime_provenance
 from ntqr_allotment.config import ExperimentProfile, load_experiment_profile
 from ntqr_allotment.sweeps import (
     aggregate,
@@ -83,7 +84,7 @@ def main() -> None:
     )
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    config_path = root / "manuscript" / "config.yaml"
+    config_path = root / "docs" / "manuscript" / "config.yaml"
     profile = load_experiment_profile(config_path, args.profile)
     grid = profile.grid
 
@@ -106,6 +107,7 @@ def main() -> None:
         "schema_version": 2,
         "metadata": {
             **profile.metadata(),
+            **runtime_provenance(),
             "config_path": str(config_path.relative_to(root)),
             "seed_list": list(grid.seeds),
             "degenerate_rows": sum(1 for row in rows if row.n_trios == 0),

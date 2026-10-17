@@ -12,3 +12,5 @@ NTQR allotment — ground-truth-free evaluation of noisy classifiers (v0.1.0 pub
 
 - `uv run pytest tests/`
 
+
+- [Dependencies and NTQR 0.9 migration](dependencies.md): pins, native CBC, API compatibility and verification.

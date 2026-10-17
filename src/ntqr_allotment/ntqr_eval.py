@@ -51,21 +51,35 @@ class Evaluation:
     def error_vs(self, oracle: "Evaluation") -> float:
         """L1-style distance to an oracle: prevalence + mean per-judge accuracy."""
         prev_err = abs(self.prevalence_a - oracle.prevalence_a)
-        n = min(len(self.accuracies), len(oracle.accuracies))
+        if len(self.accuracies) != len(oracle.accuracies):
+            raise ValueError("evaluations must contain the same number of judges")
+        n = len(self.accuracies)
         acc_err = sum(abs(self.accuracies[i] - oracle.accuracies[i]) for i in range(n)) / max(n, 1)
         return prev_err + acc_err
 
 
+def _validate_votes(votes_by_judge: Sequence[Sequence[str]], *, trio: bool = False) -> int:
+    """Validate the binary observation boundary once for all evaluator paths."""
+    if trio and len(votes_by_judge) != 3:
+        raise ValueError("the exact NTQR solver requires exactly 3 judges")
+    if not votes_by_judge:
+        raise ValueError("at least one judge is required")
+    n_items = len(votes_by_judge[0])
+    if n_items == 0:
+        raise ValueError("at least one item is required")
+    for votes in votes_by_judge:
+        if len(votes) != n_items:
+            raise ValueError("all judges must vote on the same number of items")
+        if any(vote not in ("a", "b") for vote in votes):
+            raise ValueError("votes must use only binary labels 'a' and 'b'")
+    return n_items
+
+
 def trio_vote_counts(votes_by_judge: Sequence[Sequence[str]]) -> dict[tuple[str, ...], int]:
     """Count joint vote patterns for exactly 3 binary judges (unlabeled)."""
-    if len(votes_by_judge) != 3:
-        raise ValueError("the exact NTQR solver requires exactly 3 judges")
-    n_items = len(votes_by_judge[0])
-    if any(len(v) != n_items for v in votes_by_judge):
-        raise ValueError("all judges must vote on the same number of items")
+    _validate_votes(votes_by_judge, trio=True)
     counts = {p: 0 for p in _PATTERNS}
-    for k in range(n_items):
-        pattern = (votes_by_judge[0][k], votes_by_judge[1][k], votes_by_judge[2][k])
+    for pattern in zip(*votes_by_judge):
         counts[pattern] += 1
     return counts
 
@@ -74,8 +88,11 @@ def trio_label_vote_counts(
     votes_by_judge: Sequence[Sequence[str]], items: Sequence[Item]
 ) -> dict[str, dict[tuple[str, ...], int]]:
     """Count joint vote patterns split by TRUE label (labeled -> oracle path)."""
-    if len(votes_by_judge) != 3:
-        raise ValueError("the exact NTQR solver requires exactly 3 judges")
+    n_items = _validate_votes(votes_by_judge, trio=True)
+    if len(items) != n_items:
+        raise ValueError("items must align with every judge's votes")
+    if any(item.true_label not in ("a", "b") for item in items):
+        raise ValueError("true labels must use only binary labels 'a' and 'b'")
     counts: dict[str, dict[tuple[str, ...], int]] = {
         "a": {p: 0 for p in _PATTERNS},
         "b": {p: 0 for p in _PATTERNS},
@@ -216,7 +233,11 @@ def alarm_misaligned(
     the underlying NTQR enumeration is ~O(Q^3); pass a larger ``max_q``
     deliberately if you accept the cost. Raises if Q exceeds ``max_q``.
     """
-    q = len(votes_by_judge[0])
+    q = _validate_votes(votes_by_judge)
+    if len(safety_factors) != 2 or any(type(f) is not int or f < 1 for f in safety_factors):
+        raise ValueError("safety_factors must contain two positive integers")
+    if type(max_q) is not int or max_q < 1:
+        raise ValueError("max_q must be a positive integer")
     if q > max_q:
         raise ValueError(
             f"alarm corpus Q={q} exceeds max_q={max_q}; this NTQR alarm path is "

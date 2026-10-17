@@ -156,7 +156,7 @@ def build_stego_payload(repo_root: Path, source_pdf: Path, source_cover: Path) -
     root = Path(repo_root)
     data_dir = root / "output" / "data"
     figures_dir = root / "output" / "figures"
-    manuscript_dir = root / "manuscript"
+    manuscript_dir = root / "docs" / "manuscript"
     return {
         "schema_version": 1,
         "semantic_role": "local steganographic provenance variant",

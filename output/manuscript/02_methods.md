@@ -196,7 +196,7 @@ interpretation discipline applied throughout.
 
 The synthetic track is a deterministic grid sweep over the four strategies, panel
 sizes, expert stringency, bias spread, and the population/corpus parameters in
-`manuscript/config.yaml`. That file now defines named profiles: the reported sweep
+`docs/manuscript/config.yaml`. That file now defines named profiles: the reported sweep
 uses `manuscript_contrast` (config hash `fda4da941cf0`), while `smoke`,
 `manuscript_main`, `tolerance`, `power`, `panel_ladder`, and `research_broad` keep
 CI, legacy manuscript, assumption-tolerance, design-budget, finer panel-size, and

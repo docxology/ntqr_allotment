@@ -96,7 +96,7 @@ src/ntqr_allotment/
 ## Setup
 
 ```bash
-uv sync            # locks clean deps + allotment(git) + vendored ntqr wheel
+uv sync --locked --extra dev  # install pinned deps and test tools
 uv run pytest      # tests
 ```
 
@@ -104,9 +104,11 @@ uv run pytest      # tests
 
 `ntqr` ships a working wheel but a broken sdist (its flit build references a
 README absent from the tarball), so `uv` cannot lock it from the index. The
-published wheel is vendored under `vendor/` and referenced via
+published **0.9** wheel is vendored under `vendor/` and referenced via
 `[tool.uv.sources]`. `allotment` is not on PyPI and is installed from its git
-source. See `pyproject.toml`.
+source at a pinned commit. Apple Silicon requires native CBC (`brew install cbc`);
+`NTQR_CBC_PATH` can select a solver executable on any platform. See [dependency and migration
+notes](docs/dependencies.md) and `pyproject.toml`.
 
 ## Reproduce
 

@@ -13,7 +13,7 @@ from ntqr_allotment.web_explorer import (
 def _write_fixture(root: Path) -> None:
     data = root / "output" / "data"
     figures = root / "output" / "figures"
-    manuscript = root / "manuscript"
+    manuscript = root / "docs" / "manuscript"
     data.mkdir(parents=True)
     figures.mkdir(parents=True)
     manuscript.mkdir(parents=True)

@@ -47,7 +47,7 @@ def build_explorer_model(repo_root: Path, *, max_rows: int = 500) -> ExplorerMod
     postdoc_alignment = _read_optional_json(data_dir / "postdoc_panel_alignment.json")
     cover_manifest = _read_optional_json(data_dir / "cover_manifest.json")
     analytical = _read_optional_json(data_dir / "analytical_predictions.json")
-    config_metadata = _read_config_metadata(root / "manuscript" / "config.yaml")
+    config_metadata = _read_config_metadata(root / "docs" / "manuscript" / "config.yaml")
     datasets = (
         ExplorerDataset(
             "sweep_rows",

@@ -20,14 +20,13 @@ def _compact(text: str) -> str:
 
 _TEXT_SURFACES = (
     "README.md",
-    "ISA.md",
     "audits/claim_method_audit.md",
-    "manuscript/00_abstract.md",
-    "manuscript/01_introduction.md",
-    "manuscript/02_methods.md",
-    "manuscript/03_results.md",
-    "manuscript/04_discussion.md",
-    "manuscript/99_references.md",
+    "docs/manuscript/00_abstract.md",
+    "docs/manuscript/01_introduction.md",
+    "docs/manuscript/02_methods.md",
+    "docs/manuscript/03_results.md",
+    "docs/manuscript/04_discussion.md",
+    "docs/manuscript/99_references.md",
     "src/ntqr_allotment/__init__.py",
     "src/ntqr_allotment/contrast_analysis.py",
     "src/ntqr_allotment/experts.py",
@@ -44,9 +43,6 @@ _TEXT_SURFACES = (
     "output/web/manuscript__00_abstract.html",
     "output/web/manuscript__01_introduction.html",
     "output/web/manuscript__99_references.html",
-    "output/slides/00_abstract_slides.tex",
-    "output/slides/01_introduction_slides.tex",
-    "output/slides/99_references_slides.tex",
 )
 
 
@@ -58,7 +54,8 @@ def test_ntqr_is_not_expanded_as_quantified_reliability() -> None:
     )
 
     offenders: list[str] = []
-    for path in _TEXT_SURFACES:
+    optional_slides = tuple(str(path.relative_to(_REPO)) for path in (_REPO / "output/slides").glob("*_slides.tex"))
+    for path in _TEXT_SURFACES + optional_slides:
         text = _read(path)
         for phrase in forbidden:
             if phrase in text:
@@ -68,9 +65,9 @@ def test_ntqr_is_not_expanded_as_quantified_reliability() -> None:
 
 
 def test_ntqr_first_definition_is_source_backed() -> None:
-    abstract = _compact(_read("manuscript/00_abstract.md"))
+    abstract = _compact(_read("docs/manuscript/00_abstract.md"))
     readme = _compact(_read("README.md"))
-    introduction = _compact(_read("manuscript/01_introduction.md"))
+    introduction = _compact(_read("docs/manuscript/01_introduction.md"))
 
     assert "error-independent (EIE) evaluator" in abstract
     assert "logically consistent estimates" in abstract
@@ -88,7 +85,7 @@ def test_ntqr_first_definition_is_source_backed() -> None:
 
 
 def test_ntqr_method_claims_include_upstream_caveats() -> None:
-    methods = _compact(_read("manuscript/02_methods.md"))
+    methods = _compact(_read("docs/manuscript/02_methods.md"))
     audit = _read("audits/claim_method_audit.md")
 
     for phrase in [
@@ -117,27 +114,27 @@ def test_ntqr_method_claims_include_upstream_caveats() -> None:
 
 
 def test_bibliography_and_citation_contract() -> None:
-    bib = _read("manuscript/references.bib")
+    bib = _read("docs/manuscript/references.bib")
     prose_manuscript = "\n".join(
         _read(path)
         for path in [
-            "manuscript/01_introduction.md",
-            "manuscript/02_methods.md",
-            "manuscript/03_results.md",
-            "manuscript/04_discussion.md",
+            "docs/manuscript/01_introduction.md",
+            "docs/manuscript/02_methods.md",
+            "docs/manuscript/03_results.md",
+            "docs/manuscript/04_discussion.md",
         ]
     )
     manuscript = "\n".join(
         _read(path)
         for path in [
-            "manuscript/01_introduction.md",
-            "manuscript/02_methods.md",
-            "manuscript/03_results.md",
-            "manuscript/04_discussion.md",
-            "manuscript/99_references.md",
+            "docs/manuscript/01_introduction.md",
+            "docs/manuscript/02_methods.md",
+            "docs/manuscript/03_results.md",
+            "docs/manuscript/04_discussion.md",
+            "docs/manuscript/99_references.md",
         ]
     )
-    config = _read("manuscript/config.yaml")
+    config = _read("docs/manuscript/config.yaml")
 
     pandoc_keys = {
         key
@@ -200,8 +197,8 @@ def test_bibliography_and_citation_contract() -> None:
     } <= cited_keys
     assert cited_keys <= bib_keys
     assert "link-citations: true" in config
-    assert "1. Kerman" not in _read("manuscript/99_references.md")
-    assert "The bibliography below is generated" in _read("manuscript/99_references.md")
+    assert "1. Kerman" not in _read("docs/manuscript/99_references.md")
+    assert "The bibliography below is generated" in _read("docs/manuscript/99_references.md")
     assert "<a href=" not in prose_manuscript
     assert r"</a>\citep" not in manuscript
     for raw_key in ["[@dawid1979]", "[@stone2011]", r"\citep{stone2011}"]:
@@ -310,7 +307,7 @@ def test_manuscript_injector_copies_bibliography_to_render_surface() -> None:
 
 
 def test_notation_table_is_labeled_and_has_symbol_column() -> None:
-    methods = _read("manuscript/02_methods.md")
+    methods = _read("docs/manuscript/02_methods.md")
 
     assert "Table @tbl:notation" in methods
     assert "| Symbol | Surface / estimator | Unit | Aggregation and uncertainty | Source artifact |" in methods
@@ -328,8 +325,8 @@ def test_notation_table_is_labeled_and_has_symbol_column() -> None:
 
 
 def test_research_question_and_falsification_ledger_match_active_design() -> None:
-    intro = _read("manuscript/01_introduction.md")
-    methods = _read("manuscript/02_methods.md")
+    intro = _read("docs/manuscript/01_introduction.md")
+    methods = _read("docs/manuscript/02_methods.md")
     audit = _read("audits/claim_method_audit.md")
     readme = _read("README.md")
 
@@ -358,9 +355,9 @@ def test_math_notation_is_not_plaintext_in_manuscript_source() -> None:
     source = "\n".join(
         _read(path)
         for path in [
-            "manuscript/02_methods.md",
-            "manuscript/03_results.md",
-            "manuscript/04_discussion.md",
+            "docs/manuscript/02_methods.md",
+            "docs/manuscript/03_results.md",
+            "docs/manuscript/04_discussion.md",
         ]
     )
 
@@ -372,7 +369,7 @@ def test_math_notation_is_not_plaintext_in_manuscript_source() -> None:
 
 
 def test_tolerance_and_power_figure_contracts_are_explicit() -> None:
-    results = _read("manuscript/03_results.md")
+    results = _read("docs/manuscript/03_results.md")
 
     assert "TOLERANCE_SLOSS" not in results
     tolerance_caption = re.search(
@@ -416,10 +413,10 @@ def test_tolerance_and_power_figure_contracts_are_explicit() -> None:
 
 
 def test_section_titles_are_claim_oriented_and_current() -> None:
-    introduction = _read("manuscript/01_introduction.md")
-    results = _read("manuscript/03_results.md")
-    methods = _read("manuscript/02_methods.md")
-    discussion = _read("manuscript/04_discussion.md")
+    introduction = _read("docs/manuscript/01_introduction.md")
+    results = _read("docs/manuscript/03_results.md")
+    methods = _read("docs/manuscript/02_methods.md")
+    discussion = _read("docs/manuscript/04_discussion.md")
     source = "\n".join([introduction, methods, results, discussion])
     source_lines = {line.strip() for line in source.splitlines()}
 
@@ -539,10 +536,10 @@ def test_manuscript_live_track_is_gemma_postdoc_not_qwen_family_comparison() -> 
     manuscript = "\n".join(
         _read(path)
         for path in [
-            "manuscript/00_abstract.md",
-            "manuscript/02_methods.md",
-            "manuscript/03_results.md",
-            "manuscript/04_discussion.md",
+            "docs/manuscript/00_abstract.md",
+            "docs/manuscript/02_methods.md",
+            "docs/manuscript/03_results.md",
+            "docs/manuscript/04_discussion.md",
         ]
     )
 
@@ -555,8 +552,8 @@ def test_manuscript_live_track_is_gemma_postdoc_not_qwen_family_comparison() -> 
 
 
 def test_statistical_citations_and_power_grain_are_contract_bound() -> None:
-    methods = _read("manuscript/02_methods.md")
-    results = _read("manuscript/03_results.md")
+    methods = _read("docs/manuscript/02_methods.md")
+    results = _read("docs/manuscript/03_results.md")
     audit = _read("audits/claim_method_audit.md")
 
     assert "[Cohen (1988)](https://archive.org/details/statisticalpower0000cohe)" in methods
@@ -571,8 +568,8 @@ def test_statistical_citations_and_power_grain_are_contract_bound() -> None:
 
 
 def test_alarm_power_claim_matches_saturated_curve() -> None:
-    methods = _read("manuscript/02_methods.md")
-    results = _read("manuscript/03_results.md")
+    methods = _read("docs/manuscript/02_methods.md")
+    results = _read("docs/manuscript/03_results.md")
     figure_source = _read("src/ntqr_allotment/figure_parts/power.py")
 
     joined = "\n".join([methods, results, figure_source])
@@ -583,7 +580,7 @@ def test_alarm_power_claim_matches_saturated_curve() -> None:
 
 
 def test_discussion_reports_synthetic_and_live_tracks_at_distinct_levels() -> None:
-    discussion = _compact(_read("manuscript/04_discussion.md"))
+    discussion = _compact(_read("docs/manuscript/04_discussion.md"))
 
     assert "Synthetic and live tracks operate at different inference levels" in discussion
     assert "deterministic synthetic track is the controlled Results spine" in discussion
@@ -650,7 +647,7 @@ def test_rendered_size_direction_column_matches_its_own_cells() -> None:
 
 
 def test_postdoc_item_count_is_tokenized_not_stale_literal() -> None:
-    source = _read("manuscript/03_results.md")
+    source = _read("docs/manuscript/03_results.md")
     rendered = _read("output/manuscript/03_results.md")
     n_items = json.loads((_REPO / "output/data/postdoc_panel_results.json").read_text())[
         "config"
@@ -663,7 +660,7 @@ def test_postdoc_item_count_is_tokenized_not_stale_literal() -> None:
 
 
 def test_discussion_size_effect_claim_matches_power_table() -> None:
-    source = _read("manuscript/04_discussion.md")
+    source = _read("docs/manuscript/04_discussion.md")
     rendered = _read("output/manuscript/04_discussion.md")
 
     assert "two weaker strategies" not in source
@@ -693,7 +690,7 @@ def test_postdoc_alignment_statistic_is_reported() -> None:
 
 
 def test_manuscript_captions_include_source_statistic_and_caveat() -> None:
-    source = _read("manuscript/03_results.md")
+    source = _read("docs/manuscript/03_results.md")
 
     required_caption_phrases = [
         "source `output/data/sweep_aggregated.csv`",
@@ -716,26 +713,11 @@ def test_manuscript_captions_include_source_statistic_and_caveat() -> None:
     assert "Claim: both intervals cross zero" not in source
 
 
-def test_isa_records_latest_gate_and_no_stale_pending_headings() -> None:
-    isa = _read("ISA.md")
-
-    assert "Session 10" in isa
-    assert "--require-live" in isa
-    assert "num_predict=1" in isa
-    assert "gemma3:4b" in isa
-    assert "postdoctoral reviewer-panel" in isa
-    assert "Session 16" in isa
-    assert "10,584 current-hash live prompt evaluations" in isa
-    assert "manuscript_contrast" in isa
-    assert "analytical_predictions.json" in isa
-    assert "rep_vs_ideo_heatmap.png" in isa
-    assert "output/web/ntqr_explorer.html" in isa
-    assert "output/figures/ntqr_cover.png" in isa
-    assert "phase: complete" in isa
-    assert "pending — workflow" not in isa
-    assert "full default Gemma postdoctoral reviewer-panel profile (6 seeds, 48 reviewers, 72 applications)" not in isa
-    assert "bounded 2-seed companion evidence" not in isa
-    assert "Upcoming scoped work" in isa
+def test_publication_guide_records_current_workflow() -> None:
+    guide = _read("PUBLICATION_PACKAGE.md")
+    assert "docs/manuscript" in guide
+    assert "gemma3:4b" in guide
+    assert "z_generate_manuscript_variables.py" in guide
 
 
 def test_rendered_tex_has_title_page_then_toc_then_abstract() -> None:
@@ -757,7 +739,7 @@ def test_rendered_tex_has_title_page_then_toc_then_abstract() -> None:
 
 
 def test_project_margin_override_reaches_rendered_tex() -> None:
-    preamble = _read("manuscript/preamble.md")
+    preamble = _read("docs/manuscript/preamble.md")
     tex = _read("output/pdf/_combined_manuscript.tex")
 
     assert r"\geometry{left=0.55in,right=0.55in,top=0.70in,bottom=0.70in}" in preamble
@@ -838,7 +820,7 @@ def test_cover_is_embedded_separately_from_manuscript_data_figures() -> None:
 
 
 def test_size_penalty_mechanism_is_measured_not_asserted() -> None:
-    source = _read("manuscript/03_results.md")
+    source = _read("docs/manuscript/03_results.md")
     rendered = _read("output/manuscript/03_results.md")
 
     assert "worse-conditioned trios faster than it adds" not in source

@@ -45,7 +45,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--config", type=Path, default=_ROOT / "manuscript" / "config.yaml")
+    ap.add_argument("--config", type=Path, default=_ROOT / "docs" / "manuscript" / "config.yaml")
     ap.add_argument("--n-items", type=int)
     ap.add_argument("--seed", type=int)
     ap.add_argument("--shared-strength", type=float)

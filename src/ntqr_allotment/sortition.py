@@ -30,6 +30,7 @@ from allotment.quotas import precheck_feasibility
 from allotment.selection_core.audit import build_audit_record, run_draw
 
 from .experts import Expert
+from .solver import configure_cbc
 
 _DEFAULT_PANEL_COUNT = 20
 
@@ -114,6 +115,7 @@ def representative_sortition(
     ]
     config = QuotaConfig(panel_size=panel_size, targets=targets)
     warnings = tuple(precheck_feasibility(pool, config))
+    configure_cbc()
     result = run_draw(pool, config, panel_count=panel_count, seed=seed)
     audit = build_audit_record(pool, config, result)
     ids = tuple(result.selection.candidate_ids)

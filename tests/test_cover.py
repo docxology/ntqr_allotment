@@ -21,7 +21,7 @@ def test_render_cover_is_deterministic_and_writes_manifest(tmp_path: Path) -> No
 
     payload = json.loads(first_manifest.read_text(encoding="utf-8"))
     assert payload["schema_version"] == 1
-    assert payload["source_config"] == "manuscript/config.yaml"
+    assert payload["source_config"] == "docs/manuscript/config.yaml"
     assert len(payload["source_config_hash"]) == 12
     assert payload["semantic_role"].startswith("schematic front-matter cover")
     assert "not an empirical result" in payload["caveat"]

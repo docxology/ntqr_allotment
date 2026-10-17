@@ -79,11 +79,8 @@ def votes_for(experts: Sequence[Expert], items: Sequence[Item], *, seed: int) ->
     return [sample_votes(e, items, seed=seed + 1000 * (i + 1)) for i, e in enumerate(experts)]
 
 
-def run_trial(config: TrialConfig) -> TrialResult:
-    """Run one full population -> panel -> NTQR trial and return its metrics."""
-    if config.panel_size < 3:
-        raise ValueError("panel_size must be >= 3 (the exact NTQR solver needs a trio)")
-
+def _prepare_trial(config: TrialConfig) -> tuple[list[Item], PanelDraw, list[tuple[str, ...]]]:
+    """Create the identical seeded population, panel and votes for both trial modes."""
     population = generate_population(
         config.n_experts,
         seed=config.seed,
@@ -99,6 +96,16 @@ def run_trial(config: TrialConfig) -> TrialResult:
     by_id = {e.id: e for e in population}
     panel_experts = [by_id[eid] for eid in panel.expert_ids]
     panel_votes = votes_for(panel_experts, items, seed=config.seed + 29)
+
+    return items, panel, panel_votes
+
+
+def run_trial(config: TrialConfig) -> TrialResult:
+    """Run one full population -> panel -> NTQR trial and return its metrics."""
+    if config.panel_size < 3:
+        raise ValueError("panel_size must be >= 3 (the exact NTQR solver needs a trio)")
+
+    items, panel, panel_votes = _prepare_trial(config)
 
     trio_votes = panel_votes[:3]
 
@@ -133,21 +140,7 @@ def run_trial_ensemble(
     if max_scan < n_trios:
         raise ValueError("max_scan must be >= n_trios")
 
-    population = generate_population(
-        config.n_experts,
-        seed=config.seed,
-        mean_expertise=config.mean_expertise,
-        expertise_heterogeneity=config.expertise_heterogeneity,
-        bias_std=config.bias_std,
-    )
-    items = sample_items(config.n_items, prevalence_a=config.prevalence_a, seed=config.seed + 7)
-
-    strategy_fn = STRATEGIES[config.strategy]
-    panel = strategy_fn(population, config.panel_size, seed=config.seed + 13)
-
-    by_id = {e.id: e for e in population}
-    panel_experts = [by_id[eid] for eid in panel.expert_ids]
-    panel_votes = votes_for(panel_experts, items, seed=config.seed + 29)
+    items, panel, panel_votes = _prepare_trial(config)
 
     # Scan combinations in deterministic order, collecting up to ``n_trios``
     # USABLE trios. A degenerate trio (no real, *physical* error-independent
@@ -161,7 +154,7 @@ def run_trial_ensemble(
     # ``max_scan`` candidates.
     eie_errors: list[float] = []
     mv_errors: list[float] = []
-    for scanned, trio_indices in enumerate(combinations(range(len(panel_experts)), 3)):
+    for scanned, trio_indices in enumerate(combinations(range(len(panel_votes)), 3)):
         if len(eie_errors) >= n_trios or scanned >= max_scan:
             break
         trio_votes = [panel_votes[index] for index in trio_indices]

@@ -81,7 +81,7 @@ def _panel_for_seed(args, seed, live):
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--config", type=Path, default=_ROOT / "manuscript" / "config.yaml")
+    ap.add_argument("--config", type=Path, default=_ROOT / "docs" / "manuscript" / "config.yaml")
     ap.add_argument("--seeds", type=int, nargs="+")
     ap.add_argument("--n-items", type=int)
     ap.add_argument("--shared-strength", type=float)
