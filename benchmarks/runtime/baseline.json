@@ -9,160 +9,160 @@
   "cold_imports": {
     "largest_cumulative": [
       {
-        "cumulative_us": 2486921,
+        "cumulative_us": 1732692,
         "module": "ntqr_allotment.profile_workloads",
-        "self_us": 412
+        "self_us": 356
       },
       {
-        "cumulative_us": 2475886,
+        "cumulative_us": 1726060,
         "module": "ntqr_allotment",
-        "self_us": 1831
+        "self_us": 1439
       },
       {
-        "cumulative_us": 2175118,
+        "cumulative_us": 1501566,
         "module": "ntqr_allotment.dependence",
-        "self_us": 1721
+        "self_us": 1514
       },
       {
-        "cumulative_us": 1999947,
+        "cumulative_us": 1372160,
         "module": "ntqr_allotment.ntqr_eval",
-        "self_us": 1730
+        "self_us": 957
       },
       {
-        "cumulative_us": 888983,
+        "cumulative_us": 846413,
         "module": "ntqr.alarms",
-        "self_us": 499
+        "self_us": 329
       },
       {
-        "cumulative_us": 886889,
-        "module": "sympy",
-        "self_us": 1587
-      },
-      {
-        "cumulative_us": 882870,
+        "cumulative_us": 843743,
         "module": "ntqr.evaluations",
-        "self_us": 4195
+        "self_us": 3067
       },
       {
-        "cumulative_us": 567090,
-        "module": "numba",
-        "self_us": 1295
-      },
-      {
-        "cumulative_us": 445012,
-        "module": "numba.core.decorators",
-        "self_us": 461
-      },
-      {
-        "cumulative_us": 444552,
-        "module": "numba.stencils.stencil",
-        "self_us": 790
-      },
-      {
-        "cumulative_us": 374894,
-        "module": "mpmath",
-        "self_us": 111613
-      },
-      {
-        "cumulative_us": 350727,
-        "module": "numba.core.ir_utils",
-        "self_us": 55363
-      },
-      {
-        "cumulative_us": 309946,
+        "cumulative_us": 538218,
         "module": "scipy.sparse",
-        "self_us": 772
+        "self_us": 1028
       },
       {
-        "cumulative_us": 305998,
-        "module": "sympy.polys",
+        "cumulative_us": 517686,
+        "module": "sympy",
+        "self_us": 2558
+      },
+      {
+        "cumulative_us": 505860,
+        "module": "scipy.sparse._csr",
+        "self_us": 882
+      },
+      {
+        "cumulative_us": 504159,
+        "module": "scipy.sparse._compressed",
+        "self_us": 640
+      },
+      {
+        "cumulative_us": 501169,
+        "module": "scipy._lib._util",
         "self_us": 792
       },
       {
-        "cumulative_us": 284280,
-        "module": "numba.core.extending",
-        "self_us": 989
+        "cumulative_us": 500377,
+        "module": "scipy._lib._array_api",
+        "self_us": 1330
       },
       {
-        "cumulative_us": 281798,
-        "module": "numba.core.pythonapi",
-        "self_us": 1677
+        "cumulative_us": 324445,
+        "module": "scipy._external.array_api_compat.numpy",
+        "self_us": 1104
       },
       {
-        "cumulative_us": 276570,
-        "module": "numba.core.lowering",
-        "self_us": 893
+        "cumulative_us": 300808,
+        "module": "numba",
+        "self_us": 1386
       },
       {
-        "cumulative_us": 267043,
-        "module": "numba.misc.coverage_support",
-        "self_us": 1258
+        "cumulative_us": 195116,
+        "module": "sympy.polys",
+        "self_us": 848
       },
       {
-        "cumulative_us": 265786,
-        "module": "coverage",
-        "self_us": 446
+        "cumulative_us": 178509,
+        "module": "numba.core.decorators",
+        "self_us": 1031
       },
       {
-        "cumulative_us": 264786,
-        "module": "coverage.control",
-        "self_us": 3266
+        "cumulative_us": 177479,
+        "module": "numba.stencils.stencil",
+        "self_us": 951
       },
       {
-        "cumulative_us": 248224,
-        "module": "mpmath.ctx_fp",
-        "self_us": 2985
+        "cumulative_us": 155801,
+        "module": "scipy._external.array_api_compat",
+        "self_us": 152748
       },
       {
-        "cumulative_us": 240307,
-        "module": "mpmath.ctx_base",
-        "self_us": 1078
+        "cumulative_us": 134457,
+        "module": "numpy.f2py",
+        "self_us": 580
       },
       {
-        "cumulative_us": 222688,
-        "module": "scipy.sparse._csr",
-        "self_us": 547
+        "cumulative_us": 133374,
+        "module": "numpy.f2py.f2py2e",
+        "self_us": 4495
       },
       {
-        "cumulative_us": 221918,
-        "module": "ntqr",
-        "self_us": 440
+        "cumulative_us": 129145,
+        "module": "sympy.series",
+        "self_us": 527
       },
       {
-        "cumulative_us": 221147,
-        "module": "scipy.sparse._compressed",
-        "self_us": 841
+        "cumulative_us": 117979,
+        "module": "numpy.f2py.capi_maps",
+        "self_us": 736
       },
       {
-        "cumulative_us": 218463,
-        "module": "ntqr.r2.examples",
-        "self_us": 398
+        "cumulative_us": 116316,
+        "module": "numpy",
+        "self_us": 1983
       },
       {
-        "cumulative_us": 217527,
-        "module": "ntqr.r2.datasketches",
-        "self_us": 1327
+        "cumulative_us": 116175,
+        "module": "ntqr_allotment.fairness",
+        "self_us": 1227
       },
       {
-        "cumulative_us": 216200,
-        "module": "typing_extensions",
-        "self_us": 216200
+        "cumulative_us": 114284,
+        "module": "numpy.f2py.crackfortran",
+        "self_us": 67315
       },
       {
-        "cumulative_us": 212856,
-        "module": "mpmath.libmp.backend",
-        "self_us": 44
+        "cumulative_us": 96252,
+        "module": "sympy.polys.polyfuncs",
+        "self_us": 366
       },
       {
-        "cumulative_us": 212813,
-        "module": "mpmath.libmp",
-        "self_us": 519
+        "cumulative_us": 95886,
+        "module": "sympy.polys.specialpolys",
+        "self_us": 380
+      },
+      {
+        "cumulative_us": 89657,
+        "module": "numpy.testing",
+        "self_us": 439
+      },
+      {
+        "cumulative_us": 88774,
+        "module": "sympy.polys.rings",
+        "self_us": 1348
+      },
+      {
+        "cumulative_us": 88669,
+        "module": "ntqr_allotment.cross_family",
+        "self_us": 2589
       }
     ],
     "returncode": 0,
     "status": "available"
   },
-  "generated_utc": "2026-10-18T00:18:34.558729+00:00",
+  "generated_utc": "2026-10-18T00:26:38.531438+00:00",
   "measurement_design": "Warm up once; unprofiled timing, deterministic tracing, and memory in separate passes. Imports excluded.",
   "runtime": {
     "build": "3.15.0 (main, Oct 14 2026, 00:56:12) [Clang 23.1.3 ]",
@@ -185,28 +185,28 @@
       "cffi": "2.0.0",
       "charset-normalizer": "3.4.7",
       "click": "8.4.1",
-      "contourpy": "1.3.3",
+      "contourpy": "1.4.0",
       "coverage": "7.14.3",
       "cryptography": "49.0.0",
       "cycler": "0.12.1",
       "fastapi": "0.138.0",
-      "fonttools": "4.63.0",
+      "fonttools": "4.67.0",
       "h11": "0.16.0",
       "httpcore": "1.0.9",
       "httptools": "0.8.0",
       "httpx": "0.28.1",
       "idna": "3.18",
       "iniconfig": "2.3.0",
-      "kiwisolver": "1.5.0",
+      "kiwisolver": "1.5.1",
       "llvmlite": "0.50.0",
-      "matplotlib": "3.11.0",
+      "matplotlib": "3.11.2",
       "mpmath": "1.3.0",
       "ntqr": "0.9",
       "ntqr_allotment": "0.1.0",
       "numba": "0.68.0",
-      "numpy": "2.5.0",
+      "numpy": "2.5.4",
       "packaging": "26.2",
-      "pillow": "12.2.0",
+      "pillow": "13.0.0",
       "pluggy": "1.6.0",
       "psycopg": "3.3.6",
       "psycopg-binary": "3.3.6",
@@ -294,13 +294,13 @@
       "src/ntqr_allotment/theory.py": "2ed0c275922da90abf3fe6de594e9b25602182041b4dbd805f36fccd7b134239",
       "src/ntqr_allotment/trio_conditioning.py": "4f7520f3d4afb15d751eca493b5b2216c92746ea3c1ba397257f3f43262d4f91",
       "src/ntqr_allotment/web_explorer.py": "13e5cd502ebb8ac851d169c497300065575cb8bea521e3107f86cb79a3a803b0",
-      "uv.lock": "935ba1d2ff67d47c02f48ae232b284d115c2379765ed7ca74189c6654d1dc161"
+      "uv.lock": "6a4994948e53582e77add0b86e895590e76e9db2422f8dd500a6a05a15e499d2"
     },
-    "sha256": "42adb6181166fe0c19651e8dbfcd4d1d9aa1fbc463174530151f7caf97c6f4b4"
+    "sha256": "2241195a92e808339180aa34faf8e346245836ea1175e361a506b7065b6fb751"
   },
   "workloads": [
     {
-      "cpu_median_ns": 974723000,
+      "cpu_median_ns": 723230000,
       "description": "12 judges, 96 seeded synthetic items; exact NTQR agreement moments",
       "input_sha256": "6de06133057634b753b321720809209577145d8f036261004e5726c61d32eaad",
       "memory": {
@@ -431,7 +431,7 @@
               "line": 24
             },
             "calls": 1,
-            "cumulative_seconds": 7.1040638750000005
+            "cumulative_seconds": 1.863618666
           },
           {
             "callee": {
@@ -445,7 +445,7 @@
               "line": 110
             },
             "calls": 135,
-            "cumulative_seconds": 7.085618914
+            "cumulative_seconds": 1.8489064110000002
           },
           {
             "callee": {
@@ -459,7 +459,7 @@
               "line": 98
             },
             "calls": 270,
-            "cumulative_seconds": 4.811792041
+            "cumulative_seconds": 1.1844451120000001
           },
           {
             "callee": {
@@ -473,7 +473,7 @@
               "line": 82
             },
             "calls": 273,
-            "cumulative_seconds": 3.191343251
+            "cumulative_seconds": 0.7495777220000001
           },
           {
             "callee": {
@@ -487,7 +487,7 @@
               "line": 0
             },
             "calls": 671957,
-            "cumulative_seconds": 2.80741734
+            "cumulative_seconds": 0.687483992
           },
           {
             "callee": {
@@ -501,7 +501,21 @@
               "line": 98
             },
             "calls": 135,
-            "cumulative_seconds": 2.173026836
+            "cumulative_seconds": 0.645481203
+          },
+          {
+            "callee": {
+              "file": "site-packages/ntqr/r2/datasketches.py",
+              "function": "to_frequencies_exact",
+              "line": 562
+            },
+            "caller": {
+              "file": "src/ntqr_allotment/ensemble.py",
+              "function": "_classifier_label_frequency",
+              "line": 82
+            },
+            "calls": 273,
+            "cumulative_seconds": 0.408889618
           },
           {
             "callee": {
@@ -515,21 +529,7 @@
               "line": 1898
             },
             "calls": 671567,
-            "cumulative_seconds": 1.532132317
-          },
-          {
-            "callee": {
-              "file": "site-packages/ntqr/r2/datasketches.py",
-              "function": "to_frequencies_exact",
-              "line": 562
-            },
-            "caller": {
-              "file": "src/ntqr_allotment/ensemble.py",
-              "function": "_classifier_label_frequency",
-              "line": 82
-            },
-            "calls": 273,
-            "cumulative_seconds": 1.478772615
+            "cumulative_seconds": 0.358463236
           },
           {
             "callee": {
@@ -543,7 +543,21 @@
               "line": 1374
             },
             "calls": 675807,
-            "cumulative_seconds": 1.026470328
+            "cumulative_seconds": 0.24568402900000003
+          },
+          {
+            "callee": {
+              "file": "site-packages/ntqr/r2/datasketches.py",
+              "function": "classifiers_labels_votes",
+              "line": 89
+            },
+            "caller": {
+              "file": "src/ntqr_allotment/ensemble.py",
+              "function": "_pair_label_frequency",
+              "line": 90
+            },
+            "calls": 135,
+            "cumulative_seconds": 0.236545621
           },
           {
             "callee": {
@@ -557,7 +571,21 @@
               "line": 562
             },
             "calls": 1671168,
-            "cumulative_seconds": 0.9565567920000001
+            "cumulative_seconds": 0.21395049000000002
+          },
+          {
+            "callee": {
+              "file": "~",
+              "function": "<built-in method builtins.sum>",
+              "line": 0
+            },
+            "caller": {
+              "file": "src/ntqr_allotment/ensemble.py",
+              "function": "_pair_label_frequency",
+              "line": 90
+            },
+            "calls": 135,
+            "cumulative_seconds": 0.21031037400000002
           },
           {
             "callee": {
@@ -571,35 +599,7 @@
               "line": 90
             },
             "calls": 135,
-            "cumulative_seconds": 0.804487249
-          },
-          {
-            "callee": {
-              "file": "~",
-              "function": "<built-in method builtins.sum>",
-              "line": 0
-            },
-            "caller": {
-              "file": "src/ntqr_allotment/ensemble.py",
-              "function": "_pair_label_frequency",
-              "line": 90
-            },
-            "calls": 135,
-            "cumulative_seconds": 0.703111001
-          },
-          {
-            "callee": {
-              "file": "site-packages/ntqr/r2/datasketches.py",
-              "function": "classifiers_labels_votes",
-              "line": 89
-            },
-            "caller": {
-              "file": "src/ntqr_allotment/ensemble.py",
-              "function": "_pair_label_frequency",
-              "line": 90
-            },
-            "calls": 135,
-            "cumulative_seconds": 0.646434123
+            "cumulative_seconds": 0.190490287
           },
           {
             "callee": {
@@ -613,7 +613,7 @@
               "line": 89
             },
             "calls": 552960,
-            "cumulative_seconds": 0.5498999
+            "cumulative_seconds": 0.18435026300000001
           },
           {
             "callee": {
@@ -627,7 +627,7 @@
               "line": 1397
             },
             "calls": 671975,
-            "cumulative_seconds": 0.5357047850000001
+            "cumulative_seconds": 0.132953013
           },
           {
             "callee": {
@@ -641,21 +641,7 @@
               "line": 1898
             },
             "calls": 1343524,
-            "cumulative_seconds": 0.40191314100000003
-          },
-          {
-            "callee": {
-              "file": "~",
-              "function": "<built-in method __new__ of type object at 0x1038fd1b8>",
-              "line": 0
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "__new__",
-              "line": 288
-            },
-            "calls": 671975,
-            "cumulative_seconds": 0.27740816300000004
+            "cumulative_seconds": 0.080339376
           },
           {
             "callee": {
@@ -669,7 +655,21 @@
               "line": 0
             },
             "calls": 559377,
-            "cumulative_seconds": 0.21543056800000002
+            "cumulative_seconds": 0.06604818900000001
+          },
+          {
+            "callee": {
+              "file": "~",
+              "function": "<built-in method __new__ of type object at 0x1058bd1b8>",
+              "line": 0
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/basic.py",
+              "function": "__new__",
+              "line": 288
+            },
+            "calls": 671975,
+            "cumulative_seconds": 0.043189087
           },
           {
             "callee": {
@@ -683,7 +683,7 @@
               "line": 59
             },
             "calls": 552960,
-            "cumulative_seconds": 0.130187199
+            "cumulative_seconds": 0.032653382
           },
           {
             "callee": {
@@ -697,7 +697,21 @@
               "line": 0
             },
             "calls": 19145,
-            "cumulative_seconds": 0.120471067
+            "cumulative_seconds": 0.032152253
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__add__",
+              "line": 1450
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/decorators.py",
+              "function": "__sympifyit_wrapper",
+              "line": 69
+            },
+            "calls": 19145,
+            "cumulative_seconds": 0.025045626
           },
           {
             "callee": {
@@ -711,35 +725,7 @@
               "line": 82
             },
             "calls": 273,
-            "cumulative_seconds": 0.10602367200000001
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/numbers.py",
-              "function": "__add__",
-              "line": 1450
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/decorators.py",
-              "function": "__sympifyit_wrapper",
-              "line": 69
-            },
-            "calls": 19145,
-            "cumulative_seconds": 0.079177617
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/numbers.py",
-              "function": "__add__",
-              "line": 1886
-            },
-            "caller": {
-              "file": "~",
-              "function": "<built-in method builtins.sum>",
-              "line": 0
-            },
-            "calls": 6242,
-            "cumulative_seconds": 0.067345242
+            "cumulative_seconds": 0.021727636
           },
           {
             "callee": {
@@ -753,7 +739,21 @@
               "line": 0
             },
             "calls": 138375,
-            "cumulative_seconds": 0.058799307
+            "cumulative_seconds": 0.02025996
+          },
+          {
+            "callee": {
+              "file": "src/ntqr_allotment/ensemble.py",
+              "function": "_classifier_label_frequency",
+              "line": 82
+            },
+            "caller": {
+              "file": "src/ntqr_allotment/ensemble.py",
+              "function": "panel_agreement_moments",
+              "line": 110
+            },
+            "calls": 3,
+            "cumulative_seconds": 0.013066250000000001
           },
           {
             "callee": {
@@ -767,35 +767,21 @@
               "line": 1450
             },
             "calls": 15295,
-            "cumulative_seconds": 0.043241672
+            "cumulative_seconds": 0.009058292
           },
           {
             "callee": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__add__",
+              "line": 1886
+            },
+            "caller": {
               "file": "~",
-              "function": "<built-in method math.prod>",
+              "function": "<built-in method builtins.sum>",
               "line": 0
             },
-            "caller": {
-              "file": "src/ntqr_allotment/ensemble.py",
-              "function": "_pair_frequency_moment",
-              "line": 98
-            },
-            "calls": 135,
-            "cumulative_seconds": 0.02379492
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/numbers.py",
-              "function": "_as_mpf_val",
-              "line": 1595
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/numbers.py",
-              "function": "__float__",
-              "line": 408
-            },
-            "calls": 408,
-            "cumulative_seconds": 0.022329907000000003
+            "calls": 6242,
+            "cumulative_seconds": 0.0065464650000000004
           },
           {
             "callee": {
@@ -809,7 +795,21 @@
               "line": 82
             },
             "calls": 273,
-            "cumulative_seconds": 0.022035664
+            "cumulative_seconds": 0.004381671
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "_as_mpf_val",
+              "line": 1595
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__float__",
+              "line": 408
+            },
+            "calls": 408,
+            "cumulative_seconds": 0.004189346
           },
           {
             "callee": {
@@ -823,327 +823,327 @@
               "line": 1595
             },
             "calls": 408,
-            "cumulative_seconds": 0.021932007
+            "cumulative_seconds": 0.0038884870000000004
           },
           {
             "callee": {
-              "file": "site-packages/mpmath/libmp/libmpf.py",
-              "function": "mpf_div",
-              "line": 950
+              "file": "~",
+              "function": "<built-in method builtins.isinstance>",
+              "line": 0
             },
             "caller": {
-              "file": "site-packages/mpmath/libmp/libmpf.py",
-              "function": "from_rational",
-              "line": 491
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__add__",
+              "line": 1450
             },
-            "calls": 408,
-            "cumulative_seconds": 0.020580131
+            "calls": 34440,
+            "cumulative_seconds": 0.002724718
           }
         ],
         "functions": [
           {
             "calls": 1,
-            "cumulative_seconds": 7.10412725,
+            "cumulative_seconds": 1.863675667,
             "file": "src/ntqr_allotment/profile_workloads.py",
             "function": "<lambda>",
             "line": 24,
             "primitive_calls": 1,
-            "self_seconds": 6.337500000000001e-05
+            "self_seconds": 5.7001000000000005e-05
           },
           {
             "calls": 1,
-            "cumulative_seconds": 7.1040638750000005,
+            "cumulative_seconds": 1.863618666,
             "file": "src/ntqr_allotment/ensemble.py",
             "function": "panel_agreement_moments",
             "line": 110,
             "primitive_calls": 1,
-            "self_seconds": 0.000417176
+            "self_seconds": 0.00040829600000000005
           },
           {
             "calls": 135,
-            "cumulative_seconds": 7.085618914,
+            "cumulative_seconds": 1.8489064110000002,
             "file": "src/ntqr_allotment/ensemble.py",
             "function": "_pair_frequency_moment",
             "line": 98,
             "primitive_calls": 135,
-            "self_seconds": 0.077005117
+            "self_seconds": 0.018751009000000003
           },
           {
             "calls": 273,
-            "cumulative_seconds": 4.8265906240000005,
+            "cumulative_seconds": 1.197511362,
             "file": "src/ntqr_allotment/ensemble.py",
             "function": "_classifier_label_frequency",
             "line": 82,
             "primitive_calls": 273,
-            "self_seconds": 0.028228543000000002
+            "self_seconds": 0.012779465
           },
           {
             "calls": 411,
-            "cumulative_seconds": 3.89447321,
+            "cumulative_seconds": 0.959903637,
             "file": "~",
             "function": "<built-in method builtins.sum>",
             "line": 0,
             "primitive_calls": 411,
-            "self_seconds": 0.6250096860000001
+            "self_seconds": 0.14741277800000002
           },
           {
             "calls": 671957,
-            "cumulative_seconds": 2.80741734,
+            "cumulative_seconds": 0.687483992,
             "file": "site-packages/sympy/core/numbers.py",
             "function": "__radd__",
             "line": 1898,
             "primitive_calls": 671957,
-            "self_seconds": 0.872879964
-          },
-          {
-            "calls": 408,
-            "cumulative_seconds": 2.283259864,
-            "file": "site-packages/ntqr/r2/datasketches.py",
-            "function": "to_frequencies_exact",
-            "line": 562,
-            "primitive_calls": 408,
-            "self_seconds": 1.326452645
+            "self_seconds": 0.248175208
           },
           {
             "calls": 135,
-            "cumulative_seconds": 2.173026836,
+            "cumulative_seconds": 0.645481203,
             "file": "src/ntqr_allotment/ensemble.py",
             "function": "_pair_label_frequency",
             "line": 90,
             "primitive_calls": 135,
-            "self_seconds": 0.016646218
+            "self_seconds": 0.006067684
+          },
+          {
+            "calls": 408,
+            "cumulative_seconds": 0.599379905,
+            "file": "site-packages/ntqr/r2/datasketches.py",
+            "function": "to_frequencies_exact",
+            "line": 562,
+            "primitive_calls": 408,
+            "self_seconds": 0.38522482100000005
           },
           {
             "calls": 675807,
-            "cumulative_seconds": 1.536777823,
+            "cumulative_seconds": 0.36101231300000003,
             "file": "site-packages/sympy/core/numbers.py",
             "function": "_new",
             "line": 1374,
             "primitive_calls": 675807,
-            "self_seconds": 0.510307495
+            "self_seconds": 0.115328284
           },
           {
             "calls": 675807,
-            "cumulative_seconds": 1.026470328,
+            "cumulative_seconds": 0.24568402900000003,
             "file": "site-packages/sympy/core/numbers.py",
             "function": "from_coprime_ints",
             "line": 1397,
             "primitive_calls": 675807,
-            "self_seconds": 0.490765543
-          },
-          {
-            "calls": 1692723,
-            "cumulative_seconds": 1.0015287640000001,
-            "file": "site-packages/sympy/core/cache.py",
-            "function": "wrapper",
-            "line": 69,
-            "primitive_calls": 1692723,
-            "self_seconds": 1.0015287640000001
+            "self_seconds": 0.112731016
           },
           {
             "calls": 135,
-            "cumulative_seconds": 0.646434123,
+            "cumulative_seconds": 0.236545621,
             "file": "site-packages/ntqr/r2/datasketches.py",
             "function": "classifiers_labels_votes",
             "line": 89,
             "primitive_calls": 135,
-            "self_seconds": 0.096534223
+            "self_seconds": 0.052195358000000004
+          },
+          {
+            "calls": 1692723,
+            "cumulative_seconds": 0.224331353,
+            "file": "site-packages/sympy/core/cache.py",
+            "function": "wrapper",
+            "line": 69,
+            "primitive_calls": 1692723,
+            "self_seconds": 0.224331353
           },
           {
             "calls": 552960,
-            "cumulative_seconds": 0.5498999,
+            "cumulative_seconds": 0.18435026300000001,
             "file": "site-packages/ntqr/r2/datasketches.py",
             "function": "votes_match",
             "line": 59,
             "primitive_calls": 552960,
-            "self_seconds": 0.419712701
+            "self_seconds": 0.151696881
           },
           {
             "calls": 671975,
-            "cumulative_seconds": 0.5357047850000001,
+            "cumulative_seconds": 0.132953013,
             "file": "site-packages/sympy/core/basic.py",
             "function": "__new__",
             "line": 288,
             "primitive_calls": 671975,
-            "self_seconds": 0.25829662200000003
+            "self_seconds": 0.08976392600000001
           },
           {
             "calls": 1390856,
-            "cumulative_seconds": 0.409407259,
+            "cumulative_seconds": 0.084318373,
             "file": "~",
             "function": "<built-in method builtins.isinstance>",
             "line": 0,
             "primitive_calls": 1390856,
-            "self_seconds": 0.409407259
-          },
-          {
-            "calls": 671975,
-            "cumulative_seconds": 0.27740816300000004,
-            "file": "~",
-            "function": "<built-in method __new__ of type object at 0x1038fd1b8>",
-            "line": 0,
-            "primitive_calls": 671975,
-            "self_seconds": 0.27740816300000004
+            "self_seconds": 0.084318373
           },
           {
             "calls": 559377,
-            "cumulative_seconds": 0.21543056800000002,
+            "cumulative_seconds": 0.06604818900000001,
             "file": "src/ntqr_allotment/ensemble.py",
             "function": "<genexpr>",
             "line": 87,
             "primitive_calls": 559377,
-            "self_seconds": 0.21543056800000002
+            "self_seconds": 0.06604818900000001
+          },
+          {
+            "calls": 671975,
+            "cumulative_seconds": 0.043189087,
+            "file": "~",
+            "function": "<built-in method __new__ of type object at 0x1058bd1b8>",
+            "line": 0,
+            "primitive_calls": 671975,
+            "self_seconds": 0.043189087
           },
           {
             "calls": 552960,
-            "cumulative_seconds": 0.130187199,
+            "cumulative_seconds": 0.032653382,
             "file": "~",
             "function": "<built-in method builtins.all>",
             "line": 0,
             "primitive_calls": 552960,
-            "self_seconds": 0.130187199
+            "self_seconds": 0.032653382
           },
           {
             "calls": 19145,
-            "cumulative_seconds": 0.120471067,
+            "cumulative_seconds": 0.032152253,
             "file": "site-packages/sympy/core/decorators.py",
             "function": "__sympifyit_wrapper",
             "line": 69,
             "primitive_calls": 19145,
-            "self_seconds": 0.021685274
-          },
-          {
-            "calls": 273,
-            "cumulative_seconds": 0.10602367200000001,
-            "file": "site-packages/ntqr/r2/datasketches.py",
-            "function": "classifier_label_votes",
-            "line": 36,
-            "primitive_calls": 273,
-            "self_seconds": 0.10602367200000001
+            "self_seconds": 0.005262017
           },
           {
             "calls": 19145,
-            "cumulative_seconds": 0.079177617,
+            "cumulative_seconds": 0.025045626,
             "file": "site-packages/sympy/core/numbers.py",
             "function": "__add__",
             "line": 1450,
             "primitive_calls": 19145,
-            "self_seconds": 0.031008988
+            "self_seconds": 0.012122544
           },
           {
-            "calls": 6242,
-            "cumulative_seconds": 0.067345242,
-            "file": "site-packages/sympy/core/numbers.py",
-            "function": "__add__",
-            "line": 1886,
-            "primitive_calls": 6242,
-            "self_seconds": 0.058928698
+            "calls": 273,
+            "cumulative_seconds": 0.021727636,
+            "file": "site-packages/ntqr/r2/datasketches.py",
+            "function": "classifier_label_votes",
+            "line": 36,
+            "primitive_calls": 273,
+            "self_seconds": 0.021727636
           },
           {
             "calls": 138375,
-            "cumulative_seconds": 0.058799307,
+            "cumulative_seconds": 0.02025996,
             "file": "src/ntqr_allotment/ensemble.py",
             "function": "<genexpr>",
             "line": 95,
             "primitive_calls": 138375,
-            "self_seconds": 0.058799307
+            "self_seconds": 0.02025996
+          },
+          {
+            "calls": 6242,
+            "cumulative_seconds": 0.0065464650000000004,
+            "file": "site-packages/sympy/core/numbers.py",
+            "function": "__add__",
+            "line": 1886,
+            "primitive_calls": 6242,
+            "self_seconds": 0.0030981150000000002
           },
           {
             "calls": 408,
-            "cumulative_seconds": 0.024288784,
+            "cumulative_seconds": 0.006376335,
             "file": "site-packages/sympy/core/numbers.py",
             "function": "__float__",
             "line": 408,
             "primitive_calls": 408,
-            "self_seconds": 0.0008665210000000001
-          },
-          {
-            "calls": 136,
-            "cumulative_seconds": 0.023795295,
-            "file": "~",
-            "function": "<built-in method math.prod>",
-            "line": 0,
-            "primitive_calls": 136,
-            "self_seconds": 0.023795295
+            "self_seconds": 0.0012406890000000001
           },
           {
             "calls": 408,
-            "cumulative_seconds": 0.022329907000000003,
+            "cumulative_seconds": 0.004189346,
             "file": "site-packages/sympy/core/numbers.py",
             "function": "_as_mpf_val",
             "line": 1595,
             "primitive_calls": 408,
-            "self_seconds": 0.0003979
+            "self_seconds": 0.000300859
           },
           {
             "calls": 408,
-            "cumulative_seconds": 0.021932007,
+            "cumulative_seconds": 0.0038884870000000004,
             "file": "site-packages/mpmath/libmp/libmpf.py",
             "function": "from_rational",
             "line": 491,
             "primitive_calls": 408,
-            "self_seconds": 0.0008422280000000001
+            "self_seconds": 0.0007498180000000001
           },
           {
             "calls": 408,
-            "cumulative_seconds": 0.020580131,
+            "cumulative_seconds": 0.0026664550000000003,
             "file": "site-packages/mpmath/libmp/libmpf.py",
             "function": "mpf_div",
             "line": 950,
             "primitive_calls": 408,
-            "self_seconds": 0.018048619000000002
+            "self_seconds": 0.001124407
           },
           {
             "calls": 19145,
-            "cumulative_seconds": 0.01944572,
+            "cumulative_seconds": 0.0016976930000000001,
             "file": "~",
             "function": "<built-in method builtins.hasattr>",
             "line": 0,
             "primitive_calls": 19145,
-            "self_seconds": 0.01944572
+            "self_seconds": 0.0016976930000000001
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.003142625,
+            "cumulative_seconds": 0.0011619590000000002,
             "file": "src/ntqr_allotment/ensemble.py",
             "function": "observed_vote_counts",
             "line": 59,
             "primitive_calls": 1,
-            "self_seconds": 0.000258349
+            "self_seconds": 0.000112275
+          },
+          {
+            "calls": 408,
+            "cumulative_seconds": 0.0009463000000000001,
+            "file": "site-packages/mpmath/libmp/libmpf.py",
+            "function": "to_float",
+            "line": 454,
+            "primitive_calls": 408,
+            "self_seconds": 0.00046650600000000005
           }
         ],
         "total_calls": 8332656,
-        "total_seconds": 7.1041475
+        "total_seconds": 1.8636943750000006
       },
       "unprofiled_samples": [
         {
-          "cpu_ns": 775345000,
-          "wall_ns": 3035801958
+          "cpu_ns": 718036000,
+          "wall_ns": 771205833
         },
         {
-          "cpu_ns": 979481000,
-          "wall_ns": 2952847750
+          "cpu_ns": 730282000,
+          "wall_ns": 1038938500
         },
         {
-          "cpu_ns": 953667000,
-          "wall_ns": 3095794541
+          "cpu_ns": 724978000,
+          "wall_ns": 1169893917
         },
         {
-          "cpu_ns": 974723000,
-          "wall_ns": 2814343500
+          "cpu_ns": 713855000,
+          "wall_ns": 935500750
         },
         {
-          "cpu_ns": 986336000,
-          "wall_ns": 2844697416
+          "cpu_ns": 723230000,
+          "wall_ns": 1119633250
         }
       ],
-      "wall_max_ns": 3095794541,
-      "wall_median_ns": 2952847750,
-      "wall_min_ns": 2814343500,
+      "wall_max_ns": 1169893917,
+      "wall_median_ns": 1038938500,
+      "wall_min_ns": 771205833,
       "warmups": 1
     },
     {
-      "cpu_median_ns": 56998000,
+      "cpu_median_ns": 33673000,
       "description": "One real trio solve with synthetic oracle scoring",
       "input_sha256": "2d2a6137447062c456bc4107d095fc3b121e1ea8cc8afccc80d331d6cb38e259",
       "memory": {
@@ -1182,13 +1182,6 @@
             "file": "site-packages/sympy/polys/rings.py",
             "function": "allocation",
             "line": 211
-          },
-          {
-            "bytes": 2332,
-            "count": 44,
-            "file": "site-packages/sympy/printing/printer.py",
-            "function": "allocation",
-            "line": 329
           },
           {
             "bytes": 2232,
@@ -1238,6 +1231,13 @@
             "file": "site-packages/sympy/polys/rings.py",
             "function": "allocation",
             "line": 274
+          },
+          {
+            "bytes": 1279,
+            "count": 25,
+            "file": "site-packages/sympy/printing/printer.py",
+            "function": "allocation",
+            "line": 329
           },
           {
             "bytes": 1200,
@@ -1359,9 +1359,9 @@
             "line": 108
           }
         ],
-        "current_bytes": 59876,
+        "current_bytes": 58855,
         "method": "tracemalloc; Python allocations, not process RSS or native heaps",
-        "peak_bytes": 191301
+        "peak_bytes": 190394
       },
       "name": "recovery",
       "tracing": {
@@ -1379,7 +1379,7 @@
               "line": 30
             },
             "calls": 1,
-            "cumulative_seconds": 0.886809375
+            "cumulative_seconds": 0.12901241600000002
           },
           {
             "callee": {
@@ -1393,7 +1393,7 @@
               "line": 158
             },
             "calls": 1,
-            "cumulative_seconds": 0.868356083
+            "cumulative_seconds": 0.126601875
           },
           {
             "callee": {
@@ -1407,91 +1407,7 @@
               "line": 170
             },
             "calls": 1,
-            "cumulative_seconds": 0.8682017500000001
-          },
-          {
-            "callee": {
-              "file": "site-packages/ntqr/r2/evaluators.py",
-              "function": "classifier_a_label_accuracy",
-              "line": 459
-            },
-            "caller": {
-              "file": "site-packages/ntqr/r2/evaluators.py",
-              "function": "__init__",
-              "line": 376
-            },
-            "calls": 6,
-            "cumulative_seconds": 0.41379433200000004
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/simplify/simplify.py",
-              "function": "simplify",
-              "line": 435
-            },
-            "caller": {
-              "file": "site-packages/ntqr/r2/evaluators.py",
-              "function": "classifier_a_label_accuracy",
-              "line": 459
-            },
-            "calls": 6,
-            "cumulative_seconds": 0.40219616500000005
-          },
-          {
-            "callee": {
-              "file": "site-packages/ntqr/r2/evaluators.py",
-              "function": "classifier_b_label_accuracy",
-              "line": 505
-            },
-            "caller": {
-              "file": "site-packages/ntqr/r2/evaluators.py",
-              "function": "__init__",
-              "line": 376
-            },
-            "calls": 6,
-            "cumulative_seconds": 0.24617608500000002
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/polys/polytools.py",
-              "function": "cancel",
-              "line": 7324
-            },
-            "caller": {
-              "file": "site-packages/sympy/simplify/simplify.py",
-              "function": "simplify",
-              "line": 435
-            },
-            "calls": 28,
-            "cumulative_seconds": 0.235104585
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/simplify/simplify.py",
-              "function": "simplify",
-              "line": 435
-            },
-            "caller": {
-              "file": "site-packages/ntqr/r2/evaluators.py",
-              "function": "classifier_b_label_accuracy",
-              "line": 505
-            },
-            "calls": 6,
-            "cumulative_seconds": 0.226713042
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/exprtools.py",
-              "function": "do",
-              "line": 1221
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/exprtools.py",
-              "function": "factor_terms",
-              "line": 1160
-            },
-            "calls": 70,
-            "cumulative_seconds": 0.217927538
+            "cumulative_seconds": 0.12647070800000002
           },
           {
             "callee": {
@@ -1505,7 +1421,7 @@
               "line": 376
             },
             "calls": 1,
-            "cumulative_seconds": 0.20672279100000002
+            "cumulative_seconds": 0.042907417
           },
           {
             "callee": {
@@ -1519,35 +1435,63 @@
               "line": 443
             },
             "calls": 2,
-            "cumulative_seconds": 0.206071208
+            "cumulative_seconds": 0.042447459
           },
           {
             "callee": {
-              "file": "site-packages/sympy/core/exprtools.py",
-              "function": "_gcd_terms",
-              "line": 919
+              "file": "site-packages/ntqr/r2/evaluators.py",
+              "function": "classifier_a_label_accuracy",
+              "line": 459
             },
             "caller": {
-              "file": "site-packages/sympy/core/exprtools.py",
-              "function": "gcd_terms",
-              "line": 984
+              "file": "site-packages/ntqr/r2/evaluators.py",
+              "function": "__init__",
+              "line": 376
             },
-            "calls": 98,
-            "cumulative_seconds": 0.197411797
+            "calls": 6,
+            "cumulative_seconds": 0.041581374000000004
           },
           {
             "callee": {
-              "file": "site-packages/sympy/core/exprtools.py",
-              "function": "factor_terms",
-              "line": 1160
+              "file": "site-packages/ntqr/r2/evaluators.py",
+              "function": "classifier_b_label_accuracy",
+              "line": 505
             },
             "caller": {
-              "file": "site-packages/sympy/polys/polytools.py",
-              "function": "cancel",
-              "line": 7324
+              "file": "site-packages/ntqr/r2/evaluators.py",
+              "function": "__init__",
+              "line": 376
             },
-            "calls": 42,
-            "cumulative_seconds": 0.11365821100000001
+            "calls": 6,
+            "cumulative_seconds": 0.040740625
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/simplify/simplify.py",
+              "function": "simplify",
+              "line": 435
+            },
+            "caller": {
+              "file": "site-packages/ntqr/r2/evaluators.py",
+              "function": "classifier_a_label_accuracy",
+              "line": 459
+            },
+            "calls": 6,
+            "cumulative_seconds": 0.039001292
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/simplify/simplify.py",
+              "function": "simplify",
+              "line": 435
+            },
+            "caller": {
+              "file": "site-packages/ntqr/r2/evaluators.py",
+              "function": "classifier_b_label_accuracy",
+              "line": 505
+            },
+            "calls": 6,
+            "cumulative_seconds": 0.038203084000000005
           },
           {
             "callee": {
@@ -1561,7 +1505,7 @@
               "line": 435
             },
             "calls": 84,
-            "cumulative_seconds": 0.111644666
+            "cumulative_seconds": 0.034986494
           },
           {
             "callee": {
@@ -1575,7 +1519,7 @@
               "line": 590
             },
             "calls": 56,
-            "cumulative_seconds": 0.11125804500000001
+            "cumulative_seconds": 0.034785499000000004
           },
           {
             "callee": {
@@ -1589,7 +1533,119 @@
               "line": 0
             },
             "calls": 154,
-            "cumulative_seconds": 0.111066967
+            "cumulative_seconds": 0.034702166
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/decorators.py",
+              "function": "binary_op_wrapper",
+              "line": 111
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/decorators.py",
+              "function": "_func",
+              "line": 236
+            },
+            "calls": 756,
+            "cumulative_seconds": 0.029804206000000003
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/basic.py",
+              "function": "__eq__",
+              "line": 497
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/cache.py",
+              "function": "wrapper",
+              "line": 69
+            },
+            "calls": 652,
+            "cumulative_seconds": 0.028991447000000004
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/exprtools.py",
+              "function": "do",
+              "line": 1221
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/exprtools.py",
+              "function": "factor_terms",
+              "line": 1160
+            },
+            "calls": 70,
+            "cumulative_seconds": 0.028579625
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/expr.py",
+              "function": "__mul__",
+              "line": 251
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/decorators.py",
+              "function": "binary_op_wrapper",
+              "line": 111
+            },
+            "calls": 375,
+            "cumulative_seconds": 0.028068947
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/cache.py",
+              "function": "wrapper",
+              "line": 69
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/expr.py",
+              "function": "__mul__",
+              "line": 251
+            },
+            "calls": 375,
+            "cumulative_seconds": 0.027951807000000002
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/decorators.py",
+              "function": "_func",
+              "line": 236
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/function.py",
+              "function": "count_ops",
+              "line": 3119
+            },
+            "calls": 26,
+            "cumulative_seconds": 0.027681375
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/exprtools.py",
+              "function": "_gcd_terms",
+              "line": 919
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/exprtools.py",
+              "function": "gcd_terms",
+              "line": 984
+            },
+            "calls": 98,
+            "cumulative_seconds": 0.027030831
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/polys/polytools.py",
+              "function": "cancel",
+              "line": 7324
+            },
+            "caller": {
+              "file": "site-packages/sympy/simplify/simplify.py",
+              "function": "simplify",
+              "line": 435
+            },
+            "calls": 28,
+            "cumulative_seconds": 0.024718125
           },
           {
             "callee": {
@@ -1603,21 +1659,7 @@
               "line": 1221
             },
             "calls": 70,
-            "cumulative_seconds": 0.10773121100000001
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "walk",
-              "line": 1766
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "replace",
-              "line": 1542
-            },
-            "calls": 318,
-            "cumulative_seconds": 0.10541030600000001
+            "cumulative_seconds": 0.019062415000000003
           },
           {
             "callee": {
@@ -1626,124 +1668,40 @@
               "line": 1160
             },
             "caller": {
-              "file": "site-packages/sympy/simplify/simplify.py",
-              "function": "simplify",
-              "line": 435
-            },
-            "calls": 28,
-            "cumulative_seconds": 0.104483377
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "replace",
-              "line": 1542
-            },
-            "caller": {
-              "file": "site-packages/sympy/simplify/simplify.py",
-              "function": "signsimp",
-              "line": 355
-            },
-            "calls": 154,
-            "cumulative_seconds": 0.10137546700000001
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/polys/rationaltools.py",
-              "function": "together",
-              "line": 10
-            },
-            "caller": {
-              "file": "site-packages/sympy/simplify/simplify.py",
-              "function": "simplify",
-              "line": 435
-            },
-            "calls": 28,
-            "cumulative_seconds": 0.09487587600000001
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/polys/rationaltools.py",
-              "function": "_together",
-              "line": 63
-            },
-            "caller": {
-              "file": "site-packages/sympy/polys/rationaltools.py",
-              "function": "together",
-              "line": 10
-            },
-            "calls": 28,
-            "cumulative_seconds": 0.09480645900000001
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/exprtools.py",
-              "function": "gcd_terms",
-              "line": 984
-            },
-            "caller": {
-              "file": "site-packages/sympy/polys/rationaltools.py",
-              "function": "_together",
-              "line": 63
-            },
-            "calls": 28,
-            "cumulative_seconds": 0.094258543
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/simplify/powsimp.py",
-              "function": "powsimp",
-              "line": 18
-            },
-            "caller": {
-              "file": "site-packages/sympy/simplify/simplify.py",
-              "function": "simplify",
-              "line": 435
-            },
-            "calls": 42,
-            "cumulative_seconds": 0.09024854
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/simplify/powsimp.py",
-              "function": "recurse",
-              "line": 103
-            },
-            "caller": {
-              "file": "site-packages/sympy/simplify/powsimp.py",
-              "function": "powsimp",
-              "line": 18
-            },
-            "calls": 84,
-            "cumulative_seconds": 0.089490951
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/simplify/powsimp.py",
-              "function": "powsimp",
-              "line": 18
-            },
-            "caller": {
-              "file": "site-packages/sympy/simplify/powsimp.py",
-              "function": "recurse",
-              "line": 103
-            },
-            "calls": 84,
-            "cumulative_seconds": 0.08910037600000001
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/simplify/simplify.py",
-              "function": "signsimp",
-              "line": 355
-            },
-            "caller": {
               "file": "site-packages/sympy/polys/polytools.py",
               "function": "cancel",
               "line": 7324
             },
             "calls": 42,
-            "cumulative_seconds": 0.087408997
+            "cumulative_seconds": 0.017703375
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/sympify.py",
+              "function": "sympify",
+              "line": 124
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/sympify.py",
+              "function": "_sympify",
+              "line": 514
+            },
+            "calls": 4114,
+            "cumulative_seconds": 0.016453273
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__eq__",
+              "line": 1622
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__eq__",
+              "line": 1965
+            },
+            "calls": 2235,
+            "cumulative_seconds": 0.014165157000000001
           },
           {
             "callee": {
@@ -1757,13 +1715,27 @@
               "line": 293
             },
             "calls": 1708,
-            "cumulative_seconds": 0.083736744
+            "cumulative_seconds": 0.01408171
           },
           {
             "callee": {
-              "file": "site-packages/sympy/simplify/simplify.py",
-              "function": "signsimp",
-              "line": 355
+              "file": "site-packages/sympy/core/sympify.py",
+              "function": "_sympify",
+              "line": 514
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__eq__",
+              "line": 1622
+            },
+            "calls": 3303,
+            "cumulative_seconds": 0.014023194000000001
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/expr.py",
+              "function": "cancel",
+              "line": 3810
             },
             "caller": {
               "file": "site-packages/sympy/simplify/simplify.py",
@@ -1771,327 +1743,355 @@
               "line": 435
             },
             "calls": 14,
-            "cumulative_seconds": 0.08122820900000001
+            "cumulative_seconds": 0.013592167
           },
           {
             "callee": {
-              "file": "site-packages/sympy/core/exprtools.py",
-              "function": "__init__",
-              "line": 814
+              "file": "site-packages/sympy/polys/polytools.py",
+              "function": "cancel",
+              "line": 7324
             },
             "caller": {
-              "file": "site-packages/sympy/core/exprtools.py",
-              "function": "_gcd_terms",
-              "line": 919
+              "file": "site-packages/sympy/core/expr.py",
+              "function": "cancel",
+              "line": 3810
             },
-            "calls": 266,
-            "cumulative_seconds": 0.076787243
+            "calls": 14,
+            "cumulative_seconds": 0.013550624
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/simplify/powsimp.py",
+              "function": "powsimp",
+              "line": 18
+            },
+            "caller": {
+              "file": "site-packages/sympy/simplify/simplify.py",
+              "function": "simplify",
+              "line": 435
+            },
+            "calls": 42,
+            "cumulative_seconds": 0.013422916
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/simplify/powsimp.py",
+              "function": "recurse",
+              "line": 103
+            },
+            "caller": {
+              "file": "site-packages/sympy/simplify/powsimp.py",
+              "function": "powsimp",
+              "line": 18
+            },
+            "calls": 84,
+            "cumulative_seconds": 0.012945834000000002
           }
         ],
         "functions": [
           {
             "calls": 1,
-            "cumulative_seconds": 0.886843292,
+            "cumulative_seconds": 0.12903641700000001,
             "file": "src/ntqr_allotment/profile_workloads.py",
             "function": "<lambda>",
             "line": 30,
             "primitive_calls": 1,
-            "self_seconds": 1.8167e-05
+            "self_seconds": 1.2543e-05
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.886809375,
+            "cumulative_seconds": 0.12901241600000002,
             "file": "src/ntqr_allotment/pipeline.py",
             "function": "run_trial_ensemble",
             "line": 158,
             "primitive_calls": 1,
-            "self_seconds": 4.2416e-05
+            "self_seconds": 3.0872000000000005e-05
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.868356083,
+            "cumulative_seconds": 0.126601875,
             "file": "src/ntqr_allotment/ntqr_eval.py",
             "function": "error_independent_solutions",
             "line": 170,
             "primitive_calls": 1,
-            "self_seconds": 1.0668e-05
+            "self_seconds": 1.0667000000000001e-05
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.8682017500000001,
+            "cumulative_seconds": 0.12647070800000002,
             "file": "site-packages/ntqr/r2/evaluators.py",
             "function": "__init__",
             "line": 376,
             "primitive_calls": 1,
-            "self_seconds": 7.6999e-05
+            "self_seconds": 5.212500000000001e-05
           },
           {
             "calls": 14,
-            "cumulative_seconds": 0.8349804150000001,
+            "cumulative_seconds": 0.11965183500000001,
             "file": "site-packages/sympy/simplify/simplify.py",
             "function": "simplify",
             "line": 435,
             "primitive_calls": 14,
-            "self_seconds": 0.001209791
-          },
-          {
-            "calls": 6,
-            "cumulative_seconds": 0.41379433200000004,
-            "file": "site-packages/ntqr/r2/evaluators.py",
-            "function": "classifier_a_label_accuracy",
-            "line": 459,
-            "primitive_calls": 6,
-            "self_seconds": 0.00011762
-          },
-          {
-            "calls": 42,
-            "cumulative_seconds": 0.300742294,
-            "file": "site-packages/sympy/polys/polytools.py",
-            "function": "cancel",
-            "line": 7324,
-            "primitive_calls": 42,
-            "self_seconds": 0.0060829460000000005
-          },
-          {
-            "calls": 6,
-            "cumulative_seconds": 0.24617608500000002,
-            "file": "site-packages/ntqr/r2/evaluators.py",
-            "function": "classifier_b_label_accuracy",
-            "line": 505,
-            "primitive_calls": 6,
-            "self_seconds": 0.004708368
-          },
-          {
-            "calls": 70,
-            "cumulative_seconds": 0.21814158800000003,
-            "file": "site-packages/sympy/core/exprtools.py",
-            "function": "factor_terms",
-            "line": 1160,
-            "primitive_calls": 70,
-            "self_seconds": 0.000165797
-          },
-          {
-            "calls": 420,
-            "cumulative_seconds": 0.217927538,
-            "file": "site-packages/sympy/core/exprtools.py",
-            "function": "do",
-            "line": 1221,
-            "primitive_calls": 70,
-            "self_seconds": 0.017044307
+            "self_seconds": 0.00059922
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.20672279100000002,
+            "cumulative_seconds": 0.042907417,
             "file": "site-packages/ntqr/r2/evaluators.py",
             "function": "alpha_prevalence_estimates",
             "line": 443,
             "primitive_calls": 1,
-            "self_seconds": 2.2332000000000002e-05
+            "self_seconds": 1.7835e-05
           },
           {
-            "calls": 98,
-            "cumulative_seconds": 0.20198975400000002,
-            "file": "site-packages/sympy/core/exprtools.py",
-            "function": "gcd_terms",
-            "line": 984,
-            "primitive_calls": 98,
-            "self_seconds": 0.000717225
+            "calls": 6,
+            "cumulative_seconds": 0.041581374000000004,
+            "file": "site-packages/ntqr/r2/evaluators.py",
+            "function": "classifier_a_label_accuracy",
+            "line": 459,
+            "primitive_calls": 6,
+            "self_seconds": 6.870300000000001e-05
           },
           {
-            "calls": 98,
-            "cumulative_seconds": 0.197411797,
-            "file": "site-packages/sympy/core/exprtools.py",
-            "function": "_gcd_terms",
-            "line": 919,
-            "primitive_calls": 98,
-            "self_seconds": 0.0012696410000000002
+            "calls": 6,
+            "cumulative_seconds": 0.040740625,
+            "file": "site-packages/ntqr/r2/evaluators.py",
+            "function": "classifier_b_label_accuracy",
+            "line": 505,
+            "primitive_calls": 6,
+            "self_seconds": 6.946300000000001e-05
           },
           {
-            "calls": 140,
-            "cumulative_seconds": 0.168637206,
-            "file": "site-packages/sympy/simplify/simplify.py",
-            "function": "signsimp",
-            "line": 355,
-            "primitive_calls": 56,
-            "self_seconds": 0.002084471
+            "calls": 42,
+            "cumulative_seconds": 0.038268749000000005,
+            "file": "site-packages/sympy/polys/polytools.py",
+            "function": "cancel",
+            "line": 7324,
+            "primitive_calls": 42,
+            "self_seconds": 0.0004936130000000001
           },
           {
             "calls": 17119,
-            "cumulative_seconds": 0.12364227600000001,
+            "cumulative_seconds": 0.038106295000000005,
             "file": "site-packages/sympy/core/cache.py",
             "function": "wrapper",
             "line": 69,
             "primitive_calls": 17119,
-            "self_seconds": 0.071288881
-          },
-          {
-            "calls": 3696,
-            "cumulative_seconds": 0.117643438,
-            "file": "site-packages/sympy/core/decorators.py",
-            "function": "__sympifyit_wrapper",
-            "line": 69,
-            "primitive_calls": 3391,
-            "self_seconds": 0.030226754
-          },
-          {
-            "calls": 1708,
-            "cumulative_seconds": 0.117055007,
-            "file": "site-packages/sympy/core/exprtools.py",
-            "function": "__init__",
-            "line": 293,
-            "primitive_calls": 1708,
-            "self_seconds": 0.012554132
-          },
-          {
-            "calls": 318,
-            "cumulative_seconds": 0.11319583800000001,
-            "file": "site-packages/sympy/core/basic.py",
-            "function": "replace",
-            "line": 1542,
-            "primitive_calls": 318,
-            "self_seconds": 0.001000196
+            "self_seconds": 0.005812973000000001
           },
           {
             "calls": 182,
-            "cumulative_seconds": 0.112816175,
+            "cumulative_seconds": 0.035760789,
             "file": "site-packages/sympy/core/function.py",
             "function": "count_ops",
             "line": 3119,
             "primitive_calls": 182,
-            "self_seconds": 0.023587206000000003
+            "self_seconds": 0.002457424
           },
           {
             "calls": 98,
-            "cumulative_seconds": 0.11168312400000001,
+            "cumulative_seconds": 0.035005119,
             "file": "site-packages/sympy/simplify/simplify.py",
             "function": "shorter",
             "line": 590,
             "primitive_calls": 98,
-            "self_seconds": 0.000128633
+            "self_seconds": 6.829e-05
           },
           {
             "calls": 136,
-            "cumulative_seconds": 0.111293005,
+            "cumulative_seconds": 0.034812957000000005,
             "file": "~",
             "function": "<built-in method builtins.min>",
             "line": 0,
             "primitive_calls": 136,
-            "self_seconds": 0.00020262
+            "self_seconds": 9.2791e-05
           },
           {
-            "calls": 1792,
-            "cumulative_seconds": 0.10541030600000001,
+            "calls": 2833,
+            "cumulative_seconds": 0.030851697,
             "file": "site-packages/sympy/core/basic.py",
-            "function": "walk",
-            "line": 1766,
-            "primitive_calls": 318,
-            "self_seconds": 0.027785961
+            "function": "__eq__",
+            "line": 497,
+            "primitive_calls": 2796,
+            "self_seconds": 0.029270211
           },
           {
-            "calls": 28,
-            "cumulative_seconds": 0.09487587600000001,
-            "file": "site-packages/sympy/polys/rationaltools.py",
-            "function": "together",
-            "line": 10,
-            "primitive_calls": 28,
-            "self_seconds": 5.0544e-05
+            "calls": 756,
+            "cumulative_seconds": 0.030461588,
+            "file": "site-packages/sympy/core/decorators.py",
+            "function": "_func",
+            "line": 236,
+            "primitive_calls": 756,
+            "self_seconds": 0.000391341
           },
           {
-            "calls": 196,
-            "cumulative_seconds": 0.09480645900000001,
-            "file": "site-packages/sympy/polys/rationaltools.py",
-            "function": "_together",
-            "line": 63,
-            "primitive_calls": 28,
-            "self_seconds": 0.00030279
+            "calls": 756,
+            "cumulative_seconds": 0.029804206000000003,
+            "file": "site-packages/sympy/core/decorators.py",
+            "function": "binary_op_wrapper",
+            "line": 111,
+            "primitive_calls": 756,
+            "self_seconds": 0.00038315200000000005
           },
           {
-            "calls": 8248,
-            "cumulative_seconds": 0.09472746900000001,
+            "calls": 98,
+            "cumulative_seconds": 0.0289475,
+            "file": "site-packages/sympy/core/exprtools.py",
+            "function": "gcd_terms",
+            "line": 984,
+            "primitive_calls": 98,
+            "self_seconds": 0.00040581000000000005
+          },
+          {
+            "calls": 70,
+            "cumulative_seconds": 0.028696211000000003,
+            "file": "site-packages/sympy/core/exprtools.py",
+            "function": "factor_terms",
+            "line": 1160,
+            "primitive_calls": 70,
+            "self_seconds": 8.762300000000001e-05
+          },
+          {
+            "calls": 420,
+            "cumulative_seconds": 0.028579625,
+            "file": "site-packages/sympy/core/exprtools.py",
+            "function": "do",
+            "line": 1221,
+            "primitive_calls": 70,
+            "self_seconds": 0.000970694
+          },
+          {
+            "calls": 375,
+            "cumulative_seconds": 0.028068947,
+            "file": "site-packages/sympy/core/expr.py",
+            "function": "__mul__",
+            "line": 251,
+            "primitive_calls": 375,
+            "self_seconds": 0.00011714
+          },
+          {
+            "calls": 98,
+            "cumulative_seconds": 0.027030831,
+            "file": "site-packages/sympy/core/exprtools.py",
+            "function": "_gcd_terms",
+            "line": 919,
+            "primitive_calls": 98,
+            "self_seconds": 0.0007339250000000001
+          },
+          {
+            "calls": 8246,
+            "cumulative_seconds": 0.019951636000000002,
             "file": "site-packages/sympy/core/sympify.py",
             "function": "sympify",
             "line": 124,
-            "primitive_calls": 7548,
-            "self_seconds": 0.025281043000000003
+            "primitive_calls": 7546,
+            "self_seconds": 0.005676527000000001
+          },
+          {
+            "calls": 1708,
+            "cumulative_seconds": 0.018557926000000002,
+            "file": "site-packages/sympy/core/exprtools.py",
+            "function": "__init__",
+            "line": 293,
+            "primitive_calls": 1708,
+            "self_seconds": 0.002555261
+          },
+          {
+            "calls": 4114,
+            "cumulative_seconds": 0.017383827,
+            "file": "site-packages/sympy/core/sympify.py",
+            "function": "_sympify",
+            "line": 514,
+            "primitive_calls": 4114,
+            "self_seconds": 0.0009305540000000001
           },
           {
             "calls": 3097,
-            "cumulative_seconds": 0.09444524900000001,
+            "cumulative_seconds": 0.015639277,
             "file": "site-packages/sympy/core/numbers.py",
             "function": "__eq__",
             "line": 1965,
             "primitive_calls": 3097,
-            "self_seconds": 0.037919483000000004
+            "self_seconds": 0.001122629
           },
           {
-            "calls": 534,
-            "cumulative_seconds": 0.09250259000000001,
-            "file": "site-packages/sympy/core/mul.py",
-            "function": "__neg__",
-            "line": 190,
-            "primitive_calls": 534,
-            "self_seconds": 0.046712168000000005
+            "calls": 3303,
+            "cumulative_seconds": 0.015374937000000002,
+            "file": "site-packages/sympy/core/numbers.py",
+            "function": "__eq__",
+            "line": 1622,
+            "primitive_calls": 3303,
+            "self_seconds": 0.001124407
+          },
+          {
+            "calls": 14,
+            "cumulative_seconds": 0.013592167,
+            "file": "site-packages/sympy/core/expr.py",
+            "function": "cancel",
+            "line": 3810,
+            "primitive_calls": 14,
+            "self_seconds": 4.1543000000000005e-05
           },
           {
             "calls": 480,
-            "cumulative_seconds": 0.09024854,
+            "cumulative_seconds": 0.013422916,
             "file": "site-packages/sympy/simplify/powsimp.py",
             "function": "powsimp",
             "line": 18,
             "primitive_calls": 42,
-            "self_seconds": 0.020280620000000003
+            "self_seconds": 0.003613545
           },
           {
             "calls": 438,
-            "cumulative_seconds": 0.089490951,
+            "cumulative_seconds": 0.012945834000000002,
             "file": "site-packages/sympy/simplify/powsimp.py",
             "function": "recurse",
             "line": 103,
             "primitive_calls": 84,
-            "self_seconds": 0.000868885
+            "self_seconds": 0.00044228500000000005
           },
           {
-            "calls": 756,
-            "cumulative_seconds": 0.07686577500000001,
-            "file": "site-packages/sympy/core/exprtools.py",
-            "function": "__init__",
-            "line": 814,
-            "primitive_calls": 756,
-            "self_seconds": 0.004526022
+            "calls": 140,
+            "cumulative_seconds": 0.011992296000000001,
+            "file": "site-packages/sympy/simplify/simplify.py",
+            "function": "signsimp",
+            "line": 355,
+            "primitive_calls": 56,
+            "self_seconds": 0.000376312
           }
         ],
-        "total_calls": 342771,
-        "total_seconds": 0.8868129220000006
+        "total_calls": 342759,
+        "total_seconds": 0.12901716299999993
       },
       "unprofiled_samples": [
         {
-          "cpu_ns": 56998000,
-          "wall_ns": 219123333
+          "cpu_ns": 32935000,
+          "wall_ns": 32934292
         },
         {
-          "cpu_ns": 63773000,
-          "wall_ns": 219731167
+          "cpu_ns": 33327000,
+          "wall_ns": 57812875
         },
         {
-          "cpu_ns": 55934000,
-          "wall_ns": 205949708
+          "cpu_ns": 33940000,
+          "wall_ns": 33939667
         },
         {
-          "cpu_ns": 64054000,
-          "wall_ns": 333321291
+          "cpu_ns": 34666000,
+          "wall_ns": 64256875
         },
         {
-          "cpu_ns": 54026000,
-          "wall_ns": 122430250
+          "cpu_ns": 33673000,
+          "wall_ns": 61822750
         }
       ],
-      "wall_max_ns": 333321291,
-      "wall_median_ns": 219123333,
-      "wall_min_ns": 122430250,
+      "wall_max_ns": 64256875,
+      "wall_median_ns": 57812875,
+      "wall_min_ns": 32934292,
       "warmups": 1
     },
     {
-      "cpu_median_ns": 59822000,
+      "cpu_median_ns": 32370000,
       "description": "Real finite-key alarm: three judges, six items, safety factors (2,2)",
       "input_sha256": "33b4de4658472efff83ee1471e4a6b23c8889416cbfd3f8aa9d8f3f5dd8c2b61",
       "memory": {
@@ -2187,7 +2187,7 @@
               "line": 45
             },
             "calls": 1,
-            "cumulative_seconds": 0.958422583
+            "cumulative_seconds": 0.28217675000000003
           },
           {
             "callee": {
@@ -2201,7 +2201,7 @@
               "line": 239
             },
             "calls": 1,
-            "cumulative_seconds": 0.9581816670000001
+            "cumulative_seconds": 0.281913209
           },
           {
             "callee": {
@@ -2215,7 +2215,7 @@
               "line": 184
             },
             "calls": 1,
-            "cumulative_seconds": 0.958177625
+            "cumulative_seconds": 0.281907958
           },
           {
             "callee": {
@@ -2229,7 +2229,7 @@
               "line": 162
             },
             "calls": 8,
-            "cumulative_seconds": 0.958170124
+            "cumulative_seconds": 0.28189871
           },
           {
             "callee": {
@@ -2243,7 +2243,7 @@
               "line": 179
             },
             "calls": 7,
-            "cumulative_seconds": 0.958158916
+            "cumulative_seconds": 0.28188662600000003
           },
           {
             "callee": {
@@ -2257,7 +2257,7 @@
               "line": 133
             },
             "calls": 21,
-            "cumulative_seconds": 0.958056627
+            "cumulative_seconds": 0.28177554400000004
           },
           {
             "callee": {
@@ -2271,7 +2271,7 @@
               "line": 95
             },
             "calls": 252,
-            "cumulative_seconds": 0.9517075110000001
+            "cumulative_seconds": 0.28114957300000004
           },
           {
             "callee": {
@@ -2285,7 +2285,7 @@
               "line": 2550
             },
             "calls": 252,
-            "cumulative_seconds": 0.9490067080000001
+            "cumulative_seconds": 0.28051030400000004
           },
           {
             "callee": {
@@ -2299,7 +2299,7 @@
               "line": 103
             },
             "calls": 252,
-            "cumulative_seconds": 0.9484246140000001
+            "cumulative_seconds": 0.279895334
           },
           {
             "callee": {
@@ -2313,7 +2313,7 @@
               "line": 85
             },
             "calls": 504,
-            "cumulative_seconds": 0.940221284
+            "cumulative_seconds": 0.279217162
           },
           {
             "callee": {
@@ -2327,21 +2327,7 @@
               "line": 965
             },
             "calls": 3024,
-            "cumulative_seconds": 0.358342616
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "_subs",
-              "line": 1176
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/cache.py",
-              "function": "wrapper",
-              "line": 69
-            },
-            "calls": 362,
-            "cumulative_seconds": 0.311138738
+            "cumulative_seconds": 0.079945294
           },
           {
             "callee": {
@@ -2355,7 +2341,7 @@
               "line": 1965
             },
             "calls": 12257,
-            "cumulative_seconds": 0.293052107
+            "cumulative_seconds": 0.06783291000000001
           },
           {
             "callee": {
@@ -2369,21 +2355,7 @@
               "line": 1622
             },
             "calls": 12257,
-            "cumulative_seconds": 0.284144715
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "is_same",
-              "line": 2153
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "subs",
-              "line": 965
-            },
-            "calls": 3024,
-            "cumulative_seconds": 0.274617771
+            "cumulative_seconds": 0.059621307000000005
           },
           {
             "callee": {
@@ -2397,21 +2369,21 @@
               "line": 514
             },
             "calls": 12257,
-            "cumulative_seconds": 0.24589384800000003
+            "cumulative_seconds": 0.052571816
           },
           {
             "callee": {
-              "file": "site-packages/sympy/core/numbers.py",
-              "function": "__eq__",
-              "line": 1965
+              "file": "site-packages/sympy/core/basic.py",
+              "function": "_subs",
+              "line": 1176
             },
             "caller": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "is_same",
-              "line": 2153
+              "file": "site-packages/sympy/core/cache.py",
+              "function": "wrapper",
+              "line": 69
             },
-            "calls": 7326,
-            "cumulative_seconds": 0.21974849800000001
+            "calls": 362,
+            "cumulative_seconds": 0.050801656
           },
           {
             "callee": {
@@ -2425,35 +2397,7 @@
               "line": 1176
             },
             "calls": 362,
-            "cumulative_seconds": 0.18416463800000002
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "is_same",
-              "line": 2153
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "_subs",
-              "line": 1176
-            },
-            "calls": 1083,
-            "cumulative_seconds": 0.145658218
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "__eq__",
-              "line": 497
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "is_same",
-              "line": 2153
-            },
-            "calls": 12249,
-            "cumulative_seconds": 0.10368315600000001
+            "cumulative_seconds": 0.046100795
           },
           {
             "callee": {
@@ -2467,7 +2411,105 @@
               "line": 965
             },
             "calls": 3528,
-            "cumulative_seconds": 0.103608348
+            "cumulative_seconds": 0.041101414
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/basic.py",
+              "function": "is_same",
+              "line": 2153
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/basic.py",
+              "function": "subs",
+              "line": 965
+            },
+            "calls": 3024,
+            "cumulative_seconds": 0.029986763000000003
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__eq__",
+              "line": 3314
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/basic.py",
+              "function": "subs",
+              "line": 965
+            },
+            "calls": 3024,
+            "cumulative_seconds": 0.028572325000000003
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__eq__",
+              "line": 3148
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/basic.py",
+              "function": "subs",
+              "line": 965
+            },
+            "calls": 3024,
+            "cumulative_seconds": 0.027952853000000003
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__eq__",
+              "line": 1965
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__eq__",
+              "line": 3314
+            },
+            "calls": 3024,
+            "cumulative_seconds": 0.027636287000000002
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__eq__",
+              "line": 1965
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__eq__",
+              "line": 3148
+            },
+            "calls": 3024,
+            "cumulative_seconds": 0.026788843000000003
+          },
+          {
+            "callee": {
+              "file": "~",
+              "function": "<built-in method builtins.getattr>",
+              "line": 0
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/sympify.py",
+              "function": "sympify",
+              "line": 124
+            },
+            "calls": 33598,
+            "cumulative_seconds": 0.025289237000000003
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/basic.py",
+              "function": "sympify_old",
+              "line": 1105
+            },
+            "caller": {
+              "file": "site-packages/sympy/core/basic.py",
+              "function": "subs",
+              "line": 965
+            },
+            "calls": 3024,
+            "cumulative_seconds": 0.025122729
           },
           {
             "callee": {
@@ -2481,7 +2523,7 @@
               "line": 1248
             },
             "calls": 1567,
-            "cumulative_seconds": 0.10195312100000001
+            "cumulative_seconds": 0.024410331
           },
           {
             "callee": {
@@ -2495,77 +2537,21 @@
               "line": 1248
             },
             "calls": 1733,
-            "cumulative_seconds": 0.088551749
+            "cumulative_seconds": 0.023855111000000002
           },
           {
             "callee": {
-              "file": "site-packages/sympy/core/numbers.py",
-              "function": "__eq__",
-              "line": 3314
+              "file": "site-packages/sympy/core/sympify.py",
+              "function": "sympify",
+              "line": 124
             },
             "caller": {
               "file": "site-packages/sympy/core/basic.py",
-              "function": "subs",
-              "line": 965
+              "function": "sympify_old",
+              "line": 1105
             },
             "calls": 3024,
-            "cumulative_seconds": 0.06456339400000001
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/numbers.py",
-              "function": "__eq__",
-              "line": 1965
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/numbers.py",
-              "function": "__eq__",
-              "line": 3314
-            },
-            "calls": 3024,
-            "cumulative_seconds": 0.063647697
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "<lambda>",
-              "line": 1139
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/sorting.py",
-              "function": "ordered",
-              "line": 202
-            },
-            "calls": 3024,
-            "cumulative_seconds": 0.051983322000000005
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/sorting.py",
-              "function": "_nodes",
-              "line": 179
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "<lambda>",
-              "line": 1139
-            },
-            "calls": 3024,
-            "cumulative_seconds": 0.051402
-          },
-          {
-            "callee": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "sympify_new",
-              "line": 1115
-            },
-            "caller": {
-              "file": "site-packages/sympy/core/basic.py",
-              "function": "subs",
-              "line": 965
-            },
-            "calls": 3024,
-            "cumulative_seconds": 0.039099411
+            "cumulative_seconds": 0.023606992
           },
           {
             "callee": {
@@ -2579,327 +2565,341 @@
               "line": 202
             },
             "calls": 3528,
-            "cumulative_seconds": 0.039000914000000005
+            "cumulative_seconds": 0.022776536
           },
           {
             "callee": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__new__",
+              "line": 780
+            },
+            "caller": {
               "file": "site-packages/sympy/core/sympify.py",
               "function": "sympify",
               "line": 124
             },
+            "calls": 6048,
+            "cumulative_seconds": 0.021947578000000002
+          },
+          {
+            "callee": {
+              "file": "site-packages/sympy/core/numbers.py",
+              "function": "__eq__",
+              "line": 1965
+            },
             "caller": {
               "file": "site-packages/sympy/core/basic.py",
-              "function": "sympify_new",
-              "line": 1115
+              "function": "is_same",
+              "line": 2153
             },
-            "calls": 3024,
-            "cumulative_seconds": 0.034407225
+            "calls": 7326,
+            "cumulative_seconds": 0.019351841
           }
         ],
         "functions": [
           {
             "calls": 1,
-            "cumulative_seconds": 0.958431958,
+            "cumulative_seconds": 0.28421554200000004,
             "file": "src/ntqr_allotment/profile_workloads.py",
             "function": "<lambda>",
             "line": 45,
             "primitive_calls": 1,
-            "self_seconds": 9.375000000000001e-06
+            "self_seconds": 0.002038792
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.958422583,
+            "cumulative_seconds": 0.28217675000000003,
             "file": "src/ntqr_allotment/ntqr_eval.py",
             "function": "alarm_misaligned",
             "line": 239,
             "primitive_calls": 1,
-            "self_seconds": 1.6081e-05
+            "self_seconds": 1.9374e-05
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.9581816670000001,
+            "cumulative_seconds": 0.281913209,
             "file": "site-packages/ntqr/alarms.py",
             "function": "are_misaligned",
             "line": 184,
             "primitive_calls": 1,
-            "self_seconds": 3.875e-06
+            "self_seconds": 5.084e-06
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.958177625,
+            "cumulative_seconds": 0.281907958,
             "file": "site-packages/ntqr/alarms.py",
             "function": "misalignment_trace",
             "line": 162,
             "primitive_calls": 1,
-            "self_seconds": 6.959000000000001e-06
+            "self_seconds": 8.707e-06
           },
           {
             "calls": 8,
-            "cumulative_seconds": 0.958170124,
+            "cumulative_seconds": 0.28189871,
             "file": "site-packages/ntqr/alarms.py",
             "function": "<genexpr>",
             "line": 179,
             "primitive_calls": 8,
-            "self_seconds": 1.1208e-05
+            "self_seconds": 1.2084000000000002e-05
           },
           {
             "calls": 7,
-            "cumulative_seconds": 0.958158916,
+            "cumulative_seconds": 0.28188662600000003,
             "file": "site-packages/ntqr/alarms.py",
             "function": "misaligned_at_qs",
             "line": 133,
             "primitive_calls": 7,
-            "self_seconds": 5.8495e-05
+            "self_seconds": 6.679200000000001e-05
           },
           {
             "calls": 21,
-            "cumulative_seconds": 0.958056627,
+            "cumulative_seconds": 0.28177554400000004,
             "file": "site-packages/ntqr/r2/evaluations.py",
             "function": "max_correct_at_qs",
             "line": 95,
             "primitive_calls": 21,
-            "self_seconds": 0.006216849
+            "self_seconds": 0.000488088
           },
           {
             "calls": 252,
-            "cumulative_seconds": 0.9517075110000001,
+            "cumulative_seconds": 0.28114957300000004,
             "file": "site-packages/ntqr/evaluations.py",
             "function": "_check_axiom_consistency_",
             "line": 2550,
             "primitive_calls": 252,
-            "self_seconds": 0.000435397
+            "self_seconds": 0.00048027300000000003
           },
           {
             "calls": 252,
-            "cumulative_seconds": 0.9490067080000001,
+            "cumulative_seconds": 0.28051030400000004,
             "file": "site-packages/ntqr/r2/raxioms.py",
             "function": "satisfies_axioms",
             "line": 103,
             "primitive_calls": 252,
-            "self_seconds": 0.000356484
+            "self_seconds": 0.00037787400000000005
           },
           {
             "calls": 252,
-            "cumulative_seconds": 0.9484246140000001,
+            "cumulative_seconds": 0.279895334,
             "file": "site-packages/ntqr/r2/raxioms.py",
             "function": "evaluate_axioms",
             "line": 85,
             "primitive_calls": 252,
-            "self_seconds": 0.008174163
+            "self_seconds": 0.000650669
           },
           {
             "calls": 504,
-            "cumulative_seconds": 0.940221284,
+            "cumulative_seconds": 0.279217162,
             "file": "site-packages/sympy/core/basic.py",
             "function": "subs",
             "line": 965,
             "primitive_calls": 504,
-            "self_seconds": 0.049362615000000006
-          },
-          {
-            "calls": 5840,
-            "cumulative_seconds": 0.508827738,
-            "file": "site-packages/sympy/core/basic.py",
-            "function": "is_same",
-            "line": 2153,
-            "primitive_calls": 5840,
-            "self_seconds": 0.13471302400000001
+            "self_seconds": 0.036835239000000006
           },
           {
             "calls": 11338,
-            "cumulative_seconds": 0.39519409800000005,
+            "cumulative_seconds": 0.085327726,
             "file": "site-packages/sympy/core/cache.py",
             "function": "wrapper",
             "line": 69,
             "primitive_calls": 9126,
-            "self_seconds": 0.129488468
-          },
-          {
-            "calls": 1083,
-            "cumulative_seconds": 0.311138738,
-            "file": "site-packages/sympy/core/basic.py",
-            "function": "_subs",
-            "line": 1176,
-            "primitive_calls": 362,
-            "self_seconds": 0.006131498
-          },
-          {
-            "calls": 13909,
-            "cumulative_seconds": 0.301438199,
-            "file": "site-packages/sympy/core/numbers.py",
-            "function": "__eq__",
-            "line": 1965,
-            "primitive_calls": 13909,
-            "self_seconds": 0.006737565
-          },
-          {
-            "calls": 12257,
-            "cumulative_seconds": 0.293052107,
-            "file": "site-packages/sympy/core/numbers.py",
-            "function": "__eq__",
-            "line": 1622,
-            "primitive_calls": 12257,
-            "self_seconds": 0.008598544000000001
+            "self_seconds": 0.011482369000000001
           },
           {
             "calls": 18311,
-            "cumulative_seconds": 0.28700895000000004,
+            "cumulative_seconds": 0.080641847,
             "file": "site-packages/sympy/core/sympify.py",
             "function": "sympify",
             "line": 124,
             "primitive_calls": 18311,
-            "self_seconds": 0.189059382
+            "self_seconds": 0.024093546
+          },
+          {
+            "calls": 13909,
+            "cumulative_seconds": 0.07390985600000001,
+            "file": "site-packages/sympy/core/numbers.py",
+            "function": "__eq__",
+            "line": 1965,
+            "primitive_calls": 13909,
+            "self_seconds": 0.00448193
+          },
+          {
+            "calls": 5840,
+            "cumulative_seconds": 0.07270056300000001,
+            "file": "site-packages/sympy/core/basic.py",
+            "function": "is_same",
+            "line": 2153,
+            "primitive_calls": 5840,
+            "self_seconds": 0.027308677000000003
           },
           {
             "calls": 12257,
-            "cumulative_seconds": 0.284144715,
+            "cumulative_seconds": 0.06783291000000001,
+            "file": "site-packages/sympy/core/numbers.py",
+            "function": "__eq__",
+            "line": 1622,
+            "primitive_calls": 12257,
+            "self_seconds": 0.007902829
+          },
+          {
+            "calls": 12257,
+            "cumulative_seconds": 0.059621307000000005,
             "file": "site-packages/sympy/core/sympify.py",
             "function": "_sympify",
             "line": 514,
             "primitive_calls": 12257,
-            "self_seconds": 0.038250867
+            "self_seconds": 0.007049491000000001
+          },
+          {
+            "calls": 1083,
+            "cumulative_seconds": 0.050801656,
+            "file": "site-packages/sympy/core/basic.py",
+            "function": "_subs",
+            "line": 1176,
+            "primitive_calls": 362,
+            "self_seconds": 0.001591074
           },
           {
             "calls": 825,
-            "cumulative_seconds": 0.18416463800000002,
+            "cumulative_seconds": 0.046100795,
             "file": "site-packages/sympy/core/basic.py",
             "function": "fallback",
             "line": 1248,
             "primitive_calls": 362,
-            "self_seconds": 0.001674619
-          },
-          {
-            "calls": 16159,
-            "cumulative_seconds": 0.11393475800000001,
-            "file": "site-packages/sympy/core/basic.py",
-            "function": "__eq__",
-            "line": 497,
-            "primitive_calls": 16159,
-            "self_seconds": 0.090170177
+            "self_seconds": 0.001847766
           },
           {
             "calls": 7056,
-            "cumulative_seconds": 0.103608348,
+            "cumulative_seconds": 0.041101414,
             "file": "site-packages/sympy/core/sorting.py",
             "function": "ordered",
             "line": 202,
             "primitive_calls": 3528,
-            "self_seconds": 0.013109363
+            "self_seconds": 0.008443965000000001
           },
           {
             "calls": 3024,
-            "cumulative_seconds": 0.06456339400000001,
+            "cumulative_seconds": 0.028572325000000003,
             "file": "site-packages/sympy/core/numbers.py",
             "function": "__eq__",
             "line": 3314,
             "primitive_calls": 3024,
-            "self_seconds": 0.000915697
+            "self_seconds": 0.000936038
+          },
+          {
+            "calls": 16159,
+            "cumulative_seconds": 0.028161178000000002,
+            "file": "site-packages/sympy/core/basic.py",
+            "function": "__eq__",
+            "line": 497,
+            "primitive_calls": 16159,
+            "self_seconds": 0.022235713
           },
           {
             "calls": 3024,
-            "cumulative_seconds": 0.051983322000000005,
+            "cumulative_seconds": 0.027952853000000003,
+            "file": "site-packages/sympy/core/numbers.py",
+            "function": "__eq__",
+            "line": 3148,
+            "primitive_calls": 3024,
+            "self_seconds": 0.00116401
+          },
+          {
+            "calls": 33598,
+            "cumulative_seconds": 0.025289237000000003,
+            "file": "~",
+            "function": "<built-in method builtins.getattr>",
+            "line": 0,
+            "primitive_calls": 33598,
+            "self_seconds": 0.011428331
+          },
+          {
+            "calls": 3024,
+            "cumulative_seconds": 0.025122729,
+            "file": "site-packages/sympy/core/basic.py",
+            "function": "sympify_old",
+            "line": 1105,
+            "primitive_calls": 3024,
+            "self_seconds": 0.0011282940000000002
+          },
+          {
+            "calls": 6048,
+            "cumulative_seconds": 0.021947578000000002,
+            "file": "site-packages/sympy/core/numbers.py",
+            "function": "__new__",
+            "line": 780,
+            "primitive_calls": 6048,
+            "self_seconds": 0.016451
+          },
+          {
+            "calls": 3024,
+            "cumulative_seconds": 0.014446403000000002,
             "file": "site-packages/sympy/core/basic.py",
             "function": "<lambda>",
             "line": 1139,
             "primitive_calls": 3024,
-            "self_seconds": 0.000581322
-          },
-          {
-            "calls": 25792,
-            "cumulative_seconds": 0.051493594000000004,
-            "file": "<frozen importlib._bootstrap>",
-            "function": "parent",
-            "line": 687,
-            "primitive_calls": 25792,
-            "self_seconds": 0.042059275
+            "self_seconds": 0.0007008320000000001
           },
           {
             "calls": 3024,
-            "cumulative_seconds": 0.051402,
-            "file": "site-packages/sympy/core/sorting.py",
-            "function": "_nodes",
-            "line": 179,
-            "primitive_calls": 3024,
-            "self_seconds": 0.017767006000000002
-          },
-          {
-            "calls": 132680,
-            "cumulative_seconds": 0.050337004000000005,
-            "file": "~",
-            "function": "<built-in method builtins.isinstance>",
-            "line": 0,
-            "primitive_calls": 132680,
-            "self_seconds": 0.049998364000000003
-          },
-          {
-            "calls": 3024,
-            "cumulative_seconds": 0.039099411,
-            "file": "site-packages/sympy/core/basic.py",
-            "function": "sympify_new",
-            "line": 1115,
-            "primitive_calls": 3024,
-            "self_seconds": 0.004436929
-          },
-          {
-            "calls": 58312,
-            "cumulative_seconds": 0.035267341,
-            "file": "~",
-            "function": "<method 'get' of 'dict' objects>",
-            "line": 0,
-            "primitive_calls": 58312,
-            "self_seconds": 0.035267341
-          },
-          {
-            "calls": 3024,
-            "cumulative_seconds": 0.033212312,
+            "cumulative_seconds": 0.014285945000000001,
             "file": "site-packages/sympy/core/sorting.py",
             "function": "default_sort_key",
             "line": 10,
             "primitive_calls": 3024,
-            "self_seconds": 0.008976636000000001
+            "self_seconds": 0.005896785000000001
           },
           {
-            "calls": 30995,
-            "cumulative_seconds": 0.030525495000000003,
-            "file": "site-packages/sympy/core/traversal.py",
-            "function": "postorder_traversal",
-            "line": 250,
-            "primitive_calls": 26161,
-            "self_seconds": 0.015803419000000003
+            "calls": 3024,
+            "cumulative_seconds": 0.013860906000000001,
+            "file": "site-packages/sympy/core/basic.py",
+            "function": "__sympy__",
+            "line": 208,
+            "primitive_calls": 3024,
+            "self_seconds": 0.013860906000000001
+          },
+          {
+            "calls": 3024,
+            "cumulative_seconds": 0.013745571000000002,
+            "file": "site-packages/sympy/core/sorting.py",
+            "function": "_nodes",
+            "line": 179,
+            "primitive_calls": 3024,
+            "self_seconds": 0.008383929
           }
         ],
         "total_calls": 554895,
-        "total_seconds": 0.9584474999999997
+        "total_seconds": 0.284252211
       },
       "unprofiled_samples": [
         {
-          "cpu_ns": 59822000,
-          "wall_ns": 88083583
+          "cpu_ns": 31456000,
+          "wall_ns": 32424458
         },
         {
-          "cpu_ns": 79857000,
-          "wall_ns": 185967916
+          "cpu_ns": 30604000,
+          "wall_ns": 30601791
         },
         {
-          "cpu_ns": 81564000,
-          "wall_ns": 926122500
+          "cpu_ns": 32723000,
+          "wall_ns": 48657167
         },
         {
-          "cpu_ns": 32632000,
-          "wall_ns": 259455500
+          "cpu_ns": 32370000,
+          "wall_ns": 44981750
         },
         {
-          "cpu_ns": 36905000,
-          "wall_ns": 239545000
+          "cpu_ns": 38422000,
+          "wall_ns": 126794709
         }
       ],
-      "wall_max_ns": 926122500,
-      "wall_median_ns": 239545000,
-      "wall_min_ns": 88083583,
+      "wall_max_ns": 126794709,
+      "wall_median_ns": 44981750,
+      "wall_min_ns": 30601791,
       "warmups": 1
     },
     {
-      "cpu_median_ns": 23815000,
+      "cpu_median_ns": 25056000,
       "description": "Native CBC maximin lottery over a seeded population; parent CPU excludes solver children",
       "input_sha256": "a53a5faceccf24ce0438ec0fc1881261fb221b436f2132f50b43812bfd411ed6",
       "memory": {
@@ -3135,7 +3135,7 @@
               "line": 53
             },
             "calls": 1,
-            "cumulative_seconds": 0.21240704100000002
+            "cumulative_seconds": 0.129584
           },
           {
             "callee": {
@@ -3149,7 +3149,7 @@
               "line": 113
             },
             "calls": 1,
-            "cumulative_seconds": 0.21177445800000003
+            "cumulative_seconds": 0.128872375
           },
           {
             "callee": {
@@ -3163,7 +3163,7 @@
               "line": 23
             },
             "calls": 1,
-            "cumulative_seconds": 0.211751834
+            "cumulative_seconds": 0.128854917
           },
           {
             "callee": {
@@ -3177,7 +3177,7 @@
               "line": 2383
             },
             "calls": 5,
-            "cumulative_seconds": 0.20818770900000003
+            "cumulative_seconds": 0.125767083
           },
           {
             "callee": {
@@ -3191,7 +3191,7 @@
               "line": 399
             },
             "calls": 5,
-            "cumulative_seconds": 0.20815333300000002
+            "cumulative_seconds": 0.125724542
           },
           {
             "callee": {
@@ -3205,7 +3205,7 @@
               "line": 151
             },
             "calls": 5,
-            "cumulative_seconds": 0.207952084
+            "cumulative_seconds": 0.1254715
           },
           {
             "callee": {
@@ -3219,7 +3219,7 @@
               "line": 23
             },
             "calls": 1,
-            "cumulative_seconds": 0.18412508300000002
+            "cumulative_seconds": 0.10550633400000001
           },
           {
             "callee": {
@@ -3233,7 +3233,7 @@
               "line": 10
             },
             "calls": 4,
-            "cumulative_seconds": 0.181292791
+            "cumulative_seconds": 0.103256624
           },
           {
             "callee": {
@@ -3247,7 +3247,7 @@
               "line": 159
             },
             "calls": 5,
-            "cumulative_seconds": 0.12350641500000001
+            "cumulative_seconds": 0.079703916
           },
           {
             "callee": {
@@ -3261,7 +3261,7 @@
               "line": 1440
             },
             "calls": 5,
-            "cumulative_seconds": 0.123471833
+            "cumulative_seconds": 0.07967220900000001
           },
           {
             "callee": {
@@ -3275,7 +3275,7 @@
               "line": 2293
             },
             "calls": 5,
-            "cumulative_seconds": 0.123201292
+            "cumulative_seconds": 0.07930575100000001
           },
           {
             "callee": {
@@ -3289,7 +3289,7 @@
               "line": 2205
             },
             "calls": 5,
-            "cumulative_seconds": 0.12313975
+            "cumulative_seconds": 0.07927875000000001
           },
           {
             "callee": {
@@ -3303,7 +3303,7 @@
               "line": 159
             },
             "calls": 5,
-            "cumulative_seconds": 0.048718164
+            "cumulative_seconds": 0.036798083
           },
           {
             "callee": {
@@ -3317,21 +3317,7 @@
               "line": 991
             },
             "calls": 5,
-            "cumulative_seconds": 0.047739083
-          },
-          {
-            "callee": {
-              "file": "~",
-              "function": "<built-in method _posixsubprocess.fork_exec>",
-              "line": 0
-            },
-            "caller": {
-              "file": "lib/python3.15/subprocess.py",
-              "function": "_execute_child",
-              "line": 1992
-            },
-            "calls": 5,
-            "cumulative_seconds": 0.028953999
+            "cumulative_seconds": 0.036151792
           },
           {
             "callee": {
@@ -3345,7 +3331,21 @@
               "line": 23
             },
             "calls": 1,
-            "cumulative_seconds": 0.027430417000000002
+            "cumulative_seconds": 0.023148084000000003
+          },
+          {
+            "callee": {
+              "file": "~",
+              "function": "<built-in method _posixsubprocess.fork_exec>",
+              "line": 0
+            },
+            "caller": {
+              "file": "lib/python3.15/subprocess.py",
+              "function": "_execute_child",
+              "line": 1992
+            },
+            "calls": 5,
+            "cumulative_seconds": 0.022960251
           },
           {
             "callee": {
@@ -3359,7 +3359,7 @@
               "line": 7
             },
             "calls": 1,
-            "cumulative_seconds": 0.026986417000000002
+            "cumulative_seconds": 0.022628834
           },
           {
             "callee": {
@@ -3373,13 +3373,13 @@
               "line": 1992
             },
             "calls": 5,
-            "cumulative_seconds": 0.017148708000000002
+            "cumulative_seconds": 0.010901875
           },
           {
             "callee": {
               "file": "site-packages/pulp/pulp.py",
-              "function": "assignVarsVals",
-              "line": 2325
+              "function": "writeMPS",
+              "line": 2254
             },
             "caller": {
               "file": "site-packages/pulp/apis/coin_api.py",
@@ -3387,21 +3387,49 @@
               "line": 159
             },
             "calls": 5,
-            "cumulative_seconds": 0.01707225
+            "cumulative_seconds": 0.002123582
           },
           {
             "callee": {
-              "file": "site-packages/pulp/pulp.py",
-              "function": "variablesDict",
-              "line": 2104
+              "file": "site-packages/pulp/mps_lp.py",
+              "function": "writeMPS",
+              "line": 298
             },
             "caller": {
               "file": "site-packages/pulp/pulp.py",
-              "function": "assignVarsVals",
-              "line": 2325
+              "function": "writeMPS",
+              "line": 2254
             },
             "calls": 5,
-            "cumulative_seconds": 0.017046584
+            "cumulative_seconds": 0.0020812910000000003
+          },
+          {
+            "callee": {
+              "file": "site-packages/pulp/apis/coin_api.py",
+              "function": "readsol_MPS",
+              "line": 277
+            },
+            "caller": {
+              "file": "site-packages/pulp/apis/coin_api.py",
+              "function": "solve_CBC",
+              "line": 159
+            },
+            "calls": 5,
+            "cumulative_seconds": 0.002038167
+          },
+          {
+            "callee": {
+              "file": "lib/python3.15/subprocess.py",
+              "function": "_close_pipe_fds",
+              "line": 1463
+            },
+            "caller": {
+              "file": "lib/python3.15/subprocess.py",
+              "function": "_execute_child",
+              "line": 1992
+            },
+            "calls": 5,
+            "cumulative_seconds": 0.001565708
           },
           {
             "callee": {
@@ -3415,7 +3443,7 @@
               "line": 159
             },
             "calls": 5,
-            "cumulative_seconds": 0.007362833
+            "cumulative_seconds": 0.001565083
           },
           {
             "callee": {
@@ -3429,7 +3457,7 @@
               "line": 363
             },
             "calls": 20,
-            "cumulative_seconds": 0.0073437500000000005
+            "cumulative_seconds": 0.0015371260000000002
           },
           {
             "callee": {
@@ -3443,91 +3471,7 @@
               "line": 357
             },
             "calls": 20,
-            "cumulative_seconds": 0.007309831
-          },
-          {
-            "callee": {
-              "file": "site-packages/pulp/pulp.py",
-              "function": "writeMPS",
-              "line": 2254
-            },
-            "caller": {
-              "file": "site-packages/pulp/apis/coin_api.py",
-              "function": "solve_CBC",
-              "line": 159
-            },
-            "calls": 5,
-            "cumulative_seconds": 0.005351750000000001
-          },
-          {
-            "callee": {
-              "file": "site-packages/pulp/mps_lp.py",
-              "function": "writeMPS",
-              "line": 298
-            },
-            "caller": {
-              "file": "site-packages/pulp/pulp.py",
-              "function": "writeMPS",
-              "line": 2254
-            },
-            "calls": 5,
-            "cumulative_seconds": 0.005303
-          },
-          {
-            "callee": {
-              "file": "~",
-              "function": "<built-in method _io.open>",
-              "line": 0
-            },
-            "caller": {
-              "file": "site-packages/pulp/mps_lp.py",
-              "function": "writeMPS",
-              "line": 298
-            },
-            "calls": 5,
-            "cumulative_seconds": 0.002741084
-          },
-          {
-            "callee": {
-              "file": "site-packages/pulp/apis/coin_api.py",
-              "function": "readsol_MPS",
-              "line": 277
-            },
-            "caller": {
-              "file": "site-packages/pulp/apis/coin_api.py",
-              "function": "solve_CBC",
-              "line": 159
-            },
-            "calls": 5,
-            "cumulative_seconds": 0.0020283750000000002
-          },
-          {
-            "callee": {
-              "file": "~",
-              "function": "<method '__exit__' of '_io._IOBase' objects>",
-              "line": 0
-            },
-            "caller": {
-              "file": "site-packages/pulp/mps_lp.py",
-              "function": "writeMPS",
-              "line": 298
-            },
-            "calls": 5,
-            "cumulative_seconds": 0.001039292
-          },
-          {
-            "callee": {
-              "file": "site-packages/pulp/pulp.py",
-              "function": "__init__",
-              "line": 273
-            },
-            "caller": {
-              "file": "site-packages/allotment/selection_core/panels.py",
-              "function": "generate_feasible_panels",
-              "line": 10
-            },
-            "calls": 48,
-            "cumulative_seconds": 0.000995087
+            "cumulative_seconds": 0.001498998
           },
           {
             "callee": {
@@ -3541,309 +3485,365 @@
               "line": 277
             },
             "calls": 5,
-            "cumulative_seconds": 0.000977166
+            "cumulative_seconds": 0.001126375
+          },
+          {
+            "callee": {
+              "file": "site-packages/pulp/apis/core.py",
+              "function": "executable",
+              "line": 379
+            },
+            "caller": {
+              "file": "site-packages/pulp/apis/coin_api.py",
+              "function": "solve_CBC",
+              "line": 159
+            },
+            "calls": 5,
+            "cumulative_seconds": 0.001106041
+          },
+          {
+            "callee": {
+              "file": "lib/python3.15/shutil.py",
+              "function": "which",
+              "line": 1571
+            },
+            "caller": {
+              "file": "site-packages/pulp/apis/core.py",
+              "function": "executable",
+              "line": 379
+            },
+            "calls": 5,
+            "cumulative_seconds": 0.0010672490000000001
+          },
+          {
+            "callee": {
+              "file": "lib/python3.15/shutil.py",
+              "function": "_access_check",
+              "line": 1556
+            },
+            "caller": {
+              "file": "lib/python3.15/shutil.py",
+              "function": "which",
+              "line": 1571
+            },
+            "calls": 8,
+            "cumulative_seconds": 0.001039126
+          },
+          {
+            "callee": {
+              "file": "~",
+              "function": "<built-in method posix.access>",
+              "line": 0
+            },
+            "caller": {
+              "file": "lib/python3.15/shutil.py",
+              "function": "_access_check",
+              "line": 1556
+            },
+            "calls": 7,
+            "cumulative_seconds": 0.0008951250000000001
           }
         ],
         "functions": [
           {
             "calls": 1,
-            "cumulative_seconds": 0.212432625,
+            "cumulative_seconds": 0.129607959,
             "file": "src/ntqr_allotment/profile_workloads.py",
             "function": "<lambda>",
             "line": 53,
             "primitive_calls": 1,
-            "self_seconds": 2.5584e-05
+            "self_seconds": 2.3959000000000002e-05
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.21240704100000002,
+            "cumulative_seconds": 0.129584,
             "file": "src/ntqr_allotment/sortition.py",
             "function": "representative_sortition",
             "line": 113,
             "primitive_calls": 1,
-            "self_seconds": 4.6711e-05
+            "self_seconds": 5.6496e-05
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.21177445800000003,
+            "cumulative_seconds": 0.128872375,
             "file": "site-packages/allotment/selection_core/audit.py",
             "function": "run_draw",
             "line": 23,
             "primitive_calls": 1,
-            "self_seconds": 1.1374000000000002e-05
+            "self_seconds": 9.75e-06
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.211751834,
+            "cumulative_seconds": 0.128854917,
             "file": "site-packages/allotment/selection_core/maximin.py",
             "function": "draw_selection",
             "line": 23,
             "primitive_calls": 1,
-            "self_seconds": 0.00011641800000000001
+            "self_seconds": 0.000126372
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.20827920800000002,
+            "cumulative_seconds": 0.125885458,
             "file": "site-packages/pulp/pulp.py",
             "function": "solve",
             "line": 2383,
             "primitive_calls": 5,
-            "self_seconds": 5.6122e-05
+            "self_seconds": 8.0414e-05
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.20818770900000003,
+            "cumulative_seconds": 0.125767083,
             "file": "site-packages/pulp/apis/coin_api.py",
             "function": "actualSolve",
             "line": 399,
             "primitive_calls": 5,
-            "self_seconds": 3.4376000000000004e-05
+            "self_seconds": 4.2541000000000005e-05
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.20815333300000002,
+            "cumulative_seconds": 0.125724542,
             "file": "site-packages/pulp/apis/coin_api.py",
             "function": "actualSolve",
             "line": 151,
             "primitive_calls": 5,
-            "self_seconds": 0.00017270800000000001
+            "self_seconds": 0.000231124
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.207952084,
+            "cumulative_seconds": 0.1254715,
             "file": "site-packages/pulp/apis/coin_api.py",
             "function": "solve_CBC",
             "line": 159,
             "primitive_calls": 5,
-            "self_seconds": 0.0025349640000000002
+            "self_seconds": 0.000778617
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.18412508300000002,
+            "cumulative_seconds": 0.10550633400000001,
             "file": "site-packages/allotment/selection_core/panels.py",
             "function": "generate_feasible_panels",
             "line": 10,
             "primitive_calls": 1,
-            "self_seconds": 0.00033773
+            "self_seconds": 0.000329998
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.12350641500000001,
+            "cumulative_seconds": 0.079703916,
             "file": "lib/python3.15/subprocess.py",
             "function": "wait",
             "line": 1440,
             "primitive_calls": 5,
-            "self_seconds": 3.4582e-05
+            "self_seconds": 3.1707e-05
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.123471833,
+            "cumulative_seconds": 0.07967220900000001,
             "file": "lib/python3.15/subprocess.py",
             "function": "_wait",
             "line": 2293,
             "primitive_calls": 5,
-            "self_seconds": 0.000240623
+            "self_seconds": 0.000324248
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.123201292,
+            "cumulative_seconds": 0.07930575100000001,
             "file": "lib/python3.15/subprocess.py",
             "function": "_try_wait",
             "line": 2205,
             "primitive_calls": 5,
-            "self_seconds": 6.1542e-05
+            "self_seconds": 2.7001e-05
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.12313975,
+            "cumulative_seconds": 0.07927875000000001,
             "file": "~",
             "function": "<built-in method posix.waitpid>",
             "line": 0,
             "primitive_calls": 5,
-            "self_seconds": 0.12313975
+            "self_seconds": 0.07927875000000001
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.048718164,
+            "cumulative_seconds": 0.036798083,
             "file": "lib/python3.15/subprocess.py",
             "function": "__init__",
             "line": 991,
             "primitive_calls": 5,
-            "self_seconds": 0.0006801200000000001
+            "self_seconds": 0.000340334
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.047739083,
+            "cumulative_seconds": 0.036151792,
             "file": "lib/python3.15/subprocess.py",
             "function": "_execute_child",
             "line": 1992,
             "primitive_calls": 5,
-            "self_seconds": 0.0006129610000000001
-          },
-          {
-            "calls": 5,
-            "cumulative_seconds": 0.028953999,
-            "file": "~",
-            "function": "<built-in method _posixsubprocess.fork_exec>",
-            "line": 0,
-            "primitive_calls": 5,
-            "self_seconds": 0.028953999
+            "self_seconds": 0.0005339160000000001
           },
           {
             "calls": 1,
-            "cumulative_seconds": 0.027430417000000002,
+            "cumulative_seconds": 0.023148084000000003,
             "file": "site-packages/allotment/selection_core/maximin.py",
             "function": "solve_maximin_weights",
             "line": 7,
             "primitive_calls": 1,
-            "self_seconds": 5.1623000000000004e-05
+            "self_seconds": 6.603900000000001e-05
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.017148708000000002,
+            "cumulative_seconds": 0.022960251,
+            "file": "~",
+            "function": "<built-in method _posixsubprocess.fork_exec>",
+            "line": 0,
+            "primitive_calls": 5,
+            "self_seconds": 0.022960251
+          },
+          {
+            "calls": 5,
+            "cumulative_seconds": 0.010901875,
             "file": "~",
             "function": "<built-in method posix.read>",
             "line": 0,
             "primitive_calls": 5,
-            "self_seconds": 0.017148708000000002
-          },
-          {
-            "calls": 10,
-            "cumulative_seconds": 0.017102875,
-            "file": "site-packages/pulp/pulp.py",
-            "function": "variablesDict",
-            "line": 2104,
-            "primitive_calls": 10,
-            "self_seconds": 0.017048044000000002
+            "self_seconds": 0.010901875
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.01707225,
-            "file": "site-packages/pulp/pulp.py",
-            "function": "assignVarsVals",
-            "line": 2325,
-            "primitive_calls": 5,
-            "self_seconds": 2.5666e-05
-          },
-          {
-            "calls": 5,
-            "cumulative_seconds": 0.007362833,
-            "file": "site-packages/pulp/apis/core.py",
-            "function": "delete_tmp_files",
-            "line": 363,
-            "primitive_calls": 5,
-            "self_seconds": 1.9083e-05
-          },
-          {
-            "calls": 20,
-            "cumulative_seconds": 0.0073437500000000005,
-            "file": "site-packages/pulp/apis/core.py",
-            "function": "silent_remove",
-            "line": 357,
-            "primitive_calls": 20,
-            "self_seconds": 3.3919000000000005e-05
-          },
-          {
-            "calls": 20,
-            "cumulative_seconds": 0.007309831,
-            "file": "~",
-            "function": "<built-in method posix.remove>",
-            "line": 0,
-            "primitive_calls": 20,
-            "self_seconds": 0.007309831
-          },
-          {
-            "calls": 5,
-            "cumulative_seconds": 0.005351750000000001,
+            "cumulative_seconds": 0.002123582,
             "file": "site-packages/pulp/pulp.py",
             "function": "writeMPS",
             "line": 2254,
             "primitive_calls": 5,
-            "self_seconds": 4.8750000000000006e-05
+            "self_seconds": 4.2291000000000006e-05
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.005303,
+            "cumulative_seconds": 0.0020812910000000003,
             "file": "site-packages/pulp/mps_lp.py",
             "function": "writeMPS",
             "line": 298,
             "primitive_calls": 5,
-            "self_seconds": 0.00021292900000000002
-          },
-          {
-            "calls": 20,
-            "cumulative_seconds": 0.003558625,
-            "file": "~",
-            "function": "<built-in method _io.open>",
-            "line": 0,
-            "primitive_calls": 20,
-            "self_seconds": 0.0035365830000000003
+            "self_seconds": 0.000276288
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.0020283750000000002,
+            "cumulative_seconds": 0.002038167,
             "file": "site-packages/pulp/apis/coin_api.py",
             "function": "readsol_MPS",
             "line": 277,
             "primitive_calls": 5,
-            "self_seconds": 0.00077862
+            "self_seconds": 0.0005822140000000001
           },
           {
-            "calls": 53,
-            "cumulative_seconds": 0.001094045,
-            "file": "site-packages/pulp/pulp.py",
-            "function": "__init__",
-            "line": 273,
-            "primitive_calls": 53,
-            "self_seconds": 0.000292041
-          },
-          {
-            "calls": 15,
-            "cumulative_seconds": 0.00109029,
+            "calls": 20,
+            "cumulative_seconds": 0.0019307080000000002,
             "file": "~",
-            "function": "<method '__exit__' of '_io._IOBase' objects>",
+            "function": "<built-in method _io.open>",
             "line": 0,
-            "primitive_calls": 15,
-            "self_seconds": 0.00109029
+            "primitive_calls": 20,
+            "self_seconds": 0.0018394980000000002
           },
           {
             "calls": 5,
-            "cumulative_seconds": 0.000977166,
+            "cumulative_seconds": 0.001565708,
+            "file": "lib/python3.15/subprocess.py",
+            "function": "_close_pipe_fds",
+            "line": 1463,
+            "primitive_calls": 5,
+            "self_seconds": 0.000649961
+          },
+          {
+            "calls": 5,
+            "cumulative_seconds": 0.001565083,
+            "file": "site-packages/pulp/apis/core.py",
+            "function": "delete_tmp_files",
+            "line": 363,
+            "primitive_calls": 5,
+            "self_seconds": 2.7957e-05
+          },
+          {
+            "calls": 20,
+            "cumulative_seconds": 0.0015371260000000002,
+            "file": "site-packages/pulp/apis/core.py",
+            "function": "silent_remove",
+            "line": 357,
+            "primitive_calls": 20,
+            "self_seconds": 3.8128000000000005e-05
+          },
+          {
+            "calls": 20,
+            "cumulative_seconds": 0.001498998,
+            "file": "~",
+            "function": "<built-in method posix.remove>",
+            "line": 0,
+            "primitive_calls": 20,
+            "self_seconds": 0.001498998
+          },
+          {
+            "calls": 7,
+            "cumulative_seconds": 0.001208333,
+            "file": "lib/python3.15/shutil.py",
+            "function": "which",
+            "line": 1571,
+            "primitive_calls": 7,
+            "self_seconds": 9.270400000000001e-05
+          },
+          {
+            "calls": 5,
+            "cumulative_seconds": 0.001126375,
             "file": "site-packages/pulp/apis/coin_api.py",
             "function": "get_status",
             "line": 338,
             "primitive_calls": 5,
-            "self_seconds": 6.0001000000000004e-05
+            "self_seconds": 0.000332459
+          },
+          {
+            "calls": 5,
+            "cumulative_seconds": 0.001106041,
+            "file": "site-packages/pulp/apis/core.py",
+            "function": "executable",
+            "line": 379,
+            "primitive_calls": 5,
+            "self_seconds": 3.8792000000000004e-05
+          },
+          {
+            "calls": 13,
+            "cumulative_seconds": 0.001039873,
+            "file": "~",
+            "function": "<built-in method posix.access>",
+            "line": 0,
+            "primitive_calls": 13,
+            "self_seconds": 0.001039873
           }
         ],
         "total_calls": 9366,
-        "total_seconds": 0.21246820799999994
+        "total_seconds": 0.12964441800000007
       },
       "unprofiled_samples": [
         {
-          "cpu_ns": 24364000,
-          "wall_ns": 172396083
+          "cpu_ns": 23960000,
+          "wall_ns": 173510625
         },
         {
-          "cpu_ns": 25453000,
-          "wall_ns": 202781875
+          "cpu_ns": 25964000,
+          "wall_ns": 121598209
         },
         {
-          "cpu_ns": 23815000,
-          "wall_ns": 126333292
+          "cpu_ns": 25176000,
+          "wall_ns": 138726541
         },
         {
-          "cpu_ns": 20195000,
-          "wall_ns": 107976750
+          "cpu_ns": 23987000,
+          "wall_ns": 135206375
         },
         {
-          "cpu_ns": 21946000,
-          "wall_ns": 225443166
+          "cpu_ns": 25056000,
+          "wall_ns": 135079292
         }
       ],
-      "wall_max_ns": 225443166,
-      "wall_median_ns": 172396083,
-      "wall_min_ns": 107976750,
+      "wall_max_ns": 173510625,
+      "wall_median_ns": 135206375,
+      "wall_min_ns": 121598209,
       "warmups": 1
     }
   ]

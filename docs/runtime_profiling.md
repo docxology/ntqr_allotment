@@ -76,3 +76,5 @@ The agreement regression compares the prepared view against the original NTQR
 primitive calculations across every judge pair and both labels. The estimator,
 probability filter, branch convention and recorded empirical results are not
 changed by this normalization optimization.
+
+The final lock uses Pillow 13.0 wheels for CPython 3.15 on Linux. Earlier Pillow 12.2 receipts remain as named historical snapshots; current comparisons use the final dependency context.
