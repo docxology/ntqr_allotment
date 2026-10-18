@@ -18,6 +18,12 @@ def write_json(path: str | Path, payload) -> Path:
         )
         + "\n"
     ).encode("utf-8")
+    return atomic_write_bytes(path, source)
+
+
+def atomic_write_bytes(path: str | Path, content: bytes) -> Path:
+    """Publish complete bytes atomically while preserving existing permissions."""
+    path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     mode = stat.S_IMODE(path.stat().st_mode) if path.exists() else 0o644
     temporary = None
@@ -27,7 +33,7 @@ def write_json(path: str | Path, payload) -> Path:
         ) as handle:
             temporary = Path(handle.name)
             os.chmod(temporary, mode)
-            handle.write(source)
+            handle.write(content)
             handle.flush()
             os.fsync(handle.fileno())
         os.replace(temporary, path)

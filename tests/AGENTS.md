@@ -4,3 +4,5 @@ Layout: `test_*.py` mirrors of `src/ntqr_allotment/` modules (config, ensemble, 
 Invariants: tests exercise real computation — no mock frameworks. Claim-contract and artifact-metadata tests guard manuscript-number provenance; treat their failures as blocking.
 Verify: `uv run pytest` from the project root.
 - Repo-wide policy: `../AGENTS.md` (ongoing) and `/Volumes/external_drive/Git/template/projects/ongoing/AGENTS.md`; do not duplicate it here.
+
+Research-tool tests cover real profiling, atomic raster/vector export, citation integrity and prepared computations; no timing thresholds or mocked empirical observations.

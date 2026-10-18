@@ -64,8 +64,8 @@ def plot_strategy_ranking(
         )
     ax.set_yticks(y_positions, labels=labels)
     ax.invert_yaxis()
-    ax.set_xlabel("Weighted mean EIE error")
-    _set_claim_title(ax, "Formation strategy sets the no-answer-key error ceiling")
+    ax.set_xlabel("Weighted mean oracle-referenced EIE error (lower is better)")
+    _set_claim_title(ax, "Observed error by panel-formation strategy")
     ax.set_xlim(left=0.0, right=label_x * 1.22)
     _apply_axis_style(ax, grid_axis="x")
     return save_figure(fig, output_path)
@@ -185,7 +185,15 @@ def plot_track_ranking_inversion(
             (left_x, left_pos[strategy], left_val[strategy]),
             (right_x, right_pos[strategy], right_val[strategy]),
         ):
-            ax.scatter([x], [pos], s=240, color=color, zorder=2, edgecolor="white", linewidth=1.5)
+            ax.scatter(
+                [x],
+                [pos],
+                s=240,
+                color=color,
+                zorder=2,
+                edgecolor="white",
+                linewidth=1.5,
+            )
             ax.annotate(
                 f"{value:.3f}",
                 (x, pos),
@@ -239,7 +247,9 @@ def plot_track_ranking_inversion(
     for spine in ("top", "right", "left", "bottom"):
         ax.spines[spine].set_visible(False)
 
-    _set_claim_title(ax, "Strategy ranking inverts between the synthetic and live tracks")
+    _set_claim_title(
+        ax, "Strategy ranking inverts between the synthetic and live tracks"
+    )
     _add_source_note(
         fig,
         "Matched three-seat grain: synthetic POWER_*_SIZE3 (output/data/sweep_aggregated.csv) "

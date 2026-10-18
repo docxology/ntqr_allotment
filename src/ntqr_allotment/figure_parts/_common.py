@@ -35,7 +35,7 @@ STRATEGY_COLORS: dict[str, str] = {
     "expertise_threshold": "#4C78A8",
     "random_selection": "#72B7B2",
     "representative_sortition": "#54A24B",
-    "ideological_selection": "#E45756",
+    "ideological_selection": "#D55E00",
 }
 
 
@@ -61,7 +61,9 @@ def _validated_independence_rows(
     for index, row in enumerate(aggregates):
         context = f"independence aggregate row {index}"
         rho = _coerce_float(_independence_field(row, "rho"), "rho", context)
-        corr_mean = _coerce_float(_independence_field(row, "corr_mean"), "corr_mean", context)
+        corr_mean = _coerce_float(
+            _independence_field(row, "corr_mean"), "corr_mean", context
+        )
         eie_mean = _coerce_float(
             _independence_field(row, "eie_mean"),
             "eie_mean",
@@ -82,7 +84,9 @@ def _independence_strategies(aggregates: Sequence[object]) -> list[str]:
     for index, row in enumerate(aggregates):
         context = f"independence aggregate row {index}"
         strategies.append(
-            _coerce_non_empty_string(_independence_field(row, "strategy"), "strategy", context)
+            _coerce_non_empty_string(
+                _independence_field(row, "strategy"), "strategy", context
+            )
         )
     return strategies
 
@@ -91,12 +95,18 @@ def _validated_alarm_power_rows(
     curve: Sequence[Sequence[object]],
 ) -> list[tuple[int, float]]:
     if not curve:
-        raise ValueError("alarm power curve: expected at least one (panel_size, power) row")
+        raise ValueError(
+            "alarm power curve: expected at least one (panel_size, power) row"
+        )
 
     validated_rows: list[tuple[int, float]] = []
     for index, point in enumerate(curve):
         context = f"alarm power curve point {index}"
-        if not isinstance(point, Sequence) or isinstance(point, (str, bytes)) or len(point) != 2:
+        if (
+            not isinstance(point, Sequence)
+            or isinstance(point, (str, bytes))
+            or len(point) != 2
+        ):
             raise ValueError(f"{context}: expected (panel_size, power)")
         panel_size = _coerce_positive_int(point[0], "panel_size", context)
         power = _coerce_float(point[1], "power", context)
@@ -111,7 +121,9 @@ def _validated_realised_probabilities(report_or_probs: object) -> dict[str, floa
     if probabilities is None:
         probabilities = report_or_probs
     if not isinstance(probabilities, Mapping):
-        raise ValueError("fairness maximin: expected a probability mapping or FairnessReport")
+        raise ValueError(
+            "fairness maximin: expected a probability mapping or FairnessReport"
+        )
     if not probabilities:
         raise ValueError("fairness maximin: probability mapping must be non-empty")
 
@@ -119,7 +131,9 @@ def _validated_realised_probabilities(report_or_probs: object) -> dict[str, floa
     for candidate, prob in probabilities.items():
         context = f"fairness maximin candidate {candidate!r}"
         candidate_key = _coerce_non_empty_string(str(candidate), "candidate", context)
-        validated[candidate_key] = _coerce_non_negative_float(prob, "probability", context)
+        validated[candidate_key] = _coerce_non_negative_float(
+            prob, "probability", context
+        )
     return validated
 
 
@@ -132,7 +146,9 @@ def _validated_ranking_rows(
     validated_rows: list[tuple[str, float, float]] = []
     for index, row in enumerate(ranking):
         if len(row) != 3:
-            raise ValueError(f"strategy ranking row {index}: expected [strategy, mean, ci95]")
+            raise ValueError(
+                f"strategy ranking row {index}: expected [strategy, mean, ci95]"
+            )
         context = f"strategy ranking row {index}"
         strategy = _coerce_non_empty_string(row[0], "strategy", context)
         mean = _coerce_float(row[1], "mean", context)
@@ -150,17 +166,25 @@ def _validated_effect_rows(
     validated_rows: list[tuple[tuple[float, ...], float, float]] = []
     for index, row in enumerate(effects):
         regime_key_raw = row.get("regime_key")
-        if not isinstance(regime_key_raw, Sequence) or isinstance(regime_key_raw, (str, bytes)):
-            raise ValueError(f"rep_vs_ideo effect row {index}: regime_key must be a sequence")
+        if not isinstance(regime_key_raw, Sequence) or isinstance(
+            regime_key_raw, (str, bytes)
+        ):
+            raise ValueError(
+                f"rep_vs_ideo effect row {index}: regime_key must be a sequence"
+            )
         if len(regime_key_raw) < 2:
             raise ValueError(
                 f"rep_vs_ideo effect row {index}: regime_key must include panel_size and mean_expertise"
             )
         regime_key = tuple(
-            _coerce_float(value, f"regime_key[{key_index}]", f"rep_vs_ideo effect row {index}")
+            _coerce_float(
+                value, f"regime_key[{key_index}]", f"rep_vs_ideo effect row {index}"
+            )
             for key_index, value in enumerate(regime_key_raw)
         )
-        effect = _coerce_float(row.get("effect"), "effect", f"rep_vs_ideo effect row {index}")
+        effect = _coerce_float(
+            row.get("effect"), "effect", f"rep_vs_ideo effect row {index}"
+        )
         ci95 = _coerce_non_negative_float(
             row.get("ci95"),
             "ci95",
@@ -181,7 +205,9 @@ def _normalized_alarm_points(
         if len(point) != 2:
             raise ValueError(f"alarm cost curve point {index}: expected (Q, seconds)")
         q = _coerce_positive_int(point[0], "Q", f"alarm cost curve point {index}")
-        seconds = _coerce_positive_float(point[1], "seconds", f"alarm cost curve point {index}")
+        seconds = _coerce_positive_float(
+            point[1], "seconds", f"alarm cost curve point {index}"
+        )
         grouped[q].append(seconds)
 
     return [(q, _mean(grouped[q])) for q in sorted(grouped)]
@@ -278,7 +304,10 @@ def _save_figure(fig: plt.Figure, output_path: Path) -> Path:
     try:
         if not fig.get_constrained_layout():
             fig.tight_layout()
-        fig.savefig(resolved_path, dpi=200, bbox_inches="tight")
+        from ntqr_allotment.figure_export import export_figure
+
+        description = " | ".join(ax.get_title() for ax in fig.axes if ax.get_title())
+        export_figure(fig, resolved_path, description=description)
     finally:
         plt.close(fig)
     return resolved_path

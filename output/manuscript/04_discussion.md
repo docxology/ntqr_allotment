@@ -338,3 +338,20 @@ endorsement of using age in real admissions, hiring, or fellowship review. The l
 language-model outputs are treated as an instrumented measurement of a prompted
 system, not as a substitute for human judgment. The authors declare no competing
 interests.
+
+
+## Reproducibility and scope of the computational claims
+
+The implementation now separates observed-frequency preparation, scientific
+estimators, artifact publication, and figure export. Normalizing a vote table
+once per panel preserves the original NTQR helper algebra while reducing
+repeated work. The benchmark receipts bind their inputs, source files, runtime,
+and dependencies; their ratios are descriptive measurements rather than a
+cross-machine or asymptotic performance guarantee.
+
+Vector figures retain selectable text and a textual description. Their source
+results remain the evidence for empirical statements. A figure's visual clarity,
+a passing citation check, or a complete software profile cannot establish
+conditional independence, causal fairness, or external validity for human
+review panels. The structured claim map in `docs/research_map.json` records
+these boundaries alongside the corresponding source and artifact paths.

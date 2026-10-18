@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: Cite this repository together with the Git commit used for code and generated figures.
+title: "NTQR Allotment: Panel Formation Before Algebraic Evaluation"
+type: software
+version: 0.1.0
+authors:
+  - family-names: Friedman
+    given-names: Daniel Ari
+repository-code: "https://github.com/docxology/ntqr_allotment"
+keywords:
+  - algebraic evaluation
+  - sortition
+  - reproducible research

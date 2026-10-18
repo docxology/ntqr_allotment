@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-17",
+  "policy": "Selected primary references verified; all bibliography entries receive offline structural checks. Verification is not a claim of full literature coverage.",
+  "verified_references": [
+    {
+      "key": "allman2009",
+      "source_url": "https://arxiv.org/abs/0809.5032",
+      "verified_on": "2026-10-17",
+      "scope": "Generic identifiability under stated latent-model and rank conditions; exceptional nonidentifiable parameters remain."
+    },
+    {
+      "key": "ntqr09",
+      "source_url": "https://ntqr.readthedocs.io/en/latest/",
+      "verified_on": "2026-10-17",
+      "scope": "Pinned software API; documentation does not validate this study's empirical conclusions."
+    },
+    {
+      "key": "flanigan2021",
+      "source_url": "https://www.nature.com/articles/s41586-021-03788-6",
+      "verified_on": "2026-10-17",
+      "scope": "Fairness objective for citizens-assembly lotteries; not a guarantee of classifier recovery."
+    }
+  ],
+  "claims": [
+    {
+      "id": "conditional-vs-observed-dependence",
+      "statement": "Observed agreement is distinct from conditional error dependence.",
+      "reference_keys": [
+        "allman2009"
+      ],
+      "evidence_paths": [
+        "src/ntqr_allotment/ensemble.py",
+        "src/ntqr_allotment/agreement.py"
+      ],
+      "limitations": [
+        "An observed covariance does not identify error correlation without labels or assumptions."
+      ]
+    },
+    {
+      "id": "panel-formation",
+      "statement": "The study compares panel-formation strategies with matched seeded inputs and synthetic oracle scoring.",
+      "reference_keys": [
+        "flanigan2021",
+        "ntqr09"
+      ],
+      "evidence_paths": [
+        "src/ntqr_allotment/pipeline.py",
+        "output/data/sweep_results.json"
+      ],
+      "limitations": [
+        "Closest-to-oracle branch selection is a benchmark convention, not a deployable unlabeled decision rule.",
+        "Synthetic panels do not establish causal effects in human review."
+      ]
+    },
+    {
+      "id": "runtime",
+      "statement": "Runtime receipts measure bounded real workloads under a recorded runtime and source context.",
+      "reference_keys": [],
+      "evidence_paths": [
+        "benchmarks/runtime/before.json",
+        "src/ntqr_allotment/runtime_profile.py"
+      ],
+      "limitations": [
+        "Host-specific descriptive measurements; imports excluded; Python memory is not native RSS."
+      ]
+    },
+    {
+      "id": "alarm-boundary-control",
+      "statement": "Unit safety factors make the strict accuracy specification impossible, independent of observed votes.",
+      "reference_keys": [
+        "ntqr09"
+      ],
+      "evidence_paths": [
+        "src/ntqr_allotment/ntqr_eval.py",
+        "scripts/make_extended_figures.py"
+      ],
+      "limitations": [
+        "The saturated boundary-control figure is not empirical power or a panel-size effect."
+      ]
+    }
+  ]
+}

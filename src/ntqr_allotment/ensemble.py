@@ -10,7 +10,8 @@ trio solver, in order to study *how many experts a panel needs*:
    build the observed pattern table over all N judges and report these moments
    as real numbers. They are agreement-structure descriptors, NOT accuracy
    estimates: a higher pair moment means judges co-vote more than independence
-   predicts (the very correlation the exact solver assumes away).
+   predicts under unconditional independence. Shared truth alone can produce
+   vote dependence even when errors are independent conditional on truth.
 
    .. note::
       ``ObservedVoteCounts.pair_frequency_moment`` / ``trio_frequency_moment``
@@ -47,6 +48,7 @@ from ntqr.r2.datasketches import (
     classifiers_labels_votes,
 )
 
+from .agreement import AgreementMoments
 from .experts import Expert, Item, sample_votes
 from .ntqr_eval import _validate_votes, alarm_misaligned
 
@@ -79,7 +81,9 @@ def observed_vote_counts(votes_by_judge: Sequence[Sequence[str]]) -> ObservedVot
     return ObservedVoteCounts(counts)
 
 
-def _classifier_label_frequency(ovc: ObservedVoteCounts, classifier: int, label: str) -> float:
+def _classifier_label_frequency(
+    ovc: ObservedVoteCounts, classifier: int, label: str
+) -> float:
     """Fraction of items ``classifier`` voted ``label`` (NTQR primitive, fixed call)."""
     freqs = ovc.to_frequencies_exact()
     patterns = list(ovc.vote_counts.keys())
@@ -87,7 +91,9 @@ def _classifier_label_frequency(ovc: ObservedVoteCounts, classifier: int, label:
     return float(sum((freqs[v] for v in matched), start=0))
 
 
-def _pair_label_frequency(ovc: ObservedVoteCounts, pair: tuple[int, int], label: str) -> float:
+def _pair_label_frequency(
+    ovc: ObservedVoteCounts, pair: tuple[int, int], label: str
+) -> float:
     """Fraction of items both judges in ``pair`` voted ``label`` (NTQR primitive, fixed call)."""
     freqs = ovc.to_frequencies_exact()
     patterns = list(ovc.vote_counts.keys())
@@ -95,7 +101,9 @@ def _pair_label_frequency(ovc: ObservedVoteCounts, pair: tuple[int, int], label:
     return float(sum((freqs[v] for v in matched), start=0))
 
 
-def _pair_frequency_moment(ovc: ObservedVoteCounts, pair: tuple[int, int], label: str) -> float:
+def _pair_frequency_moment(
+    ovc: ObservedVoteCounts, pair: tuple[int, int], label: str
+) -> float:
     """Centred pair frequency moment: co-vote frequency minus product of marginals.
 
     This is exactly the quantity ``ObservedVoteCounts.pair_frequency_moment``
@@ -107,15 +115,17 @@ def _pair_frequency_moment(ovc: ObservedVoteCounts, pair: tuple[int, int], label
     return co - math.prod(marginals)
 
 
-def panel_agreement_moments(votes_by_judge: Sequence[Sequence[str]]) -> dict[str, float]:
+def panel_agreement_moments(
+    votes_by_judge: Sequence[Sequence[str]],
+) -> dict[str, float]:
     """Report real-valued panel agreement-structure moments for an N-judge panel.
 
     Returns a dict of finite floats:
 
     * ``mean_abs_pair_moment_a`` / ``mean_abs_pair_moment_b`` -- mean absolute
       centred pair frequency moment over all judge pairs, per label. Larger =>
-      judges co-vote more than independence predicts (positive error-correlation
-      pressure on the trio solver's independence assumption).
+      judges have more unconditional vote dependence. This does not identify
+      conditional error dependence; the shared true label itself induces agreement.
     * ``max_abs_pair_moment`` -- the strongest pairwise agreement over both labels.
     * ``trio_frequency_moment_b`` -- the third (trio) frequency moment over the
       first three judges for label ``b`` (NTQR's ``trio_frequency_moment``
@@ -125,11 +135,12 @@ def panel_agreement_moments(votes_by_judge: Sequence[Sequence[str]]) -> dict[str
     """
     ovc = observed_vote_counts(votes_by_judge)
     n = ovc.ensemble_size
+    moments = AgreementMoments(ovc)
     pairs = [(i, j) for i in range(n) for j in range(i + 1, n)]
     out: dict[str, float] = {}
     abs_all: list[float] = []
     for label in ("a", "b"):
-        abs_label = [abs(_pair_frequency_moment(ovc, p, label)) for p in pairs]
+        abs_label = [abs(moments.centered_pair(p, label)) for p in pairs]
         out[f"mean_abs_pair_moment_{label}"] = (
             float(sum(abs_label) / len(abs_label)) if abs_label else 0.0
         )
@@ -137,11 +148,11 @@ def panel_agreement_moments(votes_by_judge: Sequence[Sequence[str]]) -> dict[str
     out["max_abs_pair_moment"] = float(max(abs_all)) if abs_all else 0.0
 
     if n >= 3:
-        clf_b = [_classifier_label_frequency(ovc, c, "b") for c in range(3)]
+        clf_b = [moments.marginal(c, "b") for c in range(3)]
         pm = {
-            (1, 2): _pair_frequency_moment(ovc, (1, 2), "b"),
-            (0, 2): _pair_frequency_moment(ovc, (0, 2), "b"),
-            (0, 1): _pair_frequency_moment(ovc, (0, 1), "b"),
+            (1, 2): moments.centered_pair((1, 2), "b"),
+            (0, 2): moments.centered_pair((0, 2), "b"),
+            (0, 1): moments.centered_pair((0, 1), "b"),
         }
         trio = (
             math.prod(clf_b)

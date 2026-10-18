@@ -4,7 +4,7 @@ The project pins the [NTQR 0.9 wheel](https://pypi.org/project/ntqr/0.9/)
 under `vendor/`. SHA-256:
 `83f3cbeeb54eb6a86fb1df8a7c86187f8b14511d69de94d3527ebe49d0a931d8`.
 `uv.lock` records its hash and the full dependency graph, including new upstream
-SciPy and Numba requirements. `.python-version` defaults to Python 3.12.
+SciPy and Numba requirements. `.python-version` defaults to Python 3.15.
 
 The wheel avoids the historical upstream source-distribution packaging failure.
 The allotment Git source is pinned by full revision in both pyproject and lock.
@@ -44,7 +44,9 @@ uv run --no-sync python scripts/z_generate_manuscript_variables.py --check
 
 The lock was generated and verified with uv 0.13.1.
 
-CI checks offline tests on Python 3.12 and 3.13. Live Ollama tests remain opt-in.
+CI checks offline tests on Python 3.12, 3.13 and 3.15. Live Ollama tests remain opt-in.
 Published PDFs and historical model/sweep observations are not relabeled as
 fresh NTQR 0.9 measurements. Token hydration continues to consume the recorded
 data; numerical compatibility is checked using real solver fixtures.
+
+The Python 3.15 environment uses the locked Psycopg 3.3.6 wheels; the prior 3.3.4 lock had no cp315 binary. See [runtime profiling](runtime_profiling.md) for the measured interpreter/dependency receipts.

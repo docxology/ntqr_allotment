@@ -4,3 +4,5 @@ Layout: core modules — `pipeline.py`, `config.py`, `ensemble.py`, `experts.py`
 Invariants: this is the only place for project logic. Depends on the vendored `vendor/ntqr` wheel (pinned 0.9) — upgrade only with explicit user authorization. `manuscript_variables.py` computes the token values injected into the manuscript.
 Verify: `uv run pytest tests/test_<module>.py` for focused checks.
 - Repo-wide policy: `../AGENTS.md` (ongoing) and `/Volumes/external_drive/Git/template/projects/ongoing/AGENTS.md`; do not duplicate it here.
+
+Research tooling: runtime_profile/profile_workloads/runtime_figure, figure_export and scholarship provide reusable APIs; CLI files only orchestrate them.

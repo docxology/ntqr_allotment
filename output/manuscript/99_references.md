@@ -6,7 +6,7 @@ manual numbered list so DOI/URL fields can render as links where the output
 format supports them.
 
 ```{=latex}
-\nocite{dawid1979,ntqr08,allotment,stone2011,aristotle_politics,aristotle_athenian,aquinas_lots,contarini1599,montesquieu1748,rousseau1762,borda1781,condorcet1785,flanigan2021,cohen1988,efron1993,holm1979,raykar2010,karger2014,lamont2009,peters1982,cole1981,lee2013,pier2018,wenneras1997,ginther2011,kaplan2008,johnson2008,fang2016elife,merton1968,neumark2019,north2013,grofman1983,hong2004,fishkin2009,bollen2014,fang2016,avin2019,arvan2025,zheng2023,shi2025,tomkins2017,helmer2017,hardt2016,bender2021}
+\nocite{allman2009,dawid1979,ntqr09,allotment,stone2011,aristotle_politics,aristotle_athenian,aquinas_lots,contarini1599,montesquieu1748,rousseau1762,borda1781,condorcet1785,flanigan2021,cohen1988,efron1993,holm1979,raykar2010,karger2014,lamont2009,peters1982,cole1981,lee2013,pier2018,wenneras1997,ginther2011,kaplan2008,johnson2008,fang2016elife,merton1968,neumark2019,north2013,grofman1983,hong2004,fishkin2009,bollen2014,fang2016,avin2019,arvan2025,zheng2023,shi2025,tomkins2017,helmer2017,hardt2016,bender2021}
 ```
 
 ```{=html}
@@ -56,6 +56,7 @@ format supports them.
 <li>Avin, S. (2019). Mavericks and lotteries. <em>Studies in History and Philosophy of Science Part A</em>. <a href="https://doi.org/10.1016/j.shpsa.2018.11.006">doi:10.1016/j.shpsa.2018.11.006</a>.</li>
 <li>Zheng, L., Chiang, W.-L., Sheng, Y., Zhuang, S., Wu, Z., Zhuang, Y., Lin, Z., Li, Z., Li, D., Xing, E. P., Zhang, H., Gonzalez, J. E., &amp; Stoica, I. (2023). Judging LLM-as-a-judge with MT-Bench and Chatbot Arena. <em>Advances in Neural Information Processing Systems</em>. <a href="https://arxiv.org/abs/2306.05685">arXiv:2306.05685</a>.</li>
 <li>Shi, L., Ma, C., Liang, W., Diao, X., Ma, W., &amp; Vosoughi, S. (2025). Judging the judges: A systematic study of position bias in LLM-as-a-judge. <em>Proceedings of IJCNLP-AACL</em>. <a href="https://doi.org/10.18653/v1/2025.ijcnlp-long.18">doi:10.18653/v1/2025.ijcnlp-long.18</a>.</li>
+<li>Allman, E. S., Matias, C., &amp; Rhodes, J. A. (2009). Identifiability of parameters in latent structure models with many observed variables. <em>The Annals of Statistics</em>. <a href="https://doi.org/10.1214/09-AOS689">doi:10.1214/09-AOS689</a>.</li>
 </ul>
 </section>
 ```

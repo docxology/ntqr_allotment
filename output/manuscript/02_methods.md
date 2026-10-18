@@ -83,7 +83,8 @@ We compute two `ntqr` evaluations per trio: the error-independent evaluation (EI
 our headline) and the majority-voting evaluation (a comparator that partitions
 solutions into crowd-right and crowd-wrong). The **supervised oracle** is read
 directly from the label-conditioned vote counts; it is always real and finite,
-and a degenerate oracle is treated as a contract violation that fails loudly.
+and an undefined oracle (for example, a missing true-label class) is excluded
+rather than assigned a fabricated conditional accuracy.
 
 **Ensemble-of-trios for panels larger than three.** Because the exact solver is trio-only, a panel of size greater than three is
 evaluated by **ensemble-of-trios**. We scan trios (combinations of panel members)
@@ -134,9 +135,10 @@ overstating what NTQR can do there.
 **N-judge alarm power is consistency-only.** A second companion track (`src/ntqr_allotment/ensemble.py`) generalizes the
 single-trio consistency check to an **N-judge** observed-vote-count alarm and
 measures how the consistency signal scales with panel size (`alarm_power_curve`).
-In the current small-$Q$ diagnostic, the tight safety setting is already saturated
-across the plotted panel sizes, so the figure demonstrates that the N-judge alarm
-is executable and panel-size-indexed rather than establishing a monotone growth
+In the plotted boundary control, unit safety factors require strictly better
+than perfect conditional accuracy. The specification is impossible for every
+answer key, so firing is certain independently of the observations. This
+exercises the N-judge interface rather than establishing empirical power or a growth
 law. The underlying answer-key enumeration is the same $O(Q^3)$ cost described
 above, so the N-judge track is exercised only at **small $Q$**. It is a
 panel-size-indexed *consistency* signal, not a recovery method.
@@ -410,3 +412,26 @@ explorer (`output/web/ntqr_explorer.html`) is a non-publishing reader/QA aid ove
 these same source artifacts; it exposes filters and source tables but does not change
 the PDF claim boundary, and a statistic is eligible for manuscript prose only after
 it is regenerated into the static artifacts and the token/caption contract.
+
+
+## Conditional independence, identifiability, and computational evidence
+
+Observed vote covariance is distinct from conditional error covariance. Under
+conditionally independent judges, the shared true label can still induce
+substantial unconditional agreement. The panel-agreement moments are therefore
+descriptors of the observed vote matrix; they do not, by themselves, test the
+error-independence assumption. Labeled synthetic errors support the separate
+error-correlation analyses used elsewhere in this study.
+
+Generic latent-class identifiability requires model and rank conditions;
+it does not guarantee recovery for every finite response table [@allman2009].
+Degenerate moments, nonphysical roots, and the label mirror remain relevant.
+Selecting the root closest to the synthetic oracle is an oracle-assisted
+benchmark convention. It is not a deployable label-free branch-selection rule.
+Operational use would need a separately justified orientation assumption.
+
+Runtime evidence is reported separately under `benchmarks/runtime/`. Its
+Python 3.15 workloads use fixed inputs, record unprofiled wall and CPU samples,
+and collect tracing and memory diagnostics in separate passes. These timings
+characterize this software and host; they are not experimental evidence about
+panel quality, statistical power, or the truth of a recovered evaluation.

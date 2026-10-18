@@ -8,6 +8,7 @@ import pytest
 from ntqr_allotment.experts import Item, generate_population, sample_items
 from ntqr_allotment.ntqr_eval import (
     Evaluation,
+    NoPhysicalSolutionError,
     _real_or_none,
     _to_evaluation,
     alarm_misaligned,
@@ -215,7 +216,7 @@ def test_supervised_oracle_degenerate_trio_raises():
     """
     items = [Item(index=i, true_label="a") for i in range(4)]
     votes = [["a", "a", "a", "a"]] * 3
-    with pytest.raises(ValueError, match="degenerate"):
+    with pytest.raises(NoPhysicalSolutionError, match="undefined"):
         supervised_oracle(votes, items)
 
 

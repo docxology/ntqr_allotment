@@ -225,3 +225,17 @@ Project code: see repository. Note `allotment` is AGPL-3.0; this is a
 local-only research project and is not distributed as a combined work.
 
 See [study validation and resumable artifacts](docs/reliability.md) for strict panel/trial inputs, failure reasons, paired aggregation, and content-bound atomic vote caches.
+
+
+## Python 3.15, profiling and publication workflows
+
+The default runtime is Python 3.15; CI also checks Python 3.12 and 3.13.
+Use `uv sync --locked --extra dev`, then `uv run python scripts/profile_runtime.py`
+for bounded real-workload profiling and `uv run python scripts/check_research.py`
+for offline reference/evidence integrity checks.
+
+See [runtime profiling](docs/runtime_profiling.md),
+[research integrity and offline figures](docs/research_integrity.md), and the
+[structured claim map](docs/research_map.json). Publication figures include
+selectable-text SVG companions. Benchmark receipts are separate from empirical
+study results and retain their source, input and runtime bindings.

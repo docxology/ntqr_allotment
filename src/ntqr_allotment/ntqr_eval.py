@@ -58,11 +58,15 @@ class Evaluation:
         if len(self.accuracies) != len(oracle.accuracies):
             raise ValueError("evaluations must contain the same number of judges")
         n = len(self.accuracies)
-        acc_err = sum(abs(self.accuracies[i] - oracle.accuracies[i]) for i in range(n)) / max(n, 1)
+        acc_err = sum(
+            abs(self.accuracies[i] - oracle.accuracies[i]) for i in range(n)
+        ) / max(n, 1)
         return prev_err + acc_err
 
 
-def _validate_votes(votes_by_judge: Sequence[Sequence[str]], *, trio: bool = False) -> int:
+def _validate_votes(
+    votes_by_judge: Sequence[Sequence[str]], *, trio: bool = False
+) -> int:
     """Validate the binary observation boundary once for all evaluator paths."""
     if trio and len(votes_by_judge) != 3:
         raise ValueError("the exact NTQR solver requires exactly 3 judges")
@@ -79,7 +83,9 @@ def _validate_votes(votes_by_judge: Sequence[Sequence[str]], *, trio: bool = Fal
     return n_items
 
 
-def trio_vote_counts(votes_by_judge: Sequence[Sequence[str]]) -> dict[tuple[str, ...], int]:
+def trio_vote_counts(
+    votes_by_judge: Sequence[Sequence[str]],
+) -> dict[tuple[str, ...], int]:
     """Count joint vote patterns for exactly 3 binary judges (unlabeled)."""
     _validate_votes(votes_by_judge, trio=True)
     counts = {p: 0 for p in _PATTERNS}
@@ -161,7 +167,9 @@ def _to_evaluation(sol: dict) -> Evaluation | None:
     return Evaluation(prevalence_a=prev, accuracies=tuple(accs))
 
 
-def error_independent_solutions(votes_by_judge: Sequence[Sequence[str]]) -> list[Evaluation]:
+def error_independent_solutions(
+    votes_by_judge: Sequence[Sequence[str]],
+) -> list[Evaluation]:
     """The consistent unsupervised solutions from the exact algebraic solver.
 
     Complex roots (no real unsupervised solution) are dropped, so the returned
@@ -170,10 +178,14 @@ def error_independent_solutions(votes_by_judge: Sequence[Sequence[str]]) -> list
     """
     tvc = TrioVoteCounts(trio_vote_counts(votes_by_judge))
     eie = ErrorIndependentEvaluation(tvc)
-    return [ev for sol in eie.evaluation_float if (ev := _to_evaluation(sol)) is not None]
+    return [
+        ev for sol in eie.evaluation_float if (ev := _to_evaluation(sol)) is not None
+    ]
 
 
-def majority_voting_solutions(votes_by_judge: Sequence[Sequence[str]]) -> list[Evaluation]:
+def majority_voting_solutions(
+    votes_by_judge: Sequence[Sequence[str]],
+) -> list[Evaluation]:
     """The majority-voting solutions (crowd-right / crowd-wrong).
 
     Complex roots (no real unsupervised solution) are dropped from the returned
@@ -181,7 +193,9 @@ def majority_voting_solutions(votes_by_judge: Sequence[Sequence[str]]) -> list[E
     """
     tvc = TrioVoteCounts(trio_vote_counts(votes_by_judge))
     mv = MajorityVotingEvaluation(tvc)
-    return [ev for sol in mv.evaluation_float if (ev := _to_evaluation(sol)) is not None]
+    return [
+        ev for sol in mv.evaluation_float if (ev := _to_evaluation(sol)) is not None
+    ]
 
 
 def supervised_oracle(
@@ -189,17 +203,17 @@ def supervised_oracle(
 ) -> Evaluation:
     """Ground-truth evaluation -- the oracle the unsupervised estimate is scored against.
 
-    The supervised solution is read directly from labeled counts and is always
-    real and finite; a degenerate oracle would be a contract violation, so this
-    fails loudly rather than returning ``None``.
+    The supervised solution is read directly from labeled counts. Conditional
+    accuracy is undefined for a missing true-label class; such an oracle fails
+    explicitly rather than contributing an invented score.
     """
     tlvc = TrioLabelVoteCounts(trio_label_vote_counts(votes_by_judge, items))
     sup = SupervisedEvaluation(tlvc)
     oracle = _to_evaluation(sup.evaluation_float)
     if oracle is None:
         raise NoPhysicalSolutionError(
-            "supervised oracle returned a degenerate (complex/non-finite) "
-            "solution; this should be impossible from labeled counts"
+            "supervised oracle is undefined for these labeled counts "
+            "(for example, a missing true-label class)"
         )
     return oracle
 
@@ -238,7 +252,9 @@ def alarm_misaligned(
     deliberately if you accept the cost. Raises if Q exceeds ``max_q``.
     """
     q = _validate_votes(votes_by_judge)
-    if len(safety_factors) != 2 or any(type(f) is not int or f < 1 for f in safety_factors):
+    if len(safety_factors) != 2 or any(
+        type(f) is not int or f < 1 for f in safety_factors
+    ):
         raise ValueError("safety_factors must contain two positive integers")
     if type(max_q) is not int or max_q < 1:
         raise ValueError("max_q must be a positive integer")
@@ -255,7 +271,10 @@ def alarm_misaligned(
     axioms = [SingleClassifierAxioms(labels, i) for i in range(len(votes_by_judge))]
     alarm = SingleClassifierAxiomsAlarm(q, axioms, SingleClassifierEvaluations)
     alarm.set_safety_specification(list(safety_factors))
-    responses = [[sum(1 for v in votes if v == "a"), sum(1 for v in votes if v == "b")] for votes in votes_by_judge]
+    responses = [
+        [sum(1 for v in votes if v == "a"), sum(1 for v in votes if v == "b")]
+        for votes in votes_by_judge
+    ]
     return bool(alarm.are_misaligned(responses))
 
 

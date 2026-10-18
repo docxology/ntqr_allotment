@@ -152,7 +152,7 @@ def test_bibliography_and_citation_contract() -> None:
     bib_keys = set(re.findall(r"@\w+\{([^,]+),", bib))
     assert {
         "dawid1979",
-        "ntqr08",
+        "ntqr09",
         "stone2011",
         "flanigan2021",
         "cohen1988",
@@ -764,7 +764,7 @@ def test_combined_html_has_linked_citations_not_plaintext_keys() -> None:
 
     for key in [
         "dawid1979",
-        "ntqr08",
+        "ntqr09",
         "stone2011",
         "flanigan2021",
         "cohen1988",

@@ -6,3 +6,5 @@ __pycache__/
 .codegraph/
 .DS_Store
 *.egg-info/
+
+.venv315/

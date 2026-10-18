@@ -87,7 +87,9 @@ def _bloc_phase_cells() -> list[dict[str, object]]:
 
 
 def test_plot_bloc_phase_diagram_writes_png(tmp_path: Path) -> None:
-    output_path = plot_bloc_phase_diagram(_bloc_phase_cells(), tmp_path / "bloc_phase.png")
+    output_path = plot_bloc_phase_diagram(
+        _bloc_phase_cells(), tmp_path / "bloc_phase.png"
+    )
     assert output_path == tmp_path / "bloc_phase.png"
     _assert_nontrivial_png(output_path)
 
@@ -98,7 +100,13 @@ def test_plot_bloc_phase_diagram_rejects_empty() -> None:
 
 
 def _concentration_cells() -> list[dict[str, object]]:
-    profile = [(0.0, 0.15, 0.02), (0.25, 0.17, 0.04), (0.5, 0.20, 0.08), (0.75, 0.23, 0.11), (1.0, 0.25, 0.13)]
+    profile = [
+        (0.0, 0.15, 0.02),
+        (0.25, 0.17, 0.04),
+        (0.5, 0.20, 0.08),
+        (0.75, 0.23, 0.11),
+        (1.0, 0.25, 0.13),
+    ]
     return [
         {"concentration": c, "n": 100, "eie_mean": e, "eie_ci95": 0.01, "corr_mean": r}
         for c, e, r in profile
@@ -191,7 +199,7 @@ def test_manuscript_plot_text_sizes_are_readable(
     assert min(observed_sizes) >= SOURCE_NOTE_FONT_SIZE
     assert any(size >= TITLE_FONT_SIZE for size in observed_sizes)
     assert any(size >= HEATMAP_CELL_FONT_SIZE for size in observed_sizes)
-    assert "Formation strategy sets the no-answer-key error ceiling" in observed_titles
+    assert "Observed error by panel-formation strategy" in observed_titles
 
 
 def test_source_note_wraps_long_reader_contract() -> None:
@@ -215,7 +223,9 @@ def test_plot_strategy_ranking_rejects_empty_input(tmp_path: Path) -> None:
         plot_strategy_ranking([], tmp_path / "strategy_ranking.png")
 
 
-def test_plot_power_curve_writes_png_and_filters_degenerate_rows(tmp_path: Path) -> None:
+def test_plot_power_curve_writes_png_and_filters_degenerate_rows(
+    tmp_path: Path,
+) -> None:
     rows = [
         {"panel_size": 3, "mean_expertise": 0.70, "eie_error": 0.18},
         {"panel_size": 3, "mean_expertise": 0.70, "eie_error": 0.22},
@@ -239,16 +249,38 @@ def test_plot_power_curve_uses_strategy_series_when_present(
     observed_labels: list[str] = []
 
     def capture_and_save(fig, output_path):
-        observed_labels.extend(text.get_text() for text in fig.axes[0].get_legend().texts)
+        observed_labels.extend(
+            text.get_text() for text in fig.axes[0].get_legend().texts
+        )
         return original_save(fig, output_path)
 
     original_save = figure_module._save_figure
     monkeypatch.setattr(figure_module, "_save_figure", capture_and_save)
     rows = [
-        {"strategy": "representative_sortition", "panel_size": 3, "mean_expertise": 0.70, "eie_error": 0.18},
-        {"strategy": "representative_sortition", "panel_size": 6, "mean_expertise": 0.70, "eie_error": 0.15},
-        {"strategy": "ideological_selection", "panel_size": 3, "mean_expertise": 0.70, "eie_error": 0.25},
-        {"strategy": "ideological_selection", "panel_size": 6, "mean_expertise": 0.70, "eie_error": 0.22},
+        {
+            "strategy": "representative_sortition",
+            "panel_size": 3,
+            "mean_expertise": 0.70,
+            "eie_error": 0.18,
+        },
+        {
+            "strategy": "representative_sortition",
+            "panel_size": 6,
+            "mean_expertise": 0.70,
+            "eie_error": 0.15,
+        },
+        {
+            "strategy": "ideological_selection",
+            "panel_size": 3,
+            "mean_expertise": 0.70,
+            "eie_error": 0.25,
+        },
+        {
+            "strategy": "ideological_selection",
+            "panel_size": 6,
+            "mean_expertise": 0.70,
+            "eie_error": 0.22,
+        },
     ]
 
     plot_power_curve(rows, tmp_path / "strategy_power_curve.png")
@@ -325,7 +357,9 @@ def _rep_heatmap_cells() -> list[dict[str, object]]:
             "effect": 0.1 + panel / 100 + bias / 10 - expertise / 20,
             "ci95": 0.03,
             "excludes_zero": bias > 0.2,
-            "prediction_status": "aligned_resolved" if bias > 0.2 else "aligned_uncertain",
+            "prediction_status": (
+                "aligned_resolved" if bias > 0.2 else "aligned_uncertain"
+            ),
         }
         for panel in (3, 6)
         for expertise in (0.68, 0.74)
@@ -381,7 +415,9 @@ def test_plot_pre_post_ntqr_heatmap_accepts_strategy_facets(tmp_path: Path) -> N
     _assert_nontrivial_png(output_path)
 
 
-def test_plot_theory_alignment_heatmap_counts_prediction_matches(tmp_path: Path) -> None:
+def test_plot_theory_alignment_heatmap_counts_prediction_matches(
+    tmp_path: Path,
+) -> None:
     payload = {
         "rep_vs_ideo_cells": _rep_heatmap_cells(),
         "monotone_checks": [
@@ -467,7 +503,9 @@ def test_plot_strategy_ranking_rejects_negative_ci95(tmp_path: Path) -> None:
         plot_strategy_ranking([["random_selection", 0.1, -0.02]], tmp_path / "r.png")
 
 
-def test_plot_rep_vs_ideo_effect_rejects_non_sequence_regime_key(tmp_path: Path) -> None:
+def test_plot_rep_vs_ideo_effect_rejects_non_sequence_regime_key(
+    tmp_path: Path,
+) -> None:
     with pytest.raises(ValueError, match="regime_key must be a sequence"):
         plot_rep_vs_ideo_effect(
             [{"regime_key": 3, "effect": 0.1, "ci95": 0.0}], tmp_path / "e.png"
@@ -525,9 +563,27 @@ def _aggregate(
 
 def test_plot_error_vs_correlation_accepts_mapping_rows(tmp_path: Path) -> None:
     aggregates = [
-        {"rho": 0.0, "corr_mean": 0.02, "eie_mean": 0.05, "eie_ci95": 0.01, "strategy": "a"},
-        {"rho": 0.0, "corr_mean": 0.10, "eie_mean": 0.12, "eie_ci95": 0.02, "strategy": "a"},
-        {"rho": 0.5, "corr_mean": 0.30, "eie_mean": 0.25, "eie_ci95": 0.03, "strategy": "b"},
+        {
+            "rho": 0.0,
+            "corr_mean": 0.02,
+            "eie_mean": 0.05,
+            "eie_ci95": 0.01,
+            "strategy": "a",
+        },
+        {
+            "rho": 0.0,
+            "corr_mean": 0.10,
+            "eie_mean": 0.12,
+            "eie_ci95": 0.02,
+            "strategy": "a",
+        },
+        {
+            "rho": 0.5,
+            "corr_mean": 0.30,
+            "eie_mean": 0.25,
+            "eie_ci95": 0.03,
+            "strategy": "b",
+        },
     ]
 
     output_path = plot_error_vs_correlation(aggregates, tmp_path / "error_vs_corr.png")
@@ -542,7 +598,9 @@ def test_plot_error_vs_correlation_accepts_dataclass_instances(tmp_path: Path) -
         _aggregate(rho=0.5, strategy="random_selection", corr_mean=0.28, eie_mean=0.21),
     ]
 
-    output_path = plot_error_vs_correlation(aggregates, tmp_path / "error_vs_corr_dc.png")
+    output_path = plot_error_vs_correlation(
+        aggregates, tmp_path / "error_vs_corr_dc.png"
+    )
 
     _assert_nontrivial_png(output_path)
 
@@ -649,9 +707,27 @@ def test_plot_fairness_maximin_rejects_negative_probability(tmp_path: Path) -> N
 
 def test_plot_strategy_correlation_accepts_mapping_rows(tmp_path: Path) -> None:
     aggregates = [
-        {"rho": 0.0, "corr_mean": 0.02, "eie_mean": 0.05, "eie_ci95": 0.01, "strategy": "random_selection"},
-        {"rho": 0.5, "corr_mean": 0.20, "eie_mean": 0.18, "eie_ci95": 0.02, "strategy": "random_selection"},
-        {"rho": 0.5, "corr_mean": 0.35, "eie_mean": 0.30, "eie_ci95": 0.03, "strategy": "expertise_threshold"},
+        {
+            "rho": 0.0,
+            "corr_mean": 0.02,
+            "eie_mean": 0.05,
+            "eie_ci95": 0.01,
+            "strategy": "random_selection",
+        },
+        {
+            "rho": 0.5,
+            "corr_mean": 0.20,
+            "eie_mean": 0.18,
+            "eie_ci95": 0.02,
+            "strategy": "random_selection",
+        },
+        {
+            "rho": 0.5,
+            "corr_mean": 0.35,
+            "eie_mean": 0.30,
+            "eie_ci95": 0.03,
+            "strategy": "expertise_threshold",
+        },
     ]
 
     output_path = plot_strategy_correlation(aggregates, tmp_path / "strategy_corr.png")
@@ -663,10 +739,14 @@ def test_plot_strategy_correlation_accepts_mapping_rows(tmp_path: Path) -> None:
 def test_plot_strategy_correlation_accepts_dataclass_instances(tmp_path: Path) -> None:
     aggregates = [
         _aggregate(rho=0.0, strategy="random_selection", corr_mean=0.02, eie_mean=0.05),
-        _aggregate(rho=0.5, strategy="expertise_threshold", corr_mean=0.35, eie_mean=0.30),
+        _aggregate(
+            rho=0.5, strategy="expertise_threshold", corr_mean=0.35, eie_mean=0.30
+        ),
     ]
 
-    output_path = plot_strategy_correlation(aggregates, tmp_path / "strategy_corr_dc.png")
+    output_path = plot_strategy_correlation(
+        aggregates, tmp_path / "strategy_corr_dc.png"
+    )
 
     _assert_nontrivial_png(output_path)
 
@@ -678,7 +758,13 @@ def test_plot_strategy_correlation_rejects_empty_input(tmp_path: Path) -> None:
 
 def test_plot_strategy_correlation_rejects_empty_strategy_name(tmp_path: Path) -> None:
     aggregates = [
-        {"rho": 0.0, "corr_mean": 0.02, "eie_mean": 0.05, "eie_ci95": 0.01, "strategy": ""},
+        {
+            "rho": 0.0,
+            "corr_mean": 0.02,
+            "eie_mean": 0.05,
+            "eie_ci95": 0.01,
+            "strategy": "",
+        },
     ]
 
     with pytest.raises(ValueError, match="strategy must be a non-empty string"):
@@ -686,6 +772,7 @@ def test_plot_strategy_correlation_rejects_empty_strategy_name(tmp_path: Path) -
 
 
 # --- Session 6: cross-family + power design-diagnosis figures -----------------
+
 
 def _cross_contrast(label: str = "live empirical, n-limited") -> dict[str, object]:
     return {
@@ -865,7 +952,9 @@ def test_plot_cross_family_contrast_accepts_object_attr_rows(tmp_path: Path) -> 
 
 
 def test_plot_cross_family_multiseed_writes_png(tmp_path: Path) -> None:
-    out = plot_cross_family_multiseed([-0.07, -0.049, -0.045, -0.042], tmp_path / "ms.png")
+    out = plot_cross_family_multiseed(
+        [-0.07, -0.049, -0.045, -0.042], tmp_path / "ms.png"
+    )
     _assert_nontrivial_png(out)
 
 
@@ -944,7 +1033,9 @@ def _postdoc_payload() -> dict[str, object]:
                         "eie_ci_low": base - 0.01,
                         "eie_ci_high": base + 0.01,
                         "mv_mean": base + 0.04,
-                        "age_disparity_mean": 0.04 if strategy == "ideological_selection" else 0.01,
+                        "age_disparity_mean": (
+                            0.04 if strategy == "ideological_selection" else 0.01
+                        ),
                         "age_disparity_ci_low": 0.0,
                         "age_disparity_ci_high": 0.06,
                     }
@@ -985,7 +1076,9 @@ def test_plot_postdoc_age_bias_heatmap_labels_disparity_units(
     assert "age-disparity" in observed_title[0]
 
 
-def test_plot_postdoc_empirical_alignment_marks_unresolved_cells(tmp_path: Path) -> None:
+def test_plot_postdoc_empirical_alignment_marks_unresolved_cells(
+    tmp_path: Path,
+) -> None:
     payload = {
         "cells": [
             {
@@ -1012,6 +1105,7 @@ def test_plot_postdoc_empirical_alignment_marks_unresolved_cells(tmp_path: Path)
 
 
 # --- Method schematic + cross-track ranking inversion -------------------------
+
 
 def _matched_grain_rows() -> tuple[list, list]:
     """Synthetic size-3 vs live three-seat rows whose extremes invert."""
@@ -1069,7 +1163,10 @@ def test_plot_method_pipeline_schematic_is_readable_and_uses_counts(
     assert "8 trios" in joined
     assert min(observed_sizes) >= SOURCE_NOTE_FONT_SIZE
     assert any(size >= TITLE_FONT_SIZE for size in observed_sizes)
-    assert "The instrument measures upstream panel formation, not the estimator" in observed_titles
+    assert (
+        "The instrument measures upstream panel formation, not the estimator"
+        in observed_titles
+    )
 
 
 def test_plot_method_pipeline_schematic_is_byte_deterministic(tmp_path: Path) -> None:
@@ -1081,7 +1178,9 @@ def test_plot_method_pipeline_schematic_is_byte_deterministic(tmp_path: Path) ->
 
 def test_plot_method_pipeline_schematic_rejects_bad_counts(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="n_experts"):
-        plot_method_pipeline_schematic({"n_items": 300, "n_trios": 8}, tmp_path / "s.png")
+        plot_method_pipeline_schematic(
+            {"n_items": 300, "n_trios": 8}, tmp_path / "s.png"
+        )
     with pytest.raises(ValueError, match="n_trios"):
         plot_method_pipeline_schematic(
             {"n_experts": 96, "n_items": 300, "n_trios": 0}, tmp_path / "s.png"
@@ -1120,7 +1219,10 @@ def test_plot_track_ranking_inversion_is_readable_and_labels_values(
     assert "0.037" in observed_text  # synthetic-best expertise threshold
     assert "0.382" in observed_text  # live-worst expertise threshold
     assert min(observed_sizes) >= SOURCE_NOTE_FONT_SIZE
-    assert "Strategy ranking inverts between the synthetic and live tracks" in observed_titles
+    assert (
+        "Strategy ranking inverts between the synthetic and live tracks"
+        in observed_titles
+    )
 
 
 def test_plot_track_ranking_inversion_is_byte_deterministic(tmp_path: Path) -> None:
@@ -1141,7 +1243,9 @@ def test_plot_track_ranking_inversion_different_inputs_differ(tmp_path: Path) ->
         ["representative_sortition", 0.382],
     ]
     path_inverted = plot_track_ranking_inversion(synthetic, live, tmp_path / "inv.png")
-    path_aligned = plot_track_ranking_inversion(synthetic, aligned_live, tmp_path / "aln.png")
+    path_aligned = plot_track_ranking_inversion(
+        synthetic, aligned_live, tmp_path / "aln.png"
+    )
     assert path_inverted.read_bytes() != path_aligned.read_bytes()
 
 
@@ -1150,7 +1254,9 @@ def test_plot_track_ranking_inversion_rejects_bad_input(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="synthetic track has no rows"):
         plot_track_ranking_inversion([], live, tmp_path / "x.png")
     with pytest.raises(ValueError, match="expected .strategy, eie_error."):
-        plot_track_ranking_inversion([["expertise_threshold"]], live, tmp_path / "x.png")
+        plot_track_ranking_inversion(
+            [["expertise_threshold"]], live, tmp_path / "x.png"
+        )
     with pytest.raises(ValueError, match="duplicate strategy"):
         dup = [["a", 0.1], ["a", 0.2]]
         plot_track_ranking_inversion(dup, dup, tmp_path / "x.png")
@@ -1225,6 +1331,6 @@ def test_plot_track_ranking_inversion_binds_value_to_column_and_rank(
     assert "0.037" in positions and "0.382" in positions
     syn_x, syn_y = positions["0.037"]
     live_x, live_y = positions["0.382"]
-    assert syn_x == 0.0       # synthetic (left) column
-    assert live_x == 1.0      # live (right) column
-    assert syn_y > live_y     # best rank (top) is above worst rank (bottom)
+    assert syn_x == 0.0  # synthetic (left) column
+    assert live_x == 1.0  # live (right) column
+    assert syn_y > live_y  # best rank (top) is above worst rank (bottom)

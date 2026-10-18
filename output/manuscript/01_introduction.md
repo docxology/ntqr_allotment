@@ -20,7 +20,7 @@ agreements among multiple predictors — logic- and constraint-based
 [@platanios2014] and spectral [@parisi2014] — and, like the exact NTQR solver, these
 methods lean on an **error-independence** (or low-rank residual-dependence)
 assumption whose violation is exactly the failure mode we make tunable here. The
-`ntqr` package (v0.8) frames the problem as algebraic logic for unsupervised
+`ntqr` package (v0.9) frames the problem as algebraic logic for unsupervised
 evaluation from unlabeled decision data
 [Corrada-Emmanuel (2026)](https://pypi.org/project/ntqr/). Our
 generative model for *violating* that assumption — same-group judges sharing a

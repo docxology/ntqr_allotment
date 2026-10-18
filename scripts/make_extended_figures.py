@@ -87,8 +87,8 @@ def main() -> None:
     # Small deterministic live runs for the consistency-power and fairness panels.
     population = generate_population(18, seed=0)
     items = sample_items(18, prevalence_a=0.5, seed=7)
-    # safety (1,1): the tight spec under which the alarm actually fires on this
-    # synthetic population (at the default (2,2) it stays flat at 0 here).
+    # Unit factors demand strictly more than perfect accuracy. This is an
+    # impossible-specification boundary control, not empirical alarm power.
     curve = alarm_power_curve(
         population, items, sizes=(3, 5, 7), seeds=(0, 1, 2), safety=(1, 1), max_q=20
     )
@@ -148,7 +148,9 @@ def main() -> None:
             "total_pairs": data.get("total_pairs", len(data.get("pair_abs_corr", {}))),
         }
         paths.append(
-            plot_cross_family_contrast(contrast, figure_dir / "cross_family_contrast.png")
+            plot_cross_family_contrast(
+                contrast, figure_dir / "cross_family_contrast.png"
+            )
         )
 
     # Multi-seed cross-family deltas (sign-stability across independent runs).
@@ -156,7 +158,9 @@ def main() -> None:
     if ms_json.exists():
         deltas = json.loads(ms_json.read_text())["deltas"]
         paths.append(
-            plot_cross_family_multiseed(deltas, figure_dir / "cross_family_multiseed.png")
+            plot_cross_family_multiseed(
+                deltas, figure_dir / "cross_family_multiseed.png"
+            )
         )
 
     postdoc_json = root / "output" / "data" / "postdoc_panel_results.json"
@@ -201,13 +205,25 @@ def main() -> None:
         # Matched three-seat grain on both tracks: synthetic POWER_*_SIZE3 vs live
         # POSTDOC_*_EIE. Ranks are compared, magnitudes are NOT pooled.
         synthetic_size3 = [
-            ["expertise_threshold", float(variables["POWER_EXPERTISE_THRESHOLD_SIZE3"])],
+            [
+                "expertise_threshold",
+                float(variables["POWER_EXPERTISE_THRESHOLD_SIZE3"]),
+            ],
             ["random_selection", float(variables["POWER_RANDOM_SELECTION_SIZE3"])],
-            ["representative_sortition", float(variables["POWER_REPRESENTATIVE_SORTITION_SIZE3"])],
-            ["ideological_selection", float(variables["POWER_IDEOLOGICAL_SELECTION_SIZE3"])],
+            [
+                "representative_sortition",
+                float(variables["POWER_REPRESENTATIVE_SORTITION_SIZE3"]),
+            ],
+            [
+                "ideological_selection",
+                float(variables["POWER_IDEOLOGICAL_SELECTION_SIZE3"]),
+            ],
         ]
         live_three_seat = [
-            ["representative_sortition", float(variables["POSTDOC_REPRESENTATIVE_EIE"])],
+            [
+                "representative_sortition",
+                float(variables["POSTDOC_REPRESENTATIVE_EIE"]),
+            ],
             ["ideological_selection", float(variables["POSTDOC_SAME_BIAS_EIE"])],
             ["random_selection", float(variables["POSTDOC_RANDOM_EIE"])],
             ["expertise_threshold", float(variables["POSTDOC_EXPERTISE_EIE"])],
@@ -223,8 +239,7 @@ def main() -> None:
     # Statistical-power curves: power vs n for a few effect sizes (analytic, exact).
     ns = [5, 10, 20, 40, 80, 160, 320]
     power_curves = [
-        (f"d={d}", ns, [analytic_power(d, n) for n in ns])
-        for d in (0.2, 0.5, 0.8)
+        (f"d={d}", ns, [analytic_power(d, n) for n in ns]) for d in (0.2, 0.5, 0.8)
     ]
     paths.append(plot_power_vs_n(power_curves, figure_dir / "power_vs_n.png"))
 
