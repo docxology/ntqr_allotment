@@ -137,7 +137,7 @@ single-trio consistency check to an **N-judge** observed-vote-count alarm and
 measures how the consistency signal scales with panel size (`alarm_power_curve`).
 In the plotted boundary control, unit safety factors require strictly better
 than perfect conditional accuracy. The specification is impossible for every
-answer key, so firing is certain independently of the observations. This
+answer key, so the alarm is saturated independently of the observations. This
 exercises the N-judge interface rather than establishing empirical power or a growth
 law. The underlying answer-key enumeration is the same $O(Q^3)$ cost described
 above, so the N-judge track is exercised only at **small $Q$**. It is a
