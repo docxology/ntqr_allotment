@@ -7,8 +7,9 @@ artifacts, and rendered manuscript.
 ## Upstream NTQR Source Truth
 
 The manuscript treats `ntqr` as a package name and local shorthand, not as an
-expanded phrase. The current upstream PyPI page identifies `ntqr` 0.8 as “Tools
-for the logic of evaluation using unlabeled data,” authored by Andres
+expanded phrase. The upstream PyPI page identifies `ntqr` 0.9 (the release this
+project vendors and locks) as “Tools for the logic
+of evaluation using unlabeled data,” authored by Andres
 Corrada-Emmanuel under the MIT license. The ReadTheDocs overview frames NTQR as
 logic and algebra for unsupervised evaluation from agreement/disagreement
 patterns, not as network theory. The exact binary evaluator used here is
@@ -44,7 +45,7 @@ two majority-vote evaluations, assuming the crowd is right or wrong, and
 | Main claim families have explicit falsification checks. | Methods `tbl:falsification`; source artifacts named in that table. | Negative controls include degenerate roots, sign mismatches, rising error with panel size, unresolved tolerance slope, and nonnegative live deltas. | The table is a manuscript contract, not a new result source. | Verified by source prose; regression-tested. |
 | Alarm enumeration has an O(Q^3) scaling limit. | `output/data/alarm_timings.csv`; `scripts/bench_alarm.py`; alarm-cost figure. | Measured timings plotted on log-log axes with cubic reference. | Constants are machine-local; scaling and cap are the claim. | Verified by local artifact. |
 | Ternary R=3 track is only axiom consistency. | `src/ntqr_allotment/ternary.py`; Methods and Results caveat. | Pass/fail consistency checks. | No R=3 recovery claim is made. | Verified by local code and prose. |
-| ISA/TODO current state is complete with evidence-hardening upcoming work. | `ISA.md`; final gate records. | Latest recorded ruff, pytest, render, and live-Ollama artifact facts. | Upcoming items are scoped future evidence expansion, not current bring-up blockers. | Updated in this pass. |
+| Repository state and remaining publication work are recorded. | `PUBLICATION_PACKAGE.md` (latest gate evidence); `docs/manuscript/MANUSCRIPT_STATUS.md`. | Latest recorded ruff, pytest, render, and live-Ollama artifact facts. | Upcoming items are scoped future evidence expansion, not current bring-up blockers. | Updated in this pass. |
 
 ## Method Ledger
 
