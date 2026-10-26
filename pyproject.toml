@@ -6,7 +6,8 @@
 #     README.md that is absent from the sdist tarball), so `uv` cannot lock it
 #     from the index. We vendor the published wheel under vendor/ and point
 #     `[tool.uv.sources]` at the local file -> deterministic, fully locked,
-#     survives `uv run` re-sync. Validated with uv 0.13.1; default runtime CPython 3.15.
+#     survives `uv run` re-sync. Lock verified in sync with uv 0.13.5
+#     (`uv lock --check`); default runtime CPython 3.15.
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"

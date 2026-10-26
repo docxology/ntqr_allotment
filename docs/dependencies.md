@@ -42,7 +42,8 @@ uv run --no-sync pytest
 uv run --no-sync python scripts/z_generate_manuscript_variables.py --check
 ```
 
-The lock was generated and verified with uv 0.13.1.
+The lock was generated with uv 0.13.1 and re-verified in sync with uv 0.13.5
+(`uv lock --check`); CI installs uv 0.13.5.
 
 CI checks offline tests on Python 3.12, 3.13 and 3.15. Live Ollama tests remain opt-in.
 Published PDFs and historical model/sweep observations are not relabeled as

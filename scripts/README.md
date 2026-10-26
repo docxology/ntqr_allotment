@@ -26,5 +26,7 @@ tested there. Run with `uv run python scripts/<name>.py`.
 | `make_stego_pdf.py` | Steganographic provenance artifacts | `ntqr_allotment.stego` (`render_stego_artifacts`) | `uv run python scripts/make_stego_pdf.py` |
 | `verify_stego.py` | Verify stego artifacts | `ntqr_allotment.stego` (`verify_stego_artifacts`) | `uv run python scripts/verify_stego.py` |
 | `bench_alarm.py` | Alarm cost benchmark | `ntqr_allotment.ntqr_eval` (`alarm_misaligned`) | `uv run python scripts/bench_alarm.py` |
+| `profile_runtime.py` | Bounded real-workload runtime profiling | `ntqr_allotment.runtime_profile` (`measure`, `compare_reports`), `ntqr_allotment.profile_workloads` (`workloads`) | `uv run python scripts/profile_runtime.py` |
+| `check_research.py` | Offline bibliography/citation/evidence-path checks (CI gate) | `ntqr_allotment.scholarship` (`audit_research`) | `uv run python scripts/check_research.py` |
 
 Dependency-correct order is declared in `docs/manuscript/config.yaml` (`analysis.scripts`).

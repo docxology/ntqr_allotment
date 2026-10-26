@@ -13,7 +13,6 @@ def main():
     bibliography = (ROOT / "docs/manuscript/references.bib").read_text(encoding="utf-8")
     registry = json.loads((ROOT / "docs/research_map.json").read_text(encoding="utf-8"))
     paths = list((ROOT / "docs/manuscript").glob("*.md"))
-    paths += list((ROOT / "scripts/manuscript/templates").glob("*.tmpl"))
     manuscripts = {
         str(path.relative_to(ROOT)): path.read_text(encoding="utf-8") for path in paths
     }
