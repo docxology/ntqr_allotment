@@ -28,6 +28,6 @@ Invariant: I/O and orchestration only — all computation imports from `src/ntqr
 | `bench_alarm.py` | `ntqr_allotment.ntqr_eval` | stdout benchmark timings |
 
 Verify: any script standalone, e.g. `uv run python scripts/run_sweep.py`.
-- Repo-wide policy: `../AGENTS.md` (ongoing) and `/Volumes/external_drive/Git/template/projects/ongoing/AGENTS.md`; do not duplicate it here.
+- Repo-wide policy: `../AGENTS.md` (ongoing); the shared policy for template projects is maintained in the template repository, not restated here.
 
 Additional thin entry points: `profile_runtime.py` (runtime_profile/profile_workloads), `check_research.py` (scholarship). See docs/runtime_profiling.md and docs/research_integrity.md.
