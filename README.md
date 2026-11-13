@@ -4,6 +4,8 @@
 panel* and *how many experts you draw* shape what no-answer-key evaluation can
 infer about noisy experts of known precision, bias, and heterogeneity.
 
+![Sortition upstream of NTQR: how the panel is drawn sets the ceiling on ground-truth-free recovery](output/cover.png)
+
 Here "ground-truth-free" is project shorthand for evaluation from unlabeled
 decision data: labels are hidden from the estimator, then used only afterward to
 score the synthetic oracle-referenced error.
