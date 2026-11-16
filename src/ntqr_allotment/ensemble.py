@@ -154,11 +154,18 @@ def panel_agreement_moments(
             (0, 2): moments.centered_pair((0, 2), "b"),
             (0, 1): moments.centered_pair((0, 1), "b"),
         }
+        trio_patterns = classifiers_labels_votes(
+            (0, 1, 2), ("b", "b", "b"), moments.patterns
+        )
+        f123_b = float(
+            sum((moments.frequencies[pattern] for pattern in trio_patterns), start=0)
+        )
         trio = (
-            math.prod(clf_b)
-            + clf_b[0] * pm[(1, 2)]
-            + clf_b[1] * pm[(0, 2)]
-            + clf_b[2] * pm[(0, 1)]
+            f123_b
+            - math.prod(clf_b)
+            - clf_b[0] * pm[(1, 2)]
+            - clf_b[1] * pm[(0, 2)]
+            - clf_b[2] * pm[(0, 1)]
         )
         out["trio_frequency_moment_b"] = float(trio)
     else:
@@ -192,7 +199,8 @@ def alarm_power_curve(
     :func:`sample_votes` per judge) and the N-judge axioms alarm is run. The
     reported *power* is the fraction of seeds for which the alarm fires
     (``are_misaligned`` True at the safety level) -- the ground-truth-free
-    consistency signal scaled in N.
+    consistency signal scaled in N. Each seed's votes are sampled once through
+    the largest requested panel, with prefixes reused across panel sizes.
 
     The corpus is capped at ``max_q`` because the alarm is ~O(Q^3); a larger
     corpus raises ``ValueError`` (mirroring
@@ -218,20 +226,26 @@ def alarm_power_curve(
     if len(safety) != 2:
         raise ValueError("safety specification length must equal the label count (2)")
 
-    curve: list[tuple[int, float]] = []
     for n in sizes:
         if n < 2:
             raise ValueError("panel size must be at least 2")
         if n > len(experts):
             raise ValueError(f"panel size {n} exceeds expert pool of {len(experts)}")
-        panel = experts[:n]
+
+    max_size = max(sizes)
+    votes_by_seed = [
+        [
+            sample_votes(e, items, seed=seed + 1009 * (j + 1))
+            for j, e in enumerate(experts[:max_size])
+        ]
+        for seed in seeds
+    ]
+
+    curve: list[tuple[int, float]] = []
+    for n in sizes:
         fires = 0
-        for seed in seeds:
-            votes_by_judge = [
-                sample_votes(e, items, seed=seed + 1009 * (j + 1))
-                for j, e in enumerate(panel)
-            ]
-            if _alarm_fires(votes_by_judge, safety=safety, q=q):
+        for votes_by_judge in votes_by_seed:
+            if _alarm_fires(votes_by_judge[:n], safety=safety, q=q):
                 fires += 1
         curve.append((n, fires / len(seeds)))
     return curve

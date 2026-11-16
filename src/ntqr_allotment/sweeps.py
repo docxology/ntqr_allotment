@@ -353,18 +353,25 @@ def aggregate(rows: list[SweepRow]) -> list[Aggregate]:
     return aggregates
 
 
-def _weighted_mean_and_ci(values: list[float], weights: list[int]) -> tuple[float, float]:
+def _weighted_mean_and_ci(
+    values: list[float], weights: list[int], stds: list[float]
+) -> tuple[float, float]:
     total_weight = sum(weights)
     if total_weight <= 0:
         raise ValueError("weights must sum to a positive integer")
     mean = sum(value * weight for value, weight in zip(values, weights, strict=True)) / total_weight
     if total_weight <= 1:
         return mean, 0.0
-    variance = sum(
+    within_ss = sum(
+        (weight - 1) * std**2 for weight, std in zip(weights, stds, strict=True)
+    )
+    between_ss = sum(
         weight * (value - mean) ** 2 for value, weight in zip(values, weights, strict=True)
-    ) / (total_weight - 1)
-    std = sqrt(variance)
-    return mean, float(std / sqrt(total_weight) * 1.96)
+    )
+    variance = (within_ss + between_ss) / (total_weight - 1)
+    if not math.isfinite(variance) or variance <= 0:
+        return mean, 0.0
+    return mean, _ci95(sqrt(variance), total_weight)
 
 
 def strategy_ranking(aggregated: list[Aggregate]) -> list[tuple[str, float, float]]:
@@ -379,6 +386,7 @@ def strategy_ranking(aggregated: list[Aggregate]) -> list[tuple[str, float, floa
         mean, ci95 = _weighted_mean_and_ci(
             [item.eie_mean for item in items],
             [item.n for item in items],
+            [item.eie_std for item in items],
         )
         ranking.append((strategy, mean, ci95))
     return sorted(ranking, key=lambda item: (item[1], item[0]))

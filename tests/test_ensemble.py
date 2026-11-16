@@ -14,6 +14,7 @@ Negative controls (assertions that FLIP on a degenerate / broken input):
 
 from __future__ import annotations
 
+from itertools import product
 import math
 
 import pytest
@@ -26,12 +27,53 @@ from ntqr_allotment.ensemble import (
     panel_agreement_moments,
 )
 from ntqr_allotment.experts import generate_population, sample_items, sample_votes
+from ntqr_allotment.ntqr_eval import alarm_misaligned
 
 
 def _panel_votes(n_judges: int, n_items: int, *, seed: int) -> list[tuple[str, ...]]:
     experts = generate_population(n_judges + 2, seed=seed)[:n_judges]
     items = sample_items(n_items, prevalence_a=0.5, seed=seed + 1)
     return [sample_votes(e, items, seed=seed + 10 + j) for j, e in enumerate(experts)]
+
+
+def _panel_from_pattern_counts(
+    counts: dict[tuple[str, ...], int],
+) -> list[list[str]]:
+    """Expand an item-pattern counts table into aligned per-judge votes."""
+    return [
+        [pattern[judge] for pattern, count in counts.items() for _ in range(count)]
+        for judge in range(3)
+    ]
+
+
+def _trio_b_reference(
+    votes: list[list[str]],
+) -> tuple[list[float], dict[tuple[int, int], float], float, float]:
+    """Compute the centered trio moment directly from raw aligned votes."""
+    n_items = len(votes[0])
+    marginals = [sum(vote == "b" for vote in row) / n_items for row in votes]
+    co_frequencies = {
+        (i, j): sum(
+            votes[i][k] == "b" and votes[j][k] == "b" for k in range(n_items)
+        )
+        / n_items
+        for i, j in ((0, 1), (0, 2), (1, 2))
+    }
+    pair_moments = {
+        (i, j): frequency - marginals[i] * marginals[j]
+        for (i, j), frequency in co_frequencies.items()
+    }
+    f123 = sum(
+        all(votes[judge][k] == "b" for judge in range(3)) for k in range(n_items)
+    ) / n_items
+    centered = (
+        f123
+        - math.prod(marginals)
+        - marginals[0] * pair_moments[(1, 2)]
+        - marginals[1] * pair_moments[(0, 2)]
+        - marginals[2] * pair_moments[(0, 1)]
+    )
+    return marginals, pair_moments, f123, centered
 
 
 # --------------------------------------------------------------------------- #
@@ -97,6 +139,45 @@ def test_panel_agreement_moments_two_judges_trio_is_nan() -> None:
     assert math.isfinite(moments["mean_abs_pair_moment_a"])
 
 
+def test_trio_moment_independent_uniform_table_is_zero() -> None:
+    votes = _panel_from_pattern_counts(
+        {pattern: 1 for pattern in product(("a", "b"), repeat=3)}
+    )
+    assert panel_agreement_moments(votes)["trio_frequency_moment_b"] == pytest.approx(
+        0.0, abs=1e-15
+    )
+
+
+def test_trio_moment_uses_f123_with_fixed_marginals_and_pair_moments() -> None:
+    # Adding a third-order interaction +/-1 to even/odd parity cells changes only
+    # f123: every single-judge and pair marginal is unchanged. The nonuniform base
+    # also keeps the pair moments nonzero, exercising every centered-formula term.
+    patterns = tuple(product(("a", "b"), repeat=3))
+    base_counts = (6, 3, 4, 3, 5, 3, 3, 5)
+    low_counts: dict[tuple[str, ...], int] = {}
+    high_counts: dict[tuple[str, ...], int] = {}
+    for pattern, count in zip(patterns, base_counts):
+        interaction = 1 if pattern.count("b") % 2 == 0 else -1
+        low_counts[pattern] = count + interaction
+        high_counts[pattern] = count - interaction
+
+    low_votes = _panel_from_pattern_counts(low_counts)
+    high_votes = _panel_from_pattern_counts(high_counts)
+    low_marginals, low_pairs, low_f123, low_expected = _trio_b_reference(low_votes)
+    high_marginals, high_pairs, high_f123, high_expected = _trio_b_reference(high_votes)
+
+    assert low_marginals == pytest.approx(high_marginals)
+    assert low_pairs == pytest.approx(high_pairs)
+    assert any(moment != 0.0 for moment in low_pairs.values())
+    assert high_f123 - low_f123 == pytest.approx(2 / 32)
+
+    low_moment = panel_agreement_moments(low_votes)["trio_frequency_moment_b"]
+    high_moment = panel_agreement_moments(high_votes)["trio_frequency_moment_b"]
+    assert low_moment == pytest.approx(low_expected, abs=1e-15)
+    assert high_moment == pytest.approx(high_expected, abs=1e-15)
+    assert low_moment != high_moment
+
+
 # --------------------------------------------------------------------------- #
 # NEGATIVE CONTROL #1 — moments discriminate identical vs independent panels
 # --------------------------------------------------------------------------- #
@@ -159,6 +240,34 @@ def test_alarm_power_curve_is_reproducible() -> None:
     curve_a = alarm_power_curve(experts, items, [3, 4, 5], seeds=[1, 2, 3], safety=(1, 1))
     curve_b = alarm_power_curve(experts, items, [3, 4, 5], seeds=[1, 2, 3], safety=(1, 1))
     assert curve_a == curve_b
+
+
+def test_alarm_power_curve_matches_original_per_size_reference() -> None:
+    """Prefix reuse must exactly match the former size/seed/judge loop."""
+    experts = generate_population(6, seed=90)
+    items = sample_items(8, prevalence_a=0.5, seed=91)
+    sizes = [4, 2, 4, 3, 2]
+    seeds = [3, 1, 3]
+    safety = (2, 2)
+
+    expected: list[tuple[int, float]] = []
+    for n in sizes:
+        panel = experts[:n]
+        fires = 0
+        for seed in seeds:
+            votes_by_judge = [
+                sample_votes(e, items, seed=seed + 1009 * (j + 1))
+                for j, e in enumerate(panel)
+            ]
+            if alarm_misaligned(
+                votes_by_judge, safety_factors=safety, max_q=len(items)
+            ):
+                fires += 1
+        expected.append((n, fires / len(seeds)))
+
+    actual = alarm_power_curve(experts, items, sizes, seeds=seeds, safety=safety)
+    assert actual == expected
+    assert [n for n, _ in actual] == sizes
 
 
 # --------------------------------------------------------------------------- #

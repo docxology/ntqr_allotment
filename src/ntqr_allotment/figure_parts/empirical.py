@@ -255,9 +255,17 @@ def plot_postdoc_age_bias_heatmap(
     panel_sizes = sorted({int(row["panel_size"]) for row in aggregates})
     matrix = np.full((len(strategies), len(panel_sizes)), np.nan)
     labels: dict[tuple[int, int], str] = {}
+    seen_cells: set[tuple[str, int]] = set()
     for row in aggregates:
-        i = strategies.index(str(row["strategy"]))
-        j = panel_sizes.index(int(row["panel_size"]))
+        cell_key = (str(row["strategy"]), int(row["panel_size"]))
+        if cell_key in seen_cells:
+            raise ValueError(
+                "postdoc age-bias heatmap: duplicate cell for "
+                f"strategy={cell_key[0]!r}, panel_size={cell_key[1]}"
+            )
+        seen_cells.add(cell_key)
+        i = strategies.index(cell_key[0])
+        j = panel_sizes.index(cell_key[1])
         value = float(row["age_disparity_mean"])
         low = float(row.get("age_disparity_ci_low", value))
         high = float(row.get("age_disparity_ci_high", value))
@@ -315,9 +323,17 @@ def plot_postdoc_empirical_alignment(
     panel_sizes = sorted({int(cell["panel_size"]) for cell in cells})
     matrix = np.full((len(strategies), len(panel_sizes)), np.nan)
     labels: dict[tuple[int, int], str] = {}
+    seen_cells: set[tuple[str, int]] = set()
     for cell in cells:
-        i = strategies.index(str(cell["strategy"]))
-        j = panel_sizes.index(int(cell["panel_size"]))
+        cell_key = (str(cell["strategy"]), int(cell["panel_size"]))
+        if cell_key in seen_cells:
+            raise ValueError(
+                "postdoc alignment: duplicate cell for "
+                f"strategy={cell_key[0]!r}, panel_size={cell_key[1]}"
+            )
+        seen_cells.add(cell_key)
+        i = strategies.index(cell_key[0])
+        j = panel_sizes.index(cell_key[1])
         unresolved = bool(cell.get("unresolved"))
         agrees = bool(cell.get("sign_agrees"))
         matrix[i, j] = 0.0 if unresolved else 1.0 if agrees else -1.0

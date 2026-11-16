@@ -22,9 +22,9 @@ manuscript reports is whatever these measured associations actually support.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from itertools import combinations
-from typing import Sequence
+from typing import Any, Sequence
 
 from .dependence import measure_error_correlations
 from .experts import generate_population, sample_items
@@ -117,6 +117,39 @@ def mean_by_size(records: Sequence[TrioDiagnostic], field: str) -> dict[int, flo
     return {size: sum(vals) / len(vals) for size, vals in sorted(buckets.items()) if vals}
 
 
+def summarize_trio_diagnostics(
+    records: Sequence[TrioDiagnostic], *, n_seeds: int
+) -> dict[str, Any]:
+    """Summarize usable trios, leaving unavailable associations/partitions null."""
+    rank0 = [rec.eie_error for rec in records if rec.trio_rank == 0]
+    later = [rec.eie_error for rec in records if rec.trio_rank > 0]
+    errors = [rec.eie_error for rec in records]
+    associations = {
+        "error_vs_corr": (
+            pearson(errors, [rec.mean_abs_corr for rec in records]) if len(records) >= 2 else None
+        ),
+        "error_vs_accuracy": (
+            pearson(errors, [rec.mean_judge_accuracy for rec in records]) if len(records) >= 2 else None
+        ),
+        "error_vs_trio_rank": (
+            pearson(errors, [float(rec.trio_rank) for rec in records]) if len(records) >= 2 else None
+        ),
+    }
+    return {
+        "schema_version": 1,
+        "n_seeds": n_seeds,
+        "n_records": len(records),
+        "sizes": sorted({rec.panel_size for rec in records}),
+        "mean_error_by_size": mean_by_size(records, "eie_error"),
+        "mean_abs_corr_by_size": mean_by_size(records, "mean_abs_corr"),
+        "mean_judge_accuracy_by_size": mean_by_size(records, "mean_judge_accuracy"),
+        "mean_error_first_trio": sum(rank0) / len(rank0) if rank0 else None,
+        "mean_error_later_trios": sum(later) / len(later) if later else None,
+        "associations_pearson": associations,
+        "records": [asdict(rec) for rec in records],
+    }
+
+
 def pearson(xs: Sequence[float], ys: Sequence[float]) -> float:
     """Pearson correlation; 0.0 if either series is constant (undefined slope)."""
     n = len(xs)
@@ -137,4 +170,5 @@ __all__ = [
     "panel_trio_diagnostics",
     "mean_by_size",
     "pearson",
+    "summarize_trio_diagnostics",
 ]

@@ -6,6 +6,9 @@ paired with a negative control.
 """
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import pytest
 
 from ntqr_allotment.pipeline import TrialConfig, run_trial_ensemble
@@ -14,7 +17,9 @@ from ntqr_allotment.trio_conditioning import (
     mean_by_size,
     panel_trio_diagnostics,
     pearson,
+    summarize_trio_diagnostics,
 )
+from scripts.run_trio_conditioning import _write_summary
 
 
 def _cfg(strategy: str, size: int, seed: int = 3) -> TrialConfig:
@@ -96,3 +101,66 @@ def test_pearson_known_values_and_constant_series() -> None:
     assert pearson([1.0, 2.0, 3.0], [5.0, 5.0, 5.0]) == 0.0
     with pytest.raises(ValueError, match="length >= 2"):
         pearson([1.0], [2.0])
+    with pytest.raises(ValueError, match="length >= 2"):
+        pearson([], [])
+
+
+def test_empty_trio_summary_serializes_and_renders_unavailable(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    summary = summarize_trio_diagnostics([], n_seeds=12)
+    assert summary["n_records"] == 0
+    assert summary["sizes"] == []
+    assert summary["mean_error_by_size"] == {}
+    assert summary["mean_abs_corr_by_size"] == {}
+    assert summary["mean_judge_accuracy_by_size"] == {}
+    assert summary["mean_error_first_trio"] is None
+    assert summary["mean_error_later_trios"] is None
+    assert summary["associations_pearson"] == {
+        "error_vs_corr": None,
+        "error_vs_accuracy": None,
+        "error_vs_trio_rank": None,
+    }
+    out = tmp_path / "empty.json"
+    _write_summary(out, [], n_seeds=12)
+    assert json.loads(out.read_text(encoding="utf-8")) == summary
+    assert "unavailable" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("rank", [0, 1])
+def test_single_trio_keeps_missing_rank_partition_and_associations_null(
+    rank: int, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    record = TrioDiagnostic("s", 3, 0, 0.7, 0.2, rank, 0.4, 0.01, 0.7)
+    summary = summarize_trio_diagnostics([record], n_seeds=1)
+    assert summary["n_records"] == 1
+    assert summary["mean_error_by_size"] == {3: 0.4}
+    assert summary["mean_error_first_trio"] == (0.4 if rank == 0 else None)
+    assert summary["mean_error_later_trios"] == (0.4 if rank > 0 else None)
+    assert all(value is None for value in summary["associations_pearson"].values())
+    out = tmp_path / f"rank-{rank}.json"
+    _write_summary(out, [record], n_seeds=1)
+    saved = json.loads(out.read_text(encoding="utf-8"))
+    assert saved["mean_error_first_trio"] == summary["mean_error_first_trio"]
+    assert saved["mean_error_later_trios"] == summary["mean_error_later_trios"]
+    assert saved["associations_pearson"] == summary["associations_pearson"]
+    assert "unavailable" in capsys.readouterr().out
+
+
+def test_summary_preserves_measured_associations_and_size_and_rank_means() -> None:
+    records = [
+        TrioDiagnostic("s", 3, 0, 0.7, 0.2, 0, 0.2, 0.01, 0.8),
+        TrioDiagnostic("s", 6, 1, 0.7, 0.2, 1, 0.4, 0.03, 0.6),
+    ]
+    summary = summarize_trio_diagnostics(records, n_seeds=2)
+    assert summary["sizes"] == [3, 6]
+    assert summary["mean_error_by_size"] == {3: 0.2, 6: 0.4}
+    assert summary["mean_abs_corr_by_size"] == {3: 0.01, 6: 0.03}
+    assert summary["mean_judge_accuracy_by_size"] == {3: 0.8, 6: 0.6}
+    assert summary["mean_error_first_trio"] == 0.2
+    assert summary["mean_error_later_trios"] == 0.4
+    assert summary["associations_pearson"] == {
+        "error_vs_corr": pytest.approx(1.0),
+        "error_vs_accuracy": pytest.approx(-1.0),
+        "error_vs_trio_rank": pytest.approx(1.0),
+    }

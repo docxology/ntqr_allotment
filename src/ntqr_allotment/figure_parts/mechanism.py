@@ -57,9 +57,10 @@ def plot_trio_conditioning(data: dict, output_path: Path) -> Path:
 
     # Panel A: mean |error-correlation| vs panel size.
     for strat in strategies:
-        ys = [sum(corr_by[strat][s]) / len(corr_by[strat][s]) for s in sizes]
+        strategy_sizes = sorted(corr_by[strat])
+        ys = [sum(corr_by[strat][s]) / len(corr_by[strat][s]) for s in strategy_sizes]
         ax_a.plot(
-            sizes,
+            strategy_sizes,
             ys,
             marker="o",
             color=_strategy_color(strat),

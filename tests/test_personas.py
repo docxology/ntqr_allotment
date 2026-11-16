@@ -67,6 +67,37 @@ def _serve_tags(body: bytes, status: int = 200) -> Iterator[str]:
         server.server_close()
 
 
+def _serve_generate(body: bytes, status: int = 200) -> Iterator[str]:
+    """Serve one real POST ``/api/generate`` response on a loopback socket."""
+
+    class _Handler(BaseHTTPRequestHandler):
+        def do_POST(self) -> None:  # noqa: N802 (BaseHTTPRequestHandler API)
+            length = int(self.headers.get("Content-Length", 0))
+            self.rfile.read(length)
+            if self.path != "/api/generate":
+                self.send_response(404)
+                self.end_headers()
+                return
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, *args: object) -> None:
+            return
+
+    server = HTTPServer(("127.0.0.1", 0), _Handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        host, port = server.server_address
+        yield f"http://{host}:{port}"
+    finally:
+        server.shutdown()
+        thread.join(timeout=5.0)
+        server.server_close()
+
+
 # ---- corpus -----------------------------------------------------------------
 
 def test_corpus_is_deterministic_and_labeled():
@@ -135,8 +166,25 @@ def test_personas_from_population_maps_params():
     "text,expected",
     [
         ("a", "a"), ("b", "b"), ("A", "a"), (" B ", "b"),
-        ("The answer is a", "a"), ("true", "a"), ("Correct", "a"),
+        ("The answer is a", "a"), ("The answer is b", "b"),
+        ("The correct answer is b", "b"),
+        ("The answer is b because it is correct", "b"),
+        ("The incorrect option is a", "a"),
+        ("The equation is correct.", "a"),
+        ("true", "a"), ("Correct", "a"), ("true and correct", "a"),
         ("false", "b"), ("incorrect", "b"), ("wrong", "b"),
+        ("false or wrong", "b"),
+        ("This is a false statement.", "b"),
+        ("A false statement.", "b"),
+        ("This is a wrong equation.", "b"),
+        ("This is a correct statement.", "a"),
+        ("The answer is a false statement.", "b"),
+        ("The answer is a wrong equation.", "b"),
+        ("The answer is a or b", None), ("true but incorrect", None),
+        ("not a", None), ("The answer is not b", None),
+        ("The statement is not correct", None),
+        ("The answer is b, not a", None),
+        ("answer", None), ("banana", None), ("ab", None),
         ("42", None), ("", None),
     ],
 )
@@ -498,6 +546,91 @@ def test_available_false_on_non_200_status():
         assert OllamaJudge(model="qwen2.5:3b", base_url=host).available() is False
     finally:
         server.close()
+
+
+def test_available_accepts_latest_tag_for_bare_model_name():
+    body = json.dumps({"models": [{"name": "llama3:latest"}]}).encode()
+    server = _serve_tags(body)
+    host = next(server)
+    try:
+        assert OllamaJudge(model="llama3", base_url=host).available() is True
+    finally:
+        server.close()
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        b"not-json",
+        b"null",
+        b"[]",
+        b"{}",
+        b'{"models": null}',
+        b'{"models": {}}',
+        b'{"models": "qwen2.5:3b"}',
+    ],
+)
+def test_available_false_on_malformed_tags_payload(body):
+    server = _serve_tags(body)
+    host = next(server)
+    try:
+        assert OllamaJudge(base_url=host).available() is False
+    finally:
+        server.close()
+
+
+@pytest.mark.parametrize(
+    "response",
+    [
+        "The correct answer is b",
+        "This is a false statement.",
+        "A wrong equation.",
+        "The answer is a false statement.",
+    ],
+)
+def test_ollama_judge_honors_explicit_label_from_real_server(response):
+    body = json.dumps({"response": response}).encode()
+    server = _serve_generate(body)
+    host = next(server)
+    persona = PersonaSpec("p", "expert", "neutral", "center", 0.9)
+    try:
+        assert OllamaJudge(base_url=host).judge(persona, "2 + 2 = 5") == "b"
+    finally:
+        server.close()
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        b"not-json",
+        b"[]",
+        b"{}",
+        b'{"response": null}',
+        b'{"response": 1}',
+        b'{"response": ""}',
+        b'{"response": "   "}',
+        b'{"response": "42"}',
+        b'{"response": "The answer is a or b"}',
+    ],
+)
+def test_invalid_live_response_raises_and_is_never_cached(body, tmp_path):
+    server = _serve_generate(body)
+    host = next(server)
+    cache_path = tmp_path / "votes.json"
+    persona = PersonaSpec("p", "expert", "neutral", "center", 0.9)
+    items = make_arithmetic_corpus(1, seed=15)
+    try:
+        with pytest.raises(ValueError, match="Ollama"):
+            judge_corpus(
+                OllamaJudge(base_url=host),
+                persona,
+                items,
+                cache_path=cache_path,
+                cache_namespace="sha256:immutable",
+            )
+    finally:
+        server.close()
+    assert not cache_path.exists()
 
 
 # ---- OllamaJudge transient-timeout retry (real server, no mocks) -------------

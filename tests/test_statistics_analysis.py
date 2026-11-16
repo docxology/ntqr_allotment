@@ -209,6 +209,20 @@ def test_mean_ci_summary_rejects_empty_and_nonfinite() -> None:
         mean_ci_summary([1.0, float("nan")], seed=0)
 
 
+@pytest.mark.parametrize("bad", [float("nan"), float("inf"), float("-inf")])
+def test_statistical_apis_reject_nonfinite_observations(bad: float) -> None:
+    with pytest.raises(ValueError, match="finite"):
+        bootstrap_ci([1.0, bad], n_boot=10, seed=0)
+    with pytest.raises(ValueError, match="finite"):
+        cohens_d([1.0, bad], [2.0, 3.0])
+    with pytest.raises(ValueError, match="finite"):
+        exact_sign_test([bad])
+    with pytest.raises(ValueError, match="finite"):
+        ols_slope([1.0, bad], [2.0, 3.0])
+    with pytest.raises(ValueError, match="finite"):
+        ci_overlap_verdict((bad, 1.0), (2.0, 3.0))
+
+
 # --------------------------------------------------------------------------- #
 # cohens_d
 # --------------------------------------------------------------------------- #
@@ -217,19 +231,22 @@ def test_cohens_d_identical_groups_is_zero():
     assert cohens_d([1.0, 2.0, 3.0], [1.0, 2.0, 3.0]) == 0.0
 
 
-def test_cohens_d_known_separated_pair():
+def test_cohens_d_known_separated_pair_is_scale_invariant():
     # a = [1,2,3]: mean 2, var(ddof=1)=1.0 ; b=[4,5,6]: mean 5, var=1.0
     # pooled_var = (2*1 + 2*1)/(3+3-2) = 1.0 ; d = (2 - 5)/sqrt(1) = -3.0
-    result = cohens_d([1.0, 2.0, 3.0], [4.0, 5.0, 6.0])
-    assert abs(result - (-3.0)) < 1e-9
-    # Swapping arguments flips the sign (sanity / direction check).
-    assert abs(cohens_d([4.0, 5.0, 6.0], [1.0, 2.0, 3.0]) - 3.0) < 1e-9
+    for scale in (1e-200, 1.0, 1e200):
+        a = [scale * value for value in (1.0, 2.0, 3.0)]
+        b = [scale * value for value in (4.0, 5.0, 6.0)]
+        assert cohens_d(a, b) == pytest.approx(-3.0, abs=1e-9)
+        assert cohens_d(b, a) == pytest.approx(3.0, abs=1e-9)
 
 
-def test_cohens_d_zero_pooled_variance_returns_zero():
-    # Both groups constant but at different levels: pooled variance is 0.
-    # The chosen contract returns 0.0 (no standardized spread to measure).
-    assert cohens_d([5.0, 5.0, 5.0], [9.0, 9.0, 9.0]) == 0.0
+def test_cohens_d_zero_pooled_variance_does_not_hide_an_effect():
+    # Different constant groups have no estimable standardized spread. Returning
+    # zero would falsely reverse the observed separation into "no effect".
+    with pytest.raises(ValueError, match="undefined"):
+        cohens_d([5.0, 5.0, 5.0], [9.0, 9.0, 9.0])
+    assert cohens_d([5.0, 5.0, 5.0], [5.0, 5.0, 5.0]) == 0.0
 
 
 def test_cohens_d_rejects_small_groups():

@@ -419,6 +419,39 @@ def test_load_live_cross_family_config_rejects_each_runtime_guard(
         load_live_cross_family_config(config)
 
 
+@pytest.mark.parametrize(
+    "field", ["replicates_per_model", "n_items", "num_predict", "progress_every"]
+)
+@pytest.mark.parametrize("bad_value", [1.5, True])
+def test_load_live_cross_family_config_rejects_non_integer_counts(
+    tmp_path: Path, field: str, bad_value: object
+) -> None:
+    config = _write_config(
+        tmp_path / "config.yaml",
+        _minimal_config(include_profiles=False, live_updates={field: bad_value}),
+    )
+
+    with pytest.raises(
+        ValueError, match=f"live_cross_family.{field} must be an integer"
+    ):
+        load_live_cross_family_config(config)
+
+
+@pytest.mark.parametrize("seeds", [[0, 0.5], [True]])
+def test_load_live_cross_family_config_rejects_non_integer_seeds(
+    tmp_path: Path, seeds: list[object]
+) -> None:
+    config = _write_config(
+        tmp_path / "config.yaml",
+        _minimal_config(include_profiles=False, live_updates={"seeds": seeds}),
+    )
+
+    with pytest.raises(
+        ValueError, match="live_cross_family.seeds must contain only integers"
+    ):
+        load_live_cross_family_config(config)
+
+
 def test_load_live_postdoc_panel_config_reads_gemma_panel_defaults(tmp_path: Path) -> None:
     config = _write_config(tmp_path / "config.yaml")
 
@@ -484,4 +517,58 @@ def test_load_live_postdoc_panel_config_rejects_bad_runtime_controls(
     )
 
     with pytest.raises(ValueError, match=message):
+        load_live_postdoc_panel_config(config)
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "n_reviewers",
+        "n_applications",
+        "n_trios",
+        "age_min",
+        "age_max",
+        "num_predict",
+        "progress_every",
+    ],
+)
+@pytest.mark.parametrize("bad_value", [1.5, True])
+def test_load_live_postdoc_panel_config_rejects_non_integer_counts(
+    tmp_path: Path, field: str, bad_value: object
+) -> None:
+    data = yaml.safe_load(DEFAULT_CONFIG)
+    data["live_postdoc_panel"][field] = bad_value
+    config = _write_config(tmp_path / "config.yaml", yaml.safe_dump(data))
+
+    with pytest.raises(
+        ValueError, match=f"live_postdoc_panel.{field} must be an integer"
+    ):
+        load_live_postdoc_panel_config(config)
+
+
+@pytest.mark.parametrize("panel_sizes", [[3, 6.5], [3, True]])
+def test_load_live_postdoc_panel_config_rejects_non_integer_panel_sizes(
+    tmp_path: Path, panel_sizes: list[object]
+) -> None:
+    data = yaml.safe_load(DEFAULT_CONFIG)
+    data["live_postdoc_panel"]["panel_sizes"] = panel_sizes
+    config = _write_config(tmp_path / "config.yaml", yaml.safe_dump(data))
+
+    with pytest.raises(
+        ValueError, match="live_postdoc_panel.panel_sizes must contain only integers"
+    ):
+        load_live_postdoc_panel_config(config)
+
+
+@pytest.mark.parametrize("seeds", [[0, 0.5], [True]])
+def test_load_live_postdoc_panel_config_rejects_non_integer_seeds(
+    tmp_path: Path, seeds: list[object]
+) -> None:
+    data = yaml.safe_load(DEFAULT_CONFIG)
+    data["live_postdoc_panel"]["seeds"] = seeds
+    config = _write_config(tmp_path / "config.yaml", yaml.safe_dump(data))
+
+    with pytest.raises(
+        ValueError, match="live_postdoc_panel.seeds must contain only integers"
+    ):
         load_live_postdoc_panel_config(config)

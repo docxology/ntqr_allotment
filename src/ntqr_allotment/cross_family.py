@@ -459,23 +459,27 @@ def make_family_correlated_votes(
 def ollama_panel_available(
     models: Sequence[str], base_url: str = "http://localhost:11434"
 ) -> bool:
-    """Cheap guard: is a live Ollama server reachable for the panel?
+    """Cheap guard: is a live Ollama server reachable for the whole panel?
 
-    Probes only the FIRST model's server via
+    Probes every distinct requested model via
     :meth:`~ntqr_allotment.personas.OllamaJudge.available` (which already
-    swallows connection errors). No votes are cast.
+    swallows connection errors). No votes are cast. An empty model sequence is
+    unavailable and returns ``False`` without making a request.
 
     Args:
         models: The model tags the live panel would use.
         base_url: Ollama base URL.
 
     Returns:
-        ``True`` iff the server answers; ``False`` if ``models`` is empty or the
-        server is unreachable.
+        ``True`` iff ``models`` is non-empty and every distinct model is pulled;
+        ``False`` if any model is absent or the server is unreachable.
     """
     if not models:
         return False
-    return OllamaJudge(model=models[0], base_url=base_url).available()
+    return all(
+        OllamaJudge(model=model, base_url=base_url).available()
+        for model in dict.fromkeys(models)
+    )
 
 
 def collect_live_family_votes(

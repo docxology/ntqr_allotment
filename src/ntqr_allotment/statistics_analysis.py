@@ -122,6 +122,8 @@ def exact_sign_test(values: Sequence[float]) -> SignTestResult:
     nonzero deltas give ``p=0.125``.
     """
     vals = [float(value) for value in values]
+    if any(not math.isfinite(value) for value in vals):
+        raise ValueError("values must be finite")
     negative = sum(1 for value in vals if value < 0.0)
     positive = sum(1 for value in vals if value > 0.0)
     zero = len(vals) - negative - positive
@@ -227,6 +229,8 @@ def bootstrap_ci(
     arr = np.asarray(values, dtype=float)
     if arr.size == 0:
         raise ValueError("values must be non-empty")
+    if np.any(~np.isfinite(arr)):
+        raise ValueError("values must be finite")
     if n_boot < 1:
         raise ValueError("n_boot must be at least 1")
     if not 0.0 < alpha < 1.0:
@@ -247,6 +251,8 @@ def _validate_ci_interval(
         raise ValueError(f"{name} must be a 2-tuple (lo, hi)")
     lo = float(interval[0])
     hi = float(interval[1])
+    if not math.isfinite(lo) or not math.isfinite(hi):
+        raise ValueError(f"{name} must contain finite endpoints")
     if lo > hi:
         raise ValueError(f"{name} must satisfy lo <= hi")
     return (lo, hi)
@@ -324,10 +330,9 @@ def cohens_d(group_a: Sequence[float], group_b: Sequence[float]) -> float:
     """Return Cohen's d, the pooled-SD standardized mean difference.
 
     Computes ``(mean(a) - mean(b)) / s_pooled`` where ``s_pooled`` is the pooled
-    standard deviation using the sample (ddof=1) variances. Identical groups give
-    exactly ``0.0``. If the pooled variance is zero (both groups constant) the
-    function returns ``0.0`` rather than raising, since a zero numerator over a
-    zero spread is reported as no standardized effect.
+    standard deviation using the sample (ddof=1) variances. Equal observed means
+    give exactly ``0.0``, including zero-spread groups. Different means with zero
+    pooled spread raise instead of being misreported as no effect.
 
     Args:
         group_a: First group (needs at least two points).
@@ -343,15 +348,27 @@ def cohens_d(group_a: Sequence[float], group_b: Sequence[float]) -> float:
     b = np.asarray(group_b, dtype=float)
     if a.size < 2 or b.size < 2:
         raise ValueError("each group must have at least two points")
+    if np.any(~np.isfinite(a)) or np.any(~np.isfinite(b)):
+        raise ValueError("both groups must contain only finite values")
 
+    # Work in common-scale units; d is invariant and the squared deviations stay
+    # in a numerically representable range for every finite input scale.
+    scale = max(float(np.max(np.abs(a))), float(np.max(np.abs(b))))
+    if scale == 0.0:
+        return 0.0
+    a = a / scale
+    b = b / scale
+    mean_difference = float(a.mean()) - float(b.mean())
     var_a = float(a.var(ddof=1))
     var_b = float(b.var(ddof=1))
     na = a.size
     nb = b.size
     pooled_var = ((na - 1) * var_a + (nb - 1) * var_b) / (na + nb - 2)
     if pooled_var == 0.0:
-        return 0.0
-    return (float(a.mean()) - float(b.mean())) / float(np.sqrt(pooled_var))
+        if mean_difference == 0.0:
+            return 0.0
+        raise ValueError("Cohen's d is undefined when different means have zero spread")
+    return mean_difference / float(np.sqrt(pooled_var))
 
 
 def ols_slope(xs: Sequence[float], ys: Sequence[float]) -> OLSResult:
@@ -379,6 +396,8 @@ def ols_slope(xs: Sequence[float], ys: Sequence[float]) -> OLSResult:
         raise ValueError("xs and ys must have the same length")
     if x.size < 2:
         raise ValueError("at least two points are required")
+    if np.any(~np.isfinite(x)) or np.any(~np.isfinite(y)):
+        raise ValueError("xs and ys must contain only finite values")
 
     mean_x = float(x.mean())
     mean_y = float(y.mean())

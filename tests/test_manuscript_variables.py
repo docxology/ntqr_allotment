@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import csv
+import hashlib
+import importlib.util
+import json
+import os
 import re
 from pathlib import Path
+from types import ModuleType
 
 import pytest
-
-import json
 
 from ntqr_allotment.manuscript_variables import (
     INDEPENDENCE_TOKEN_NAMES,
@@ -790,3 +793,157 @@ def test_compute_cross_family_multiseed_tokens_missing_raises(tmp_path: Path) ->
 
     with pytest.raises(FileNotFoundError, match="run_cross_family_multiseed"):
         compute_cross_family_multiseed_tokens(tmp_path / "absent.json")
+
+
+def _load_publication_bridge() -> ModuleType:
+    script = _REPO / "scripts" / "z_generate_manuscript_variables.py"
+    spec = importlib.util.spec_from_file_location("manuscript_publication", script)
+    assert spec is not None and spec.loader is not None
+    bridge = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bridge)
+    return bridge
+
+
+def _publication_bridge(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    variables: dict[str, str],
+) -> ModuleType:
+    bridge = _load_publication_bridge()
+    monkeypatch.setattr(bridge, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(bridge, "generate_variables", lambda _root: variables)
+    return bridge
+
+
+def _output_snapshot(paths: list[Path]) -> dict[Path, tuple[bytes, int]]:
+    return {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in paths}
+
+
+def _sentinel_outputs(root: Path) -> dict[Path, tuple[bytes, int]]:
+    output = root / "output"
+    paths = [
+        output / "manuscript_variables.json",
+        output / "manuscript" / "00_main.md",
+        output / "manuscript" / "config.yaml",
+        output / "manuscript" / "references.bib",
+        output / "data" / "render_manifest.json",
+        output / "manuscript" / "README.md",
+    ]
+    for index, path in enumerate(paths):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(f"sentinel-{index}".encode("utf-8"))
+        mtime = 1_700_000_000_000_000_000 + index
+        os.utime(path, ns=(mtime, mtime))
+    return _output_snapshot(paths)
+
+
+def test_inject_rejects_token_valued_replacement_without_recursion() -> None:
+    bridge = _load_publication_bridge()
+    with pytest.raises(ValueError, match=r"\{\{B\}\}") as error:
+        bridge.inject("{{A}}", {"A": "{{B}}", "B": "expanded"})
+    assert "one-pass substitution" in str(error.value)
+    assert bridge.inject("{{A}}", {"A": "expanded"}) == "expanded"
+
+
+def test_token_preflight_failure_preserves_destination_bytes_and_mtimes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    bridge = _publication_bridge(
+        tmp_path, monkeypatch, {"A": "{{B}}", "B": "expanded"}
+    )
+    manuscript = tmp_path / "docs" / "manuscript"
+    manuscript.mkdir(parents=True)
+    (manuscript / "00_main.md").write_text("{{A}}\n", encoding="utf-8")
+    (manuscript / "config.yaml").write_bytes(b"paper: {}\n")
+    (manuscript / "references.bib").write_bytes(b"@misc{ref}\n")
+    before = _sentinel_outputs(tmp_path)
+
+    with pytest.raises(ValueError, match=r"00_main\.md.*\{\{B\}\}"):
+        bridge.main([])
+
+    assert _output_snapshot(list(before)) == before
+
+
+def test_source_read_preflight_failure_preserves_destination_bytes_and_mtimes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    bridge = _publication_bridge(tmp_path, monkeypatch, {"A": "resolved"})
+    manuscript = tmp_path / "docs" / "manuscript"
+    manuscript.mkdir(parents=True)
+    (manuscript / "00_main.md").write_text("{{A}}\n", encoding="utf-8")
+    (manuscript / "config.yaml").write_bytes(b"paper: {}\n")
+    (manuscript / "references.bib").symlink_to(manuscript / "missing.bib")
+    before = _sentinel_outputs(tmp_path)
+
+    with pytest.raises(FileNotFoundError):
+        bridge.main([])
+
+    assert _output_snapshot(list(before)) == before
+
+
+def test_publication_manifest_is_deterministic_and_check_is_byte_exact(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    variables = {"A": "42", "B": "front matter"}
+    bridge = _publication_bridge(tmp_path, monkeypatch, variables)
+    manuscript = tmp_path / "docs" / "manuscript"
+    manuscript.mkdir(parents=True)
+    (manuscript / "00_main.md").write_bytes(b"value={{A}}\n")
+    (manuscript / "preamble.md").write_bytes(b"{{B}}\n")
+    (manuscript / "config.yaml").write_bytes(b"paper:\r\n  title: Test\r\n")
+    (manuscript / "references.bib").write_bytes(b"@misc{ref,\r\n}\r\n")
+    (manuscript / "README.md").write_text(
+        "Source guide with an ignored {{UNPRODUCED}} token.\n", encoding="utf-8"
+    )
+    output_guide = tmp_path / "output" / "manuscript" / "README.md"
+    output_guide.parent.mkdir(parents=True)
+    output_guide.write_bytes(b"preserve output directory guide\n")
+    unrelated = tmp_path / "output" / "manuscript" / "notes" / "keep.txt"
+    unrelated.parent.mkdir(parents=True)
+    unrelated.write_bytes(b"preserve unrelated output\n")
+
+    assert bridge.main([]) == 0
+
+    output = tmp_path / "output"
+    injected = output / "manuscript"
+    expected = {
+        output / "manuscript_variables.json": json.dumps(
+            variables, indent=2, sort_keys=True
+        ).encode("utf-8"),
+        injected / "00_main.md": b"value=42\n",
+        injected / "preamble.md": b"front matter\n",
+        injected / "config.yaml": b"paper:\r\n  title: Test\r\n",
+        injected / "references.bib": b"@misc{ref,\r\n}\r\n",
+    }
+    for path, payload in expected.items():
+        assert path.read_bytes() == payload
+    assert output_guide.read_bytes() == b"preserve output directory guide\n"
+    assert unrelated.read_bytes() == b"preserve unrelated output\n"
+
+    manifest_path = output / "data" / "render_manifest.json"
+    expected_manifest = {
+        "schema_version": 1,
+        "files": {
+            str(path.relative_to(tmp_path)): hashlib.sha256(payload).hexdigest()
+            for path, payload in sorted(expected.items())
+        },
+    }
+    assert json.loads(manifest_path.read_text(encoding="utf-8")) == expected_manifest
+    assert manifest_path.read_bytes() == (
+        json.dumps(expected_manifest, indent=2, sort_keys=True) + "\n"
+    ).encode("utf-8")
+
+    checked_paths = [*expected, manifest_path, output_guide, unrelated]
+    before_check = _output_snapshot(checked_paths)
+    capsys.readouterr()
+    assert bridge.main(["--check"]) == 0
+    assert _output_snapshot(checked_paths) == before_check
+
+    manifest_path.write_bytes(b'{"files": {}}\n')
+    before_failed_check = _output_snapshot(checked_paths)
+    capsys.readouterr()
+    assert bridge.main(["--check"]) == 1
+    assert _output_snapshot(checked_paths) == before_failed_check
+    assert "output/data/render_manifest.json" in capsys.readouterr().err

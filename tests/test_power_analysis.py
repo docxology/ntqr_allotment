@@ -133,6 +133,25 @@ def test_permutation_test_separated_groups_small_p() -> None:
     assert p < 0.01
 
 
+@pytest.mark.parametrize("alternative", ["two-sided", "greater", "less"])
+def test_permutation_significance_is_invariant_to_common_location(alternative):
+    # Exactly two of the 252 balanced partitions separate these groups.
+    centered_a, centered_b = [1.0] * 5, [0.0] * 5
+    reference = permutation_test(
+        centered_a, centered_b, n_perm=2000, seed=9, alternative=alternative
+    )
+    shifted = permutation_test(
+        [1e13 + 1.0] * 5,
+        [1e13] * 5,
+        n_perm=2000,
+        seed=9,
+        alternative=alternative,
+    )
+    assert shifted == reference
+    if alternative != "less":
+        assert shifted < 0.02
+
+
 def test_permutation_test_identical_groups_not_extreme() -> None:
     a = [1.0, 2.0, 3.0, 4.0]
     b = [1.0, 2.0, 3.0, 4.0]
@@ -179,11 +198,33 @@ def test_permutation_test_one_sided_direction() -> None:
     assert permutation_test(a, b, n_perm=1000, seed=3, alternative="greater") > 0.8
 
 
+def test_permutation_test_is_scale_invariant() -> None:
+    a = [0.0, 0.1, -0.1]
+    b = [3.0, 3.1, 2.9]
+    scaled_a = [value * 1e-13 for value in a]
+    scaled_b = [value * 1e-13 for value in b]
+    for alternative in ("two-sided", "greater", "less"):
+        baseline = permutation_test(a, b, n_perm=1000, seed=3, alternative=alternative)
+        scaled = permutation_test(
+            scaled_a, scaled_b, n_perm=1000, seed=3, alternative=alternative
+        )
+        assert scaled == baseline
+
+    # With three pairs, complete separation attains a two-sided p-value near
+    # 2/C(6,3)=0.1; a fixed absolute tolerance used to return 1.0 instead.
+    micro = permutation_test([0.0, 0.0, 0.0], [5e-13] * 3, n_perm=1000, seed=0)
+    assert micro < 0.2
+
+
 def test_permutation_test_rejects_bad_args() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="non-empty"):
         permutation_test([], [1.0], n_perm=10, seed=0)
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="n_perm"):
         permutation_test([1.0], [2.0], n_perm=0, seed=0)
+    with pytest.raises(ValueError, match="alternative"):
+        permutation_test([1.0], [2.0], n_perm=10, seed=0, alternative="typo")
+    with pytest.raises(ValueError, match="finite"):
+        permutation_test([1.0, float("nan")], [2.0, 3.0], n_perm=10, seed=0)
 
 
 # --------------------------------------------------------------------------------------
@@ -230,6 +271,13 @@ def test_simulate_power_one_sided_negative_effect() -> None:
     # (regression guard for the one-sided direction bug).
     p = simulate_power(-0.7, 25, alpha=0.05, n_sim=200, n_perm=150, seed=32, two_sided=False)
     assert p > 0.3
+
+
+def test_simulate_power_rejects_p_value_equal_to_alpha() -> None:
+    # With 19 permutations the add-one minimum p-value is exactly 0.05. A huge
+    # real effect must not produce zero power solely because alpha uses '<'.
+    power = simulate_power(10.0, 12, n_sim=20, n_perm=19, seed=11)
+    assert power > 0.8
 
 
 def test_simulate_power_rejects_bad_args() -> None:
@@ -360,30 +408,30 @@ def test_cohens_d_safe_rejects_empty_group() -> None:
         cohens_d_safe([1.0, 2.0], [])
 
 
-def test_cohens_d_safe_single_element_groups_return_zero() -> None:
-    # Lines 172-173: with one point per group, denom = 1 + 1 - 2 = 0 (no pooled
-    # variance is defined) -> the degenerate-safe contract returns 0.0 rather than
-    # dividing by zero.
-    assert cohens_d_safe([4.0], [9.0]) == 0.0
-    # NEGATIVE CONTROL: a non-degenerate separated pair must NOT be flattened to 0.0.
+def test_cohens_d_safe_rejects_undefined_single_element_effect() -> None:
+    # One point per group cannot estimate pooled variance. Different means must
+    # not be flattened into evidence of no effect; equal means remain directional
+    # zeroes rather than a division-by-zero sentinel.
+    with pytest.raises(ValueError, match="undefined"):
+        cohens_d_safe([4.0], [9.0])
+    assert cohens_d_safe([4.0], [4.0]) == 0.0
     assert cohens_d_safe([1.0, 2.0, 3.0], [4.0, 5.0, 6.0]) != 0.0
 
 
-def test_cohens_d_safe_zero_pooled_variance_returns_zero() -> None:
-    # Lines 175-176: both groups constant (at different levels) -> within-group
-    # variances are 0 -> pooled_var <= 0 -> 0.0 (no standardized spread to express).
-    assert cohens_d_safe([5.0, 5.0, 5.0], [9.0, 9.0, 9.0]) == 0.0
+def test_cohens_d_safe_zero_pooled_variance_does_not_hide_an_effect() -> None:
+    with pytest.raises(ValueError, match="undefined"):
+        cohens_d_safe([5.0, 5.0, 5.0], [9.0, 9.0, 9.0])
+    assert cohens_d_safe([5.0, 5.0, 5.0], [5.0, 5.0, 5.0]) == 0.0
 
 
-def test_cohens_d_safe_known_separated_pair() -> None:
-    # Line 177 (the real computation), checked against a hand-derived reference:
-    # a = [1,2,3]: mean 2, sample var (ddof=1) = 1.0 ; b = [4,5,6]: mean 5, var 1.0.
-    # pooled_var = ((3-1)*1.0 + (3-1)*1.0) / (3+3-2) = 1.0 ; s_pooled = 1.0.
-    # d = (mean_a - mean_b) / s_pooled = (2 - 5) / 1.0 = -3.0.
-    result = cohens_d_safe([1.0, 2.0, 3.0], [4.0, 5.0, 6.0])
-    assert result == pytest.approx(-3.0, abs=1e-9)
-    # Swapping the arguments flips the sign (direction check / independent corner).
-    assert cohens_d_safe([4.0, 5.0, 6.0], [1.0, 2.0, 3.0]) == pytest.approx(3.0, abs=1e-9)
+def test_cohens_d_safe_known_separated_pair_is_scale_invariant() -> None:
+    # a = [1,2,3]: mean 2, sample var=1 ; b = [4,5,6]: mean 5, var=1.
+    # The hand-derived d is (2 - 5) / 1 = -3 at every common input scale.
+    for scale in (1e-200, 1.0, 1e200):
+        a = [scale * value for value in (1.0, 2.0, 3.0)]
+        b = [scale * value for value in (4.0, 5.0, 6.0)]
+        assert cohens_d_safe(a, b) == pytest.approx(-3.0, abs=1e-9)
+        assert cohens_d_safe(b, a) == pytest.approx(3.0, abs=1e-9)
 
 
 def test_diagnose_null_returns_none_budget_for_unpowerable_tiny_effect() -> None:

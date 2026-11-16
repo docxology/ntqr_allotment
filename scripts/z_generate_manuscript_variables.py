@@ -7,18 +7,19 @@ auto-runs this before rendering, then renders from ``output/manuscript/`` when p
 
 It (1) computes every token via ``generate_variables`` (recomputed from the real
 artifacts under ``output/data/``), (2) checks that every ``{{TOKEN}}`` used in
-``docs/manuscript/*.md`` is produced (no orphans), (3) writes
-``output/manuscript_variables.json``, and (4) unless ``--check`` is passed, writes
-token-substituted copies of every manuscript file (and ``config.yaml``) under
-``output/manuscript/`` for the renderer to consume.
+``docs/manuscript/*.md`` is produced (no orphans), and (3) preflights complete
+byte payloads for ``output/manuscript_variables.json``, the injected manuscript,
+and a deterministic SHA-256 render manifest before publishing any of them.
+``--check`` performs the same preflight and byte-compares every owned payload,
+including the manifest, without writing.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
-import shutil
 import sys
 from pathlib import Path
 
@@ -33,6 +34,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 # so we key off an actual import failure instead.
 _VENV_PY = PROJECT_ROOT / ".venv" / "bin" / "python"
 try:
+    from ntqr_allotment.artifacts import atomic_write_bytes  # noqa: E402
     from ntqr_allotment.manuscript_variables import generate_variables  # noqa: E402
 except ModuleNotFoundError:
     if os.environ.get("_NTQR_HYDRATE_REEXEC") != "1" and _VENV_PY.is_file():
@@ -60,22 +62,31 @@ def used_tokens(manuscript_dir: Path) -> set[str]:
     return tokens
 
 
-def inject(text: str, variables: dict[str, str]) -> str:
-    return TOKEN_RE.sub(lambda m: variables.get(m.group(1), m.group(0)), text)
+def inject(
+    text: str, variables: dict[str, str], source: str | Path = "<text>"
+) -> str:
+    """Substitute once, then reject tokens left by missing or token-valued values."""
+    rendered = TOKEN_RE.sub(lambda m: variables.get(m.group(1), m.group(0)), text)
+    remaining = sorted({match.group(0) for match in TOKEN_RE.finditer(rendered)})
+    if remaining:
+        raise ValueError(
+            f"unresolved tokens after one-pass substitution in {source}: "
+            + ", ".join(remaining)
+        )
+    return rendered
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--check",
         action="store_true",
-        help="Only validate token coverage; do not write the injected manuscript.",
+        help="Verify all generated payloads byte-for-byte without writing.",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     manuscript_dir = PROJECT_ROOT / "docs" / "manuscript"
     output_dir = PROJECT_ROOT / "output"
-    output_dir.mkdir(parents=True, exist_ok=True)
 
     variables = generate_variables(PROJECT_ROOT)
 
@@ -86,26 +97,53 @@ def main() -> int:
         return 1
 
     vars_path = output_dir / "manuscript_variables.json"
+    injected_dir = output_dir / "manuscript"
+    payloads: dict[Path, bytes] = {
+        vars_path: json.dumps(variables, indent=2, sort_keys=True).encode("utf-8")
+    }
+    for md in source_markdown(manuscript_dir):
+        rendered = inject(md.read_text(encoding="utf-8"), variables, source=md)
+        payloads[injected_dir / md.name] = rendered.encode("utf-8")
+    config_src = manuscript_dir / "config.yaml"
+    if config_src.is_file():
+        payloads[injected_dir / "config.yaml"] = config_src.read_bytes()
+    for bib in sorted(manuscript_dir.glob("*.bib")):
+        payloads[injected_dir / bib.name] = bib.read_bytes()
+
+    # Per-file atomic writes are not a multi-file transaction. The manifest makes
+    # interrupted or partial publication detectable by --check, not preventable.
+    manifest = {
+        "schema_version": 1,
+        "files": {
+            str(path.relative_to(PROJECT_ROOT)): hashlib.sha256(source).hexdigest()
+            for path, source in sorted(payloads.items())
+        },
+    }
+    manifest_path = output_dir / "data" / "render_manifest.json"
+    payloads[manifest_path] = (
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n"
+    ).encode("utf-8")
+
     print(str(vars_path))
     print(f"tokens generated: {len(variables)} | tokens used in prose: {len(used)} | orphans: 0")
 
     if args.check:
+        stale = [
+            str(path.relative_to(PROJECT_ROOT))
+            for path, source in payloads.items()
+            if not path.is_file() or path.read_bytes() != source
+        ]
+        if stale:
+            print("Stale generated artifacts: " + ", ".join(stale), file=sys.stderr)
+            return 1
+        print(f"OK — {len(payloads)} generated artifacts match their sources.")
         return 0
 
-    vars_path.write_text(json.dumps(variables, indent=2, sort_keys=True), encoding="utf-8")
-    injected_dir = output_dir / "manuscript"
-    injected_dir.mkdir(parents=True, exist_ok=True)
-    for md in source_markdown(manuscript_dir):
-        out = injected_dir / md.name
-        out.write_text(inject(md.read_text(encoding="utf-8"), variables), encoding="utf-8")
-        print(str(out))
-    config_src = manuscript_dir / "config.yaml"
-    if config_src.is_file():
-        shutil.copy2(config_src, injected_dir / "config.yaml")
-        print(str(injected_dir / "config.yaml"))
-    for bib in sorted(manuscript_dir.glob("*.bib")):
-        shutil.copy2(bib, injected_dir / bib.name)
-        print(str(injected_dir / bib.name))
+    # All source reads and token validation finished before the first write.
+    for path, source in payloads.items():
+        atomic_write_bytes(path, source)
+        if path != vars_path:
+            print(str(path))
     return 0
 
 

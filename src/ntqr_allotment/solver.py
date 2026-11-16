@@ -38,6 +38,7 @@ def configure_cbc() -> str:
     if not Path(path).is_file() or not os.access(path, os.X_OK):
         raise RuntimeError("CBC executable missing; install CBC or set NTQR_CBC_PATH")
     pulp.PULP_CBC_CMD.pulp_cbc_path = str(path)
+    pulp.PULP_CBC_CMD._permissions_ok = True
     return str(path)
 
 

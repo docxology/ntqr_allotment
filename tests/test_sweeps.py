@@ -113,6 +113,36 @@ def test_strategy_ranking_shape():
     assert all(ranking[index][1] <= ranking[index + 1][1] for index in range(len(ranking) - 1))
 
 
+def test_strategy_ranking_equal_means_pool_within_cell_variance():
+    cells = [
+        _agg("random_selection", n=2, eie_mean=0.20, eie_std=0.10),
+        _agg("random_selection", n=3, eie_mean=0.20, eie_std=0.20),
+    ]
+
+    [(_, mean, ci95)] = strategy_ranking(cells)
+
+    # Within SS = 0.01 + 2 * 0.04 = 0.09, so pooled std = sqrt(0.09 / 4) = 0.15.
+    expected_ci95 = 1.96 * 0.15 / (5**0.5)
+    assert mean == pytest.approx(0.20, abs=1e-12)
+    assert ci95 == pytest.approx(expected_ci95, abs=1e-12)
+    assert ci95 > 0.0
+
+
+def test_strategy_ranking_matches_manual_pooled_variance():
+    cells = [
+        _agg("random_selection", n=2, eie_mean=0.10, eie_std=0.10),
+        _agg("random_selection", n=2, eie_mean=0.30, eie_std=0.20),
+    ]
+
+    [(_, mean, ci95)] = strategy_ranking(cells)
+
+    # Around pooled mean 0.20: within SS = 0.05 and between SS = 0.04.
+    # Sample variance = (0.05 + 0.04) / (4 - 1) = 0.03.
+    expected_ci95 = 1.96 * (0.03 / 4) ** 0.5
+    assert mean == pytest.approx(0.20, abs=1e-12)
+    assert ci95 == pytest.approx(expected_ci95, abs=1e-12)
+
+
 def test_ensemble_degeneracy_panel3():
     config = TrialConfig(
         strategy="random_selection",
@@ -343,7 +373,7 @@ def test_strategy_ranking_skips_zero_n_aggregates():
         strategy="random_selection",
         n=2,
         eie_mean=0.12,
-        eie_std=0.01,
+        eie_std=0.0,
         eie_ci95=0.02,
         mv_mean=0.10,
         mv_std=0.01,
@@ -361,19 +391,26 @@ def test_strategy_ranking_skips_zero_n_aggregates():
 
 def test_weighted_mean_zero_total_weight_raises():
     with pytest.raises(ValueError, match="weights must sum to a positive integer"):
-        _weighted_mean_and_ci([0.5], [0])
+        _weighted_mean_and_ci([0.5], [0], [0.0])
     # negative control: a positive weight does not raise
-    mean, ci95 = _weighted_mean_and_ci([0.5], [1])
+    mean, ci95 = _weighted_mean_and_ci([0.5], [1], [0.0])
     assert mean == pytest.approx(0.5, abs=1e-12)
 
 
 def test_weighted_mean_single_weight_zero_ci():
-    mean, ci95 = _weighted_mean_and_ci([0.30], [1])
+    mean, ci95 = _weighted_mean_and_ci([0.30], [1], [0.10])
     assert mean == pytest.approx(0.30, abs=1e-12)
     assert ci95 == 0.0  # total_weight <= 1 -> no spread reported
     # negative control: total_weight > 1 produces a non-degenerate CI
-    mean2, ci2 = _weighted_mean_and_ci([0.10, 0.30], [1, 2])
+    mean2, ci2 = _weighted_mean_and_ci([0.10, 0.30], [1, 2], [0.0, 0.0])
     assert ci2 > 0.0
+
+
+def test_weighted_mean_zero_or_invalid_variance_has_zero_ci():
+    for stds in ([0.0, 0.0], [float("nan"), 0.0], [float("inf"), 0.0]):
+        mean, ci95 = _weighted_mean_and_ci([0.20, 0.20], [2, 2], stds)
+        assert mean == pytest.approx(0.20, abs=1e-12)
+        assert ci95 == 0.0
 
 
 # ---------------------------------------------------------------------------
@@ -381,13 +418,13 @@ def test_weighted_mean_single_weight_zero_ci():
 # (line 304).
 # ---------------------------------------------------------------------------
 
-def _agg(strategy: str, *, n: int, eie_mean: float) -> Aggregate:
+def _agg(strategy: str, *, n: int, eie_mean: float, eie_std: float = 0.01) -> Aggregate:
     return Aggregate(
         config_key=(strategy, 6, 0.72, 0.08, 0.30, 90, 0.5, 32),
         strategy=strategy,
         n=n,
         eie_mean=eie_mean,
-        eie_std=0.01,
+        eie_std=eie_std,
         eie_ci95=0.02,
         mv_mean=0.10,
         mv_std=0.01,

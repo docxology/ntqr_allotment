@@ -8,8 +8,13 @@ NTQR's real supervised estimator. The single live test is marked
 
 from __future__ import annotations
 
+import json
 import math
+import threading
+from contextlib import contextmanager
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
+from typing import Iterator
 
 import pytest
 
@@ -282,8 +287,70 @@ def test_contrast_docstring_carries_n_limited():
 
 # ---- guard ------------------------------------------------------------------
 
-def test_ollama_panel_available_false_on_empty_and_dead_port():
-    assert ollama_panel_available([]) is False
+@contextmanager
+def _serve_ollama_tags(models: list[str]) -> Iterator[tuple[str, list[str]]]:
+    """Serve real ``GET /api/tags`` responses and record requested paths."""
+    requested_paths: list[str] = []
+    body = json.dumps({"models": [{"name": model} for model in models]}).encode()
+
+    class _Handler(BaseHTTPRequestHandler):
+        def do_GET(self) -> None:  # noqa: N802 (BaseHTTPRequestHandler API)
+            if self.path != "/api/tags":
+                self.send_response(404)
+                self.end_headers()
+                return
+            requested_paths.append(self.path)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, *args: object) -> None:
+            return
+
+    server = HTTPServer(("127.0.0.1", 0), _Handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        host, port = server.server_address
+        yield f"http://{host}:{port}", requested_paths
+    finally:
+        server.shutdown()
+        thread.join(timeout=5.0)
+        server.server_close()
+
+
+def test_ollama_panel_available_false_when_later_model_is_missing():
+    with _serve_ollama_tags(["qwen2.5:3b"]) as (base_url, requested_paths):
+        assert (
+            ollama_panel_available(["qwen2.5:3b", "gemma3:4b"], base_url=base_url)
+            is False
+        )
+    assert requested_paths == ["/api/tags", "/api/tags"]
+
+
+def test_ollama_panel_available_true_when_every_distinct_model_is_present():
+    with _serve_ollama_tags(["qwen2.5:3b", "gemma3:4b"]) as (
+        base_url,
+        requested_paths,
+    ):
+        assert (
+            ollama_panel_available(
+                ["qwen2.5:3b", "qwen2.5:3b", "gemma3:4b"], base_url=base_url
+            )
+            is True
+        )
+    assert requested_paths == ["/api/tags", "/api/tags"]
+
+
+def test_ollama_panel_available_empty_models_do_not_probe_tags():
+    with _serve_ollama_tags([]) as (base_url, requested_paths):
+        assert ollama_panel_available([], base_url=base_url) is False
+    assert requested_paths == []
+
+
+def test_ollama_panel_available_false_on_dead_port():
     assert ollama_panel_available(["qwen2.5:3b"], base_url="http://localhost:6553") is False
 
 

@@ -9,7 +9,8 @@ from ntqr_allotment.dependence import (
     measure_error_correlations,
     sample_votes_correlated,
 )
-from ntqr_allotment.experts import generate_population, sample_items
+from ntqr_allotment.experts import Item, generate_population, sample_items
+from ntqr_allotment.ntqr_eval import NoPhysicalSolutionError
 
 
 @pytest.fixture
@@ -38,6 +39,15 @@ def test_measure_error_correlations_trio_only(trio_and_items):
     _, items = trio_and_items
     with pytest.raises(ValueError):
         measure_error_correlations([("a",), ("b",)], items[:1])
+
+
+@pytest.mark.parametrize("labels", [("a", "a"), ("b", "b"), ("a",)])
+def test_measure_error_correlations_rejects_missing_true_label_strata(labels):
+    items = [Item(index=index, true_label=label) for index, label in enumerate(labels)]
+    votes = [tuple("a" for _ in items) for _ in range(3)]
+
+    with pytest.raises(NoPhysicalSolutionError, match="non-empty true-label strata"):
+        measure_error_correlations(votes, items)
 
 
 def test_measure_returns_report(trio_and_items):

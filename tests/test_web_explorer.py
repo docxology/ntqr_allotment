@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
+
+import pytest
 
 from ntqr_allotment.web_explorer import (
     build_explorer_model,
@@ -245,3 +248,149 @@ def test_build_explorer_model_rejects_non_object_json(tmp_path: Path) -> None:
         assert "JSON object" in str(exc)
     else:
         raise AssertionError("expected non-object JSON to fail")
+
+
+def test_render_explorer_html_treats_stored_markup_as_literal_text(
+    tmp_path: Path,
+) -> None:
+    _write_fixture(tmp_path)
+    data = tmp_path / "output" / "data"
+    json_key = "<img src=x onerror=alert('json-key')>"
+    csv_header = "<svg onload=alert('csv-header')>"
+    dataset_title = "<img src=x onerror=alert('title')>"
+    dataset_source = "</script><script>alert('source')</script>"
+
+    sweep_path = data / "sweep_results.json"
+    sweep = json.loads(sweep_path.read_text(encoding="utf-8"))
+    sweep["rows"] = [{json_key: "literal JSON header"}]
+    sweep_path.write_text(json.dumps(sweep), encoding="utf-8")
+    (data / "sweep_aggregated.csv").write_text(
+        f"{csv_header},value\nliteral CSV header,1\n",
+        encoding="utf-8",
+    )
+
+    model = build_explorer_model(tmp_path)
+    datasets = list(model.datasets)
+    datasets[0] = replace(
+        datasets[0],
+        title=dataset_title,
+        source=dataset_source,
+    )
+    rendered = render_explorer_html(replace(model, datasets=tuple(datasets)))
+
+    assert ".innerHTML" not in rendered
+    assert ".outerHTML" not in rendered
+    assert "title.textContent = dataset.title;" in rendered
+    assert "sourceCode.textContent = dataset.source;" in rendered
+    assert "header.textContent = column;" in rendered
+    before_state = rendered.split('<script id="explorer-state"', 1)[0]
+    assert dataset_title not in before_state
+    assert dataset_source not in rendered
+
+    state = rendered.split('<script id="explorer-state" type="application/json">', 1)[1]
+    state = state.split("</script>", 1)[0]
+    state_datasets = json.loads(state)["datasets"]
+    sweep_dataset = next(item for item in state_datasets if item["dataset_id"] == "sweep_rows")
+    csv_dataset = next(
+        item for item in state_datasets if item["dataset_id"] == "sweep_aggregates"
+    )
+    assert sweep_dataset["title"] == dataset_title
+    assert sweep_dataset["source"] == dataset_source
+    assert sweep_dataset["rows"] == [{json_key: "literal JSON header"}]
+    assert csv_dataset["rows"] == [{csv_header: "literal CSV header", "value": "1"}]
+
+
+def test_build_explorer_model_marks_small_json_and_csv_not_truncated(
+    tmp_path: Path,
+) -> None:
+    _write_fixture(tmp_path)
+
+    model = build_explorer_model(tmp_path)
+
+    json_dataset = next(
+        dataset for dataset in model.datasets if dataset.dataset_id == "postdoc_alignment"
+    )
+    csv_dataset = next(
+        dataset for dataset in model.datasets if dataset.dataset_id == "power_diagnostics"
+    )
+    for dataset in (json_dataset, csv_dataset):
+        assert len(dataset.rows) == 1
+        assert dataset.source_row_count == 1
+        assert dataset.truncated is False
+        assert dataset.row_limit == 500
+
+
+def test_build_explorer_model_retains_json_and_csv_truncation_metadata(
+    tmp_path: Path,
+) -> None:
+    _write_fixture(tmp_path)
+    data = tmp_path / "output" / "data"
+    sweep_path = data / "sweep_results.json"
+    sweep = json.loads(sweep_path.read_text(encoding="utf-8"))
+    sweep["rows"] = [{"index": index} for index in range(501)]
+    sweep_path.write_text(json.dumps(sweep), encoding="utf-8")
+    (data / "sweep_aggregated.csv").write_text(
+        "index\n" + "".join(f"{index}\n" for index in range(501)),
+        encoding="utf-8",
+    )
+
+    model = build_explorer_model(tmp_path)
+
+    for dataset_id in ("sweep_rows", "sweep_aggregates"):
+        dataset = next(item for item in model.datasets if item.dataset_id == dataset_id)
+        assert len(dataset.rows) == 500
+        assert dataset.source_row_count == 501
+        assert dataset.truncated is True
+        assert dataset.row_limit == 500
+
+    rendered = render_explorer_html(model)
+    assert "showing first ${dataset.rows.length} of ${dataset.source_row_count} rows" in rendered
+    state = rendered.split('<script id="explorer-state" type="application/json">', 1)[1]
+    state = state.split("</script>", 1)[0]
+    state_datasets = json.loads(state)["datasets"]
+    for dataset_id in ("sweep_rows", "sweep_aggregates"):
+        dataset = next(item for item in state_datasets if item["dataset_id"] == dataset_id)
+        assert dataset["source_row_count"] == 501
+        assert dataset["truncated"] is True
+        assert dataset["row_limit"] == 500
+
+
+@pytest.mark.parametrize(
+    "bad_number",
+    [
+        pytest.param(float("nan"), id="nan"),
+        pytest.param(float("inf"), id="positive-infinity"),
+        pytest.param(float("-inf"), id="negative-infinity"),
+    ],
+)
+def test_write_explorer_rejects_nonfinite_numbers_without_writing_html(
+    tmp_path: Path,
+    bad_number: float,
+) -> None:
+    _write_fixture(tmp_path)
+    sweep_path = tmp_path / "output" / "data" / "sweep_results.json"
+    sweep = json.loads(sweep_path.read_text(encoding="utf-8"))
+    sweep["rows"][0]["eie_error"] = bad_number
+    sweep_path.write_text(json.dumps(sweep), encoding="utf-8")
+    output_path = tmp_path / "output" / "web" / "ntqr_explorer.html"
+
+    with pytest.raises(ValueError, match="embedded JSON.*NaN and Infinity"):
+        write_explorer(tmp_path, output_path)
+
+    assert not output_path.exists()
+
+
+def test_write_explorer_rejects_nested_nonfinite_numbers_without_writing_html(
+    tmp_path: Path,
+) -> None:
+    _write_fixture(tmp_path)
+    sweep_path = tmp_path / "output" / "data" / "sweep_results.json"
+    sweep = json.loads(sweep_path.read_text(encoding="utf-8"))
+    sweep["rows"][0]["nested"] = {"bad": float("nan")}
+    sweep_path.write_text(json.dumps(sweep), encoding="utf-8")
+    output_path = tmp_path / "output" / "web" / "ntqr_explorer.html"
+
+    with pytest.raises(ValueError, match="row field 'nested'.*NaN and Infinity"):
+        write_explorer(tmp_path, output_path)
+
+    assert not output_path.exists()
