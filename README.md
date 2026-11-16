@@ -1,5 +1,15 @@
 # NTQR_allotment
 
+<p align="center">
+  <a href="https://github.com/docxology/ntqr_allotment/actions/workflows/tests.yml"><img alt="tests.yml workflow status on main" src="https://github.com/docxology/ntqr_allotment/actions/workflows/tests.yml/badge.svg?branch=main"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
+  <img alt="Requires Python 3.12 or newer" src="https://img.shields.io/badge/python-3.12%2B-3776AB?logo=python&logoColor=white">
+</p>
+
+<p align="center">
+  <img src="output/figures/ntqr_cover.png" alt="Schematic cover, Sortition upstream of NTQR. Step 1 draws an expert panel from an audited pool. Step 2 contrasts a representative panel, whose expert errors decorrelate, with a single-bloc panel, whose errors co-move through a shared confound. Step 3 plots recovery against within-bloc error coupling: representative panels stay protective while single-bloc panels collapse. Schematic only, not empirical evidence." width="720">
+</p>
+
 **Sortition upstream of NTQR** — a research testbed for how *forming an expert
 panel* and *how many experts you draw* shape what no-answer-key evaluation can
 infer about noisy experts of known precision, bias, and heterogeneity.
