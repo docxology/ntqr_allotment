@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import json
+import os
+import subprocess
+import sys
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from ntqr_allotment.postdoc_panel import (
     POSTDOC_STRATEGY_LABELS,
@@ -189,3 +193,75 @@ def test_postdoc_alignment_compares_analytical_and_gemma_signs() -> None:
     assert alignment["model"] == "gemma3:4b"
     assert alignment["cells"][0]["sign_agrees"] is True
     assert alignment["agreement_rate_resolved"] == 1.0
+
+
+def _run_postdoc_cli(output_dir: Path, *overrides: str) -> subprocess.CompletedProcess[str]:
+    root = Path(__file__).resolve().parents[1]
+    return subprocess.run(
+        [
+            sys.executable,
+            str(root / "scripts" / "run_postdoc_panel.py"),
+            "--offline",
+            "--output-dir", str(output_dir),
+            "--seeds", "0",
+            "--panel-sizes", "3",
+            "--strategies", "random_selection",
+            "--n-reviewers", "9",
+            "--n-applications", "36",
+            *overrides,
+        ],
+        cwd=root,
+        env={**os.environ, "PYTHONHASHSEED": "0", "PYTHONPATH": str(root / "src")},
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+
+
+def test_postdoc_offline_cli_reports_unavailable_live_alignment(tmp_path: Path) -> None:
+    destination = tmp_path / "postdoc"
+    result = _run_postdoc_cli(destination)
+    assert result.returncode == 0, result.stderr
+    payload = json.loads((destination / "postdoc_panel_results.json").read_text(encoding="utf-8"))
+    alignment = json.loads((destination / "postdoc_panel_alignment.json").read_text(encoding="utf-8"))
+    assert set(payload["tracks"]) == {"analytical"}
+    assert payload["rows"] == payload["tracks"]["analytical"]["rows"]
+    assert payload["live_ollama"] is False
+    assert payload["model_provenance"] is None
+    assert payload["alignment"] == alignment
+    assert alignment["available"] is False
+    assert alignment["reason"] == "offline analytical-only run"
+    assert alignment["cells"] == []
+    assert alignment["n_cells"] == 0
+    assert alignment["n_resolved_cells"] == 0
+    assert alignment["agreement_rate_resolved"] is None
+    assert alignment["live_config_hash"] is None
+    assert alignment["model_provenance"] is None
+    assert sorted(path.name for path in destination.iterdir()) == [
+        "postdoc_panel_alignment.json",
+        "postdoc_panel_results.json",
+    ]
+
+
+@pytest.mark.parametrize(
+    ("flag", "message"),
+    [
+        ("--n-reviewers", "n_reviewers must cover the largest panel"),
+        ("--n-applications", "n_items must be positive"),
+    ],
+)
+def test_postdoc_cli_preserves_explicit_zero_for_validation(
+    flag: str, message: str, tmp_path: Path
+) -> None:
+    destination = tmp_path / "invalid"
+    result = _run_postdoc_cli(destination, flag, "0")
+    assert result.returncode != 0
+    assert message in result.stderr
+    assert not destination.exists()
+
+
+def test_postdoc_offline_cli_refuses_recorded_live_destination() -> None:
+    root = Path(__file__).resolve().parents[1]
+    result = _run_postdoc_cli(root / "output" / "data")
+    assert result.returncode != 0
+    assert "separate from recorded live results" in result.stderr

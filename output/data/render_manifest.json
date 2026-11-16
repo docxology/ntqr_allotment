@@ -1,0 +1,15 @@
+{
+  "files": {
+    "output/manuscript/00_abstract.md": "42ae19d7caba34ccfc47df1dbb53158d700e04791cc226aa76e740c33a4e4d9b",
+    "output/manuscript/01_introduction.md": "8109383ea60882a336a8f3e201b2329a469f025445d9133877f592e542a07bc0",
+    "output/manuscript/02_methods.md": "93dc8c196247d723c6e845bdceb5733774aa237cc73c63f163c6eb057867308c",
+    "output/manuscript/03_results.md": "61e22eb6fff9cbc6a53219cee814df9b2f9bb051c2cf3fd4752efc2fabeec357",
+    "output/manuscript/04_discussion.md": "8707a4e0738ed49413f22f07633b31702597f9e14be194aa480a247870a9daa1",
+    "output/manuscript/99_references.md": "5447234a7fb7c919b13c501f6122ab47cae45dfd9d5a0236fdc088562513b9bb",
+    "output/manuscript/config.yaml": "be866381d01a2b7e51a034768cc1ff0dd25114b1d18af55a2d52d58e107de2c2",
+    "output/manuscript/preamble.md": "97aee43a624aa3a7dbb7174854b4adbe82be2082bbe19ccc8b47c1075e68602b",
+    "output/manuscript/references.bib": "7bd8c366e99b7edeb1d949a3b95a547f946fcc2e582b6272279d3937f8d04517",
+    "output/manuscript_variables.json": "795c85ad361c5c53b0ed30d71d76a1917863934de6bc9b44370a9664650be28f"
+  },
+  "schema_version": 1
+}

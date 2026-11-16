@@ -471,6 +471,15 @@ def _validate_grid_ranges(profile_name: str, grid: SweepGrid) -> None:
         )
 
 
+def _live_integer(
+    config: dict[str, Any], section: str, key: str, default: int
+) -> int:
+    value = config.get(key, default)
+    if type(value) is not int:
+        raise ValueError(f"{section}.{key} must be an integer")
+    return value
+
+
 def _validate_live_cross_family(config: object) -> None:
     if config is None:
         return
@@ -479,13 +488,17 @@ def _validate_live_cross_family(config: object) -> None:
     models = config.get("models")
     if not isinstance(models, list) or not models or not all(isinstance(m, str) and m for m in models):
         raise ValueError("live_cross_family.models must be a non-empty list of model tags")
-    replicates = int(config.get("replicates_per_model", 2))
+    replicates = _live_integer(config, "live_cross_family", "replicates_per_model", 2)
     if replicates < 1:
         raise ValueError("live_cross_family.replicates_per_model must be >= 1")
     seeds = config.get("seeds", [])
-    if not isinstance(seeds, list) or not seeds or len(set(seeds)) != len(seeds):
+    if not isinstance(seeds, list) or not seeds:
         raise ValueError("live_cross_family.seeds must be a non-empty unique list")
-    if int(config.get("n_items", 0)) <= 0:
+    if any(type(seed) is not int for seed in seeds):
+        raise ValueError("live_cross_family.seeds must contain only integers")
+    if len(set(seeds)) != len(seeds):
+        raise ValueError("live_cross_family.seeds must be a non-empty unique list")
+    if _live_integer(config, "live_cross_family", "n_items", 0) <= 0:
         raise ValueError("live_cross_family.n_items must be positive")
     target_accuracy = float(config.get("target_accuracy", 0.0))
     if not 0.0 < target_accuracy < 1.0:
@@ -498,11 +511,11 @@ def _validate_live_cross_family(config: object) -> None:
         raise ValueError("live_cross_family.base_url must be a non-empty string")
     if float(config.get("temperature", 0.6)) < 0.0:
         raise ValueError("live_cross_family.temperature must be non-negative")
-    if int(config.get("num_predict", 1)) <= 0:
+    if _live_integer(config, "live_cross_family", "num_predict", 1) <= 0:
         raise ValueError("live_cross_family.num_predict must be positive")
     if float(config.get("timeout", 20.0)) <= 0.0:
         raise ValueError("live_cross_family.timeout must be positive")
-    if int(config.get("progress_every", 25)) <= 0:
+    if _live_integer(config, "live_cross_family", "progress_every", 25) <= 0:
         raise ValueError("live_cross_family.progress_every must be positive")
     if not isinstance(config.get("require_live", False), bool):
         raise ValueError("live_cross_family.require_live must be a boolean")
@@ -517,12 +530,18 @@ def _validate_live_postdoc_panel(config: object) -> None:
     if model != "gemma3:4b":
         raise ValueError("live_postdoc_panel.model must be gemma3:4b")
     seeds = config.get("seeds", [])
-    if not isinstance(seeds, list) or not seeds or len(set(seeds)) != len(seeds):
+    if not isinstance(seeds, list) or not seeds:
+        raise ValueError("live_postdoc_panel.seeds must be a non-empty unique list")
+    if any(type(seed) is not int for seed in seeds):
+        raise ValueError("live_postdoc_panel.seeds must contain only integers")
+    if len(set(seeds)) != len(seeds):
         raise ValueError("live_postdoc_panel.seeds must be a non-empty unique list")
     panel_sizes = config.get("panel_sizes", [])
     if not isinstance(panel_sizes, list) or not panel_sizes:
         raise ValueError("live_postdoc_panel.panel_sizes must be a non-empty list")
-    if any(int(size) < 3 for size in panel_sizes):
+    if any(type(size) is not int for size in panel_sizes):
+        raise ValueError("live_postdoc_panel.panel_sizes must contain only integers")
+    if any(size < 3 for size in panel_sizes):
         raise ValueError("live_postdoc_panel.panel_sizes must be >= 3")
     strategies = config.get("strategies", [])
     if not isinstance(strategies, list) or not strategies:
@@ -530,19 +549,20 @@ def _validate_live_postdoc_panel(config: object) -> None:
     for strategy in strategies:
         if strategy not in STRATEGIES:
             raise ValueError(f"live_postdoc_panel invalid strategy {strategy}")
-    n_reviewers = int(config.get("n_reviewers", 0))
-    if n_reviewers < max(int(size) for size in panel_sizes):
+    n_reviewers = _live_integer(config, "live_postdoc_panel", "n_reviewers", 0)
+    if n_reviewers < max(panel_sizes):
         raise ValueError("live_postdoc_panel.n_reviewers must cover panel sizes")
-    if int(config.get("n_applications", 0)) <= 0:
+    if _live_integer(config, "live_postdoc_panel", "n_applications", 0) <= 0:
         raise ValueError("live_postdoc_panel.n_applications must be positive")
-    max_trios = max(math.comb(int(size), 3) for size in panel_sizes)
-    if int(config.get("n_trios", 0)) <= 0 or int(config.get("n_trios", 0)) > max_trios:
+    max_trios = max(math.comb(size, 3) for size in panel_sizes)
+    n_trios = _live_integer(config, "live_postdoc_panel", "n_trios", 0)
+    if n_trios <= 0 or n_trios > max_trios:
         raise ValueError("live_postdoc_panel.n_trios must fit available trios")
     prevalence = float(config.get("prevalence_strong", 0.5))
     if not 0.0 < prevalence < 1.0:
         raise ValueError("live_postdoc_panel.prevalence_strong must be in (0, 1)")
-    age_min = int(config.get("age_min", 28))
-    age_max = int(config.get("age_max", 52))
+    age_min = _live_integer(config, "live_postdoc_panel", "age_min", 28)
+    age_max = _live_integer(config, "live_postdoc_panel", "age_max", 52)
     if age_min >= age_max:
         raise ValueError("live_postdoc_panel.age_min must be below age_max")
     mean_expertise = float(config.get("mean_expertise", 0.74))
@@ -557,11 +577,11 @@ def _validate_live_postdoc_panel(config: object) -> None:
         raise ValueError("live_postdoc_panel.base_url must be a non-empty string")
     if float(config.get("temperature", 0.2)) < 0.0:
         raise ValueError("live_postdoc_panel.temperature must be non-negative")
-    if int(config.get("num_predict", 1)) <= 0:
+    if _live_integer(config, "live_postdoc_panel", "num_predict", 1) <= 0:
         raise ValueError("live_postdoc_panel.num_predict must be positive")
     if float(config.get("timeout", 20.0)) <= 0.0:
         raise ValueError("live_postdoc_panel.timeout must be positive")
-    if int(config.get("progress_every", 25)) <= 0:
+    if _live_integer(config, "live_postdoc_panel", "progress_every", 25) <= 0:
         raise ValueError("live_postdoc_panel.progress_every must be positive")
     if not isinstance(config.get("require_live", False), bool):
         raise ValueError("live_postdoc_panel.require_live must be a boolean")

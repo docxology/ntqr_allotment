@@ -13,15 +13,15 @@ from __future__ import annotations
 
 import json
 from concurrent.futures import ProcessPoolExecutor
-from dataclasses import asdict
 from itertools import product
 from pathlib import Path
 
 from ntqr_allotment.config import load_experiment_profile
 from ntqr_allotment.pipeline import TrialConfig
 from ntqr_allotment.trio_conditioning import (
+    TrioDiagnostic,
     panel_trio_diagnostics,
-    pearson,
+    summarize_trio_diagnostics,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,9 +58,9 @@ def _configs() -> tuple[list[TrialConfig], int]:
     return configs, grid.n_trios
 
 
-def _run(args: tuple[TrialConfig, int]) -> list[dict]:
+def _run(args: tuple[TrialConfig, int]) -> list[TrioDiagnostic]:
     config, n_trios = args
-    return [asdict(rec) for rec in panel_trio_diagnostics(config, n_trios=n_trios)]
+    return panel_trio_diagnostics(config, n_trios=n_trios)
 
 
 def main() -> None:
@@ -68,54 +68,33 @@ def main() -> None:
 
     ensure_deterministic_hashing()  # representative_sortition is hash-order sensitive
     configs, n_trios = _configs()
-    records: list[dict] = []
+    records: list[TrioDiagnostic] = []
     with ProcessPoolExecutor(max_workers=WORKERS) as pool:
         for batch in pool.map(_run, [(c, n_trios) for c in configs], chunksize=8):
             records.extend(batch)
 
-    sizes = sorted({r["panel_size"] for r in records})
-    by_size_err = mean_by_size_from_dicts(records, "eie_error")
-    by_size_corr = mean_by_size_from_dicts(records, "mean_abs_corr")
-    by_size_acc = mean_by_size_from_dicts(records, "mean_judge_accuracy")
-    # First-trio (rank 0) vs later-trio (rank > 0) mean error, by size.
-    rank0 = [r["eie_error"] for r in records if r["trio_rank"] == 0]
-    rankN = [r["eie_error"] for r in records if r["trio_rank"] > 0]
-    # Per-trio associations (do error and correlation/accuracy/rank move together?).
-    err = [r["eie_error"] for r in records]
-    assoc = {
-        "error_vs_corr": pearson(err, [r["mean_abs_corr"] for r in records]),
-        "error_vs_accuracy": pearson(err, [r["mean_judge_accuracy"] for r in records]),
-        "error_vs_trio_rank": pearson(err, [float(r["trio_rank"]) for r in records]),
-    }
-    payload = {
-        "schema_version": 1,
-        "n_seeds": N_SEEDS,
-        "n_records": len(records),
-        "sizes": sizes,
-        "mean_error_by_size": by_size_err,
-        "mean_abs_corr_by_size": by_size_corr,
-        "mean_judge_accuracy_by_size": by_size_acc,
-        "mean_error_first_trio": sum(rank0) / len(rank0) if rank0 else None,
-        "mean_error_later_trios": sum(rankN) / len(rankN) if rankN else None,
-        "associations_pearson": assoc,
-        "records": records,
-    }
-    out = ROOT / "output" / "data" / "trio_conditioning.json"
+    _write_summary(
+        ROOT / "output" / "data" / "trio_conditioning.json",
+        records,
+        n_seeds=N_SEEDS,
+    )
+
+
+def _write_summary(out: Path, records: list[TrioDiagnostic], *, n_seeds: int) -> None:
+    payload = summarize_trio_diagnostics(records, n_seeds=n_seeds)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print(f"wrote {out} ({len(records)} trio records, {N_SEEDS} seeds)")
-    print("mean error by size:", {k: round(v, 4) for k, v in by_size_err.items()})
-    print("mean |corr| by size:", {k: round(v, 4) for k, v in by_size_corr.items()})
-    print("first-trio err:", round(payload["mean_error_first_trio"], 4),
-          "| later-trios err:", round(payload["mean_error_later_trios"], 4))
-    print("associations:", {k: round(v, 3) for k, v in assoc.items()})
-
-
-def mean_by_size_from_dicts(records: list[dict], field: str) -> dict[int, float]:
-    buckets: dict[int, list[float]] = {}
-    for rec in records:
-        buckets.setdefault(int(rec["panel_size"]), []).append(float(rec[field]))
-    return {size: sum(v) / len(v) for size, v in sorted(buckets.items())}
+    print(f"wrote {out} ({len(records)} trio records, {n_seeds} seeds)")
+    print("mean error by size:", {k: round(v, 4) for k, v in payload["mean_error_by_size"].items()})
+    print("mean |corr| by size:", {k: round(v, 4) for k, v in payload["mean_abs_corr_by_size"].items()})
+    first = payload["mean_error_first_trio"]
+    later = payload["mean_error_later_trios"]
+    print("first-trio err:", round(first, 4) if first is not None else "unavailable",
+          "| later-trios err:", round(later, 4) if later is not None else "unavailable")
+    print("associations:", {
+        k: round(v, 3) if v is not None else None
+        for k, v in payload["associations_pearson"].items()
+    })
 
 
 if __name__ == "__main__":

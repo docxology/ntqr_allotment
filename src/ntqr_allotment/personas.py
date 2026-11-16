@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Protocol, Sequence
@@ -148,23 +149,41 @@ def personas_from_population(experts: Sequence[Expert]) -> list[PersonaSpec]:
     return personas
 
 
-def parse_label(text: str) -> str | None:
-    """Robustly extract 'a'/'b' from a model's free-text answer; None if unclear.
+_LABEL_RE = re.compile(r"\b([ab])\b")
+_BARE_LABEL_RE = re.compile(r"""['"`*]*[ab]['"`*]*[.!]?""")
+_EXPLICIT_LABEL_RE = re.compile(
+    r"""\b(?:answer|option|label)\s*(?:is\s+|[:=]\s*)['"`*]*[ab]['"`*]*"""
+    r"""(?=\s*(?:[.!?,;:)]|$)|\s+(?:because|since)\b)"""
+)
+_CUE_RE = re.compile(r"\b(correct|true|incorrect|false|wrong)\b")
+_NEGATION_RE = re.compile(
+    r"\b(?:not|no|never|none|neither|nor|cannot|can't|cant|isn't|isnt|wasn't|wasnt)\b"
+)
+_CUE_LABELS = {"correct": "a", "true": "a", "incorrect": "b", "false": "b", "wrong": "b"}
 
-    Word cues win over a bare letter scan ("incorrect" is checked before
-    "correct" since it contains it), so "false"/"incorrect" do not get
-    mis-read as 'a' by the letter in the word.
+
+def parse_label(text: str) -> str | None:
+    """Extract an unnegated, unambiguous binary label from free-text prose.
+
+    Bare answers and explicit answer/option/label syntax are authoritative over
+    explanatory cues. Ordinary articles are not answers. Conflicting labels or
+    cues, negation, and text without a recognized answer are rejected.
     """
     low = text.strip().lower()
-    if any(w in low for w in ("incorrect", "false", "wrong")):
-        return "b"
-    if any(w in low for w in ("correct", "true")):
-        return "a"
-    for ch in low:
-        if ch == "a":
-            return "a"
-        if ch == "b":
-            return "b"
+    if _NEGATION_RE.search(low):
+        return None
+
+    labels = set(_LABEL_RE.findall(low))
+    if len(labels) > 1:
+        return None
+    if len(labels) == 1 and (
+        _BARE_LABEL_RE.fullmatch(low) or _EXPLICIT_LABEL_RE.search(low)
+    ):
+        return labels.pop()
+
+    cues = {_CUE_LABELS[match.group(1)] for match in _CUE_RE.finditer(low)}
+    if len(cues) == 1:
+        return cues.pop()
     return None
 
 
@@ -271,14 +290,18 @@ class OllamaJudge:
             r = requests.get(f"{self.base_url}/api/tags", timeout=3.0)
             if r.status_code != 200:
                 return False
-            names = {
-                m.get("name")
-                for m in r.json().get("models", [])
-                if isinstance(m, dict)
-            }
-            return self.model in names
-        except requests.RequestException:
+            payload = r.json()
+        except (requests.RequestException, ValueError):
             return False
+        models = payload.get("models") if isinstance(payload, dict) else None
+        if not isinstance(models, list):
+            return False
+        names = {
+            entry.get("name")
+            for entry in models
+            if isinstance(entry, dict) and isinstance(entry.get("name"), str)
+        }
+        return any(candidate in names for candidate in _matching_model_names(self.model))
 
     def judge(self, persona: PersonaSpec, item_text: str) -> str:
         system, user = persona.build_prompt(item_text)
@@ -300,8 +323,21 @@ class OllamaJudge:
                     f"{self.base_url}/api/generate", json=payload, timeout=self.timeout
                 )
                 r.raise_for_status()
-                label = parse_label(r.json().get("response", ""))
-                return label if label is not None else "b"  # unparseable -> conservative 'b'
+                try:
+                    response_payload = r.json()
+                except ValueError as exc:
+                    raise ValueError("Ollama /api/generate returned invalid JSON") from exc
+                if not isinstance(response_payload, dict):
+                    raise ValueError("Ollama /api/generate response must be a JSON object")
+                response_text = response_payload.get("response")
+                if not isinstance(response_text, str) or not response_text.strip():
+                    raise ValueError(
+                        "Ollama /api/generate response must contain a non-empty string 'response'"
+                    )
+                label = parse_label(response_text)
+                if label is None:
+                    raise ValueError(f"could not parse Ollama response as 'a' or 'b': {response_text!r}")
+                return label
             except (requests.Timeout, requests.ConnectionError) as exc:
                 # Transient: server stalled or briefly unreachable. Retry rather than
                 # abort the whole run; the vote already in the cache is never re-asked.
@@ -368,10 +404,15 @@ def judge_corpus(
 
     Legacy persona-id/item-index keys are retained but never reused without
     provenance. Custom judges supply cache_identity() or an explicit namespace.
-    A namespace may also bind an Ollama model digest in addition to its tag.
+    Cached Ollama runs require a namespace containing the immutable model digest.
     """
     cache: dict[str, str] = {}
     path = Path(cache_path) if cache_path is not None else None
+    if path is not None and isinstance(judge, OllamaJudge):
+        if not isinstance(cache_namespace, str) or not cache_namespace.strip():
+            raise ValueError(
+                "cached Ollama runs require cache_namespace with an immutable model digest"
+            )
     if path is not None and path.exists():
         cache = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(cache, dict):
@@ -422,12 +463,18 @@ def run_persona_trio(
     items: Sequence[CorpusItem],
     *,
     cache_path: str | Path | None = None,
+    cache_namespace: str | None = None,
 ) -> PersonaTrioResult:
     """Run the empirical centerpiece: 3 persona judges -> NTQR -> oracle scoring."""
     if len(personas) < 3:
         raise ValueError("need at least 3 personas for the trio solver")
     trio = list(personas[:3])
-    votes = [judge_corpus(judge, p, items, cache_path=cache_path) for p in trio]
+    votes = [
+        judge_corpus(
+            judge, p, items, cache_path=cache_path, cache_namespace=cache_namespace
+        )
+        for p in trio
+    ]
     oracle = supervised_oracle(votes, items)
     eie_sols = error_independent_solutions(votes)
     mv_sols = majority_voting_solutions(votes)

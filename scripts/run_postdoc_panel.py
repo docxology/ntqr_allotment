@@ -14,14 +14,18 @@ def main() -> None:
     args = _parse_args()
     root = Path(__file__).resolve().parents[1]
     config = load_live_postdoc_panel_config(root / args.config)
-    data_dir = root / "output" / "data"
-    data_dir.mkdir(parents=True, exist_ok=True)
+    live_dir = root / "output" / "data"
+    data_dir = args.output_dir
+    if data_dir is None:
+        data_dir = root / "output" / "diagnostics" / "postdoc_panel" if args.offline else live_dir
+    if args.offline and data_dir.resolve() == live_dir.resolve():
+        raise ValueError("--offline requires an output directory separate from recorded live results")
 
     seeds = tuple(args.seeds) if args.seeds else config.seeds
     panel_sizes = tuple(args.panel_sizes) if args.panel_sizes else config.panel_sizes
     strategies = tuple(args.strategies) if args.strategies else config.strategies
-    n_reviewers = args.n_reviewers or config.n_reviewers
-    n_applications = args.n_applications or config.n_applications
+    n_reviewers = config.n_reviewers if args.n_reviewers is None else args.n_reviewers
+    n_applications = config.n_applications if args.n_applications is None else args.n_applications
     runtime_config = {
         **config.metadata(),
         "seed_list": list(seeds),
@@ -71,7 +75,22 @@ def main() -> None:
         )
         tracks["live"] = live
 
-    alignment = build_postdoc_alignment(analytical, live if live is not None else analytical)
+    if live is not None and live.get("live_ollama"):
+        alignment = build_postdoc_alignment(analytical, live)
+    else:
+        alignment = {
+            "schema_version": 1,
+            "available": False,
+            "reason": "offline analytical-only run" if args.offline else "live observations unavailable",
+            "analytical_config_hash": runtime_hash,
+            "live_config_hash": None,
+            "model": None,
+            "model_provenance": None,
+            "cells": [],
+            "agreement_rate_resolved": None,
+            "n_cells": 0,
+            "n_resolved_cells": 0,
+        }
     combined = {
         "schema_version": 1,
         "config_hash": runtime_hash,
@@ -83,7 +102,7 @@ def main() -> None:
         "alignment": alignment,
         "live_ollama": bool(live and live.get("live_ollama")),
         "model": config.model,
-        "model_provenance": (live or analytical).get("model_provenance"),
+        "model_provenance": live.get("model_provenance") if live is not None else None,
         "caveat": (
             "Synthetic applicants and age metadata only; the live track uses one "
             "local Gemma model prompted as synthetic reviewers and is not a "
@@ -92,6 +111,7 @@ def main() -> None:
     }
     results_path = data_dir / "postdoc_panel_results.json"
     alignment_path = data_dir / "postdoc_panel_alignment.json"
+    data_dir.mkdir(parents=True, exist_ok=True)
     results_path.write_text(json.dumps(combined, indent=2, sort_keys=True), encoding="utf-8")
     alignment_path.write_text(json.dumps(alignment, indent=2, sort_keys=True), encoding="utf-8")
     print(results_path.resolve())
@@ -102,6 +122,8 @@ def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="docs/manuscript/config.yaml")
     parser.add_argument("--offline", action="store_true")
+    parser.add_argument("--output-dir", type=Path,
+                        help="results directory; offline defaults to output/diagnostics/postdoc_panel")
     parser.add_argument("--require-live", dest="require_live", action="store_true")
     parser.add_argument("--allow-unavailable-live", dest="require_live", action="store_false")
     parser.set_defaults(require_live=None)

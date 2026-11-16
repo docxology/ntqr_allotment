@@ -1,14 +1,26 @@
 """Exercise the native CBC adapter with real continuous and integer programs."""
 
+import os
+
 import pulp
 import pytest
 
 from ntqr_allotment.solver import configure_cbc, runtime_provenance
 
 
+def _configure_real_cbc() -> None:
+    try:
+        configure_cbc()
+    except RuntimeError:
+        if os.environ.get("NTQR_CBC_PATH") is not None:
+            raise
+        pytest.skip("real CBC solver unavailable")
+
+
 @pytest.mark.parametrize("category, expected", [("Continuous", 1.5), ("Integer", 1.0)])
 def test_native_cbc_solves_real_program(category, expected):
-    configure_cbc()
+    pulp.PULP_CBC_CMD._permissions_ok = False
+    _configure_real_cbc()
     problem = pulp.LpProblem("native_cbc_smoke", pulp.LpMaximize)
     x = pulp.LpVariable("x", lowBound=0, cat=category)
     problem += x

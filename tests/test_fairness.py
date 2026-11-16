@@ -42,8 +42,7 @@ def test_maximin_fairness_report(population):
 def test_maximin_min_prob_is_positive(population):
     # the maximin objective should give every quota-eligible candidate some chance
     rep = maximin_fairness(population, 6, seed=2, panel_count=40)
-    assert rep.min_selection_prob >= 0.0
-    assert rep.max_selection_prob > 0.0
+    assert rep.min_selection_prob > 0.0
 
 
 def test_gini_edge_cases():

@@ -142,9 +142,10 @@ def test_verdict_well_powered_null_branch() -> None:
     assert _verdict(perm_p=0.50, underpowered=False, alpha=0.05) == "well-powered-null"
 
 
-def test_verdict_alpha_boundary_is_not_significant() -> None:
-    # NEGATIVE CONTROL: the test is strict ``<`` -- p exactly at alpha is NOT significant.
-    assert _verdict(perm_p=0.05, underpowered=False, alpha=0.05) == "well-powered-null"
+def test_verdict_alpha_boundary_is_significant() -> None:
+    # Standard rejection is p <= alpha; only a value strictly above alpha is a null.
+    assert _verdict(perm_p=0.05, underpowered=False, alpha=0.05) == "significant"
+    assert _verdict(perm_p=0.050001, underpowered=False, alpha=0.05) == "well-powered-null"
 
 
 # --------------------------------------------------------------------------- #
@@ -180,26 +181,21 @@ def test_contrast_power_separated_pair_is_significant_nonzero_d() -> None:
     assert rowp.verdict != "well-powered-null"
 
 
-def test_contrast_power_constant_pair_has_zero_d_and_none_seed_budget() -> None:
-    # Both groups constant (but at different levels): pooled variance is 0 -> d == 0.0.
-    # That drives seeds_for_80 to None (no retrospective observed power is computed).
-    a = [0.5, 0.5, 0.5]
-    b = [0.9, 0.9, 0.9]
-    rowp = contrast_power(
-        a,
-        b,
-        contrast="flat",
-        group_a="A",
-        group_b="B",
-        panel_size=3,
-        n_perm=200,
-        seed=1,
-        alpha=0.05,
-    )
-    assert rowp.observed_d == 0.0
-    assert not hasattr(rowp, "power_at_n")  # retrospective observed power is not reported
-    assert rowp.seeds_for_80 is None  # diagnose_null returns None for a zero effect
-    assert rowp.underpowered is True  # |0| < mde always
+def test_contrast_power_rejects_undefined_zero_spread_effect() -> None:
+    # Perfectly separated constant groups have no finite Cohen's d. Reporting
+    # zero would contradict both the group means and the permutation evidence.
+    with pytest.raises(ValueError, match="undefined"):
+        contrast_power(
+            [0.5, 0.5, 0.5],
+            [0.9, 0.9, 0.9],
+            contrast="flat",
+            group_a="A",
+            group_b="B",
+            panel_size=3,
+            n_perm=200,
+            seed=1,
+            alpha=0.05,
+        )
 
 
 def test_contrast_power_is_deterministic() -> None:

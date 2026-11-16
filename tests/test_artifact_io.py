@@ -8,7 +8,15 @@ import pytest
 
 from ntqr_allotment.artifacts import write_json
 from ntqr_allotment.corpus import make_arithmetic_corpus
-from ntqr_allotment.personas import DeterministicJudge, PersonaSpec, judge_corpus
+from ntqr_allotment.experts import generate_population
+from ntqr_allotment.personas import (
+    DeterministicJudge,
+    OllamaJudge,
+    PersonaSpec,
+    judge_corpus,
+    personas_from_population,
+    run_persona_trio,
+)
 
 
 def test_failed_json_encoding_preserves_existing_file(tmp_path):
@@ -56,3 +64,32 @@ def test_legacy_index_only_keys_are_preserved_without_being_trusted(tmp_path):
     stored = json.loads(path.read_text())
     assert all(stored[key] == value for key, value in old.items())
     assert sum(key.startswith("v2:") for key in stored) == 4
+
+
+def test_cached_ollama_judge_requires_immutable_digest(tmp_path):
+    items = make_arithmetic_corpus(1, seed=8)
+    persona = PersonaSpec("p", "expert", "neutral", "center", 0.99)
+    path = tmp_path / "live-cache.json"
+    judge = OllamaJudge(base_url="http://localhost:6553")
+    with pytest.raises(ValueError, match="immutable model digest"):
+        judge_corpus(judge, persona, items, cache_path=path)
+    assert not path.exists()
+
+
+def test_run_persona_trio_forwards_digest_cache_namespace(tmp_path):
+    items = make_arithmetic_corpus(300, seed=7)
+    population = generate_population(
+        10, seed=7, mean_expertise=0.8, expertise_heterogeneity=0.05
+    )
+    personas = personas_from_population(population)
+    judge = DeterministicJudge(items, seed=7)
+    path = tmp_path / "trio-cache.json"
+
+    run_persona_trio(
+        judge, personas, items, cache_path=path, cache_namespace="sha256:first"
+    )
+    assert len(json.loads(path.read_text())) == 3 * len(items)
+    run_persona_trio(
+        judge, personas, items, cache_path=path, cache_namespace="sha256:second"
+    )
+    assert len(json.loads(path.read_text())) == 6 * len(items)

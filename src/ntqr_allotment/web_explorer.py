@@ -18,6 +18,9 @@ class ExplorerDataset:
     title: str
     source: str
     rows: tuple[dict[str, object], ...]
+    source_row_count: int
+    truncated: bool
+    row_limit: int
 
 
 @dataclass(frozen=True)
@@ -49,47 +52,54 @@ def build_explorer_model(repo_root: Path, *, max_rows: int = 500) -> ExplorerMod
     analytical = _read_optional_json(data_dir / "analytical_predictions.json")
     config_metadata = _read_config_metadata(root / "docs" / "manuscript" / "config.yaml")
     datasets = (
-        ExplorerDataset(
+        _make_dataset(
             "sweep_rows",
             "Synthetic sweep rows",
             "output/data/sweep_results.json",
-            tuple(_limit_rows(sweep.get("rows", []), max_rows)),
+            _limit_rows(sweep.get("rows", []), max_rows),
+            max_rows=max_rows,
         ),
-        ExplorerDataset(
+        _make_dataset(
             "sweep_aggregates",
             "Synthetic sweep aggregates",
             "output/data/sweep_aggregated.csv",
-            tuple(_read_csv(data_dir / "sweep_aggregated.csv", max_rows=max_rows)),
+            _read_csv(data_dir / "sweep_aggregated.csv", max_rows=max_rows),
+            max_rows=max_rows,
         ),
-        ExplorerDataset(
+        _make_dataset(
             "power_diagnostics",
             "Power diagnostics",
             "output/data/power_analysis.csv",
-            tuple(_read_csv(data_dir / "power_analysis.csv", max_rows=max_rows)),
+            _read_csv(data_dir / "power_analysis.csv", max_rows=max_rows),
+            max_rows=max_rows,
         ),
-        ExplorerDataset(
+        _make_dataset(
             "analytical_predictions",
             "Analytical prediction cells",
             "output/data/analytical_predictions.json",
-            tuple(_limit_rows(analytical.get("rep_vs_ideo_cells", []), max_rows)),
+            _limit_rows(analytical.get("rep_vs_ideo_cells", []), max_rows),
+            max_rows=max_rows,
         ),
-        ExplorerDataset(
+        _make_dataset(
             "pre_post_cells",
             "Pre/post NTQR cells",
             "output/data/analytical_predictions.json",
-            tuple(_limit_rows(analytical.get("pre_post_cells", []), max_rows)),
+            _limit_rows(analytical.get("pre_post_cells", []), max_rows),
+            max_rows=max_rows,
         ),
-        ExplorerDataset(
+        _make_dataset(
             "postdoc_panel_aggregates",
             "Gemma postdoc panel aggregates",
             "output/data/postdoc_panel_results.json",
-            tuple(_limit_rows(postdoc.get("aggregates", []), max_rows)),
+            _limit_rows(postdoc.get("aggregates", []), max_rows),
+            max_rows=max_rows,
         ),
-        ExplorerDataset(
+        _make_dataset(
             "postdoc_alignment",
             "Analytical-vs-Gemma postdoc alignment",
             "output/data/postdoc_panel_alignment.json",
-            tuple(_limit_rows(postdoc_alignment.get("cells", []), max_rows)),
+            _limit_rows(postdoc_alignment.get("cells", []), max_rows),
+            max_rows=max_rows,
         ),
     )
     figures = tuple(
@@ -131,7 +141,13 @@ def render_explorer_html(model: ExplorerModel) -> str:
         "datasets": [dataset.__dict__ for dataset in model.datasets],
         "figures": [figure.__dict__ for figure in model.figures],
     }
-    state_json = json.dumps(payload, sort_keys=True)
+    try:
+        state_json = json.dumps(payload, sort_keys=True, allow_nan=False)
+    except ValueError as exc:
+        raise ValueError(
+            "explorer HTML embedded JSON serialization failed; "
+            "NaN and Infinity are not allowed"
+        ) from exc
     state_json_html = _script_json(state_json)
     dataset_options = "\n".join(
         f'<option value="{html.escape(dataset.dataset_id)}">'
@@ -264,11 +280,32 @@ function renderTable() {{
   const needle = filter.value.toLowerCase();
   const rows = dataset.rows.filter(row => JSON.stringify(row).toLowerCase().includes(needle));
   const columns = Array.from(new Set(rows.flatMap(row => Object.keys(row)))).slice(0, 24);
-  source.innerHTML = `<p><strong>${{dataset.title}}</strong> from <code>${{dataset.source}}</code>; showing ${{rows.length}} row(s).</p>`;
-  table.innerHTML = "";
+  const rowSummary = dataset.truncated
+    ? `showing first ${{dataset.rows.length}} of ${{dataset.source_row_count}} rows`
+    : `showing ${{rows.length}} row(s)`;
+  const filterSummary = needle && dataset.truncated
+    ? `; ${{rows.length}} row(s) match the filter`
+    : "";
+  const summary = document.createElement("p");
+  const title = document.createElement("strong");
+  title.textContent = dataset.title;
+  const sourceCode = document.createElement("code");
+  sourceCode.textContent = dataset.source;
+  summary.append(
+    title,
+    document.createTextNode(" from "),
+    sourceCode,
+    document.createTextNode(`; ${{rowSummary}}${{filterSummary}}.`)
+  );
+  source.replaceChildren(summary);
+  table.replaceChildren();
   const thead = table.createTHead();
   const tr = thead.insertRow();
-  columns.forEach(col => tr.insertCell().outerHTML = `<th>${{col}}</th>`);
+  columns.forEach(column => {{
+    const header = document.createElement("th");
+    header.textContent = column;
+    tr.appendChild(header);
+  }});
   const tbody = table.createTBody();
   rows.forEach(row => {{
     const bodyRow = tbody.insertRow();
@@ -348,19 +385,49 @@ def _read_config_metadata(path: Path) -> dict[str, object]:
     }
 
 
-def _read_csv(path: Path, *, max_rows: int) -> list[dict[str, object]]:
+def _make_dataset(
+    dataset_id: str,
+    title: str,
+    source: str,
+    row_data: tuple[list[dict[str, object]], int],
+    *,
+    max_rows: int,
+) -> ExplorerDataset:
+    rows, source_row_count = row_data
+    return ExplorerDataset(
+        dataset_id=dataset_id,
+        title=title,
+        source=source,
+        rows=tuple(rows),
+        source_row_count=source_row_count,
+        truncated=source_row_count > max_rows,
+        row_limit=max_rows,
+    )
+
+
+def _read_csv(
+    path: Path,
+    *,
+    max_rows: int,
+) -> tuple[list[dict[str, object]], int]:
     with path.open(newline="", encoding="utf-8") as handle:
-        return [dict(row) for _, row in zip(range(max_rows), csv.DictReader(handle), strict=False)]
+        reader = csv.DictReader(handle)
+        limited = [
+            dict(row)
+            for _, row in zip(range(max_rows), reader, strict=False)
+        ]
+        source_row_count = len(limited) + sum(1 for _ in reader)
+    return limited, source_row_count
 
 
-def _limit_rows(rows: object, max_rows: int) -> list[dict[str, object]]:
+def _limit_rows(rows: object, max_rows: int) -> tuple[list[dict[str, object]], int]:
     if not isinstance(rows, list):
-        return []
+        return [], 0
     limited: list[dict[str, object]] = []
     for row in rows[:max_rows]:
         if isinstance(row, dict):
             limited.append(_flatten_row(row))
-    return limited
+    return limited, len(rows)
 
 
 def _flatten_row(row: dict[str, object]) -> dict[str, object]:
@@ -369,7 +436,13 @@ def _flatten_row(row: dict[str, object]) -> dict[str, object]:
         if isinstance(value, (str, int, float, bool)) or value is None:
             flattened[key] = value
         else:
-            flattened[key] = json.dumps(value, sort_keys=True)
+            try:
+                flattened[key] = json.dumps(value, sort_keys=True, allow_nan=False)
+            except ValueError as exc:
+                raise ValueError(
+                    f"explorer row field {key!r} is not valid strict JSON; "
+                    "NaN and Infinity are not allowed"
+                ) from exc
     return flattened
 
 

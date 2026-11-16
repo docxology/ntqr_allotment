@@ -23,9 +23,26 @@ def permutation_test(
     b = np.asarray(group_b, dtype=float)
     if a.size == 0 or b.size == 0:
         raise ValueError("both groups must be non-empty")
-    if n_perm < 1:
-        raise ValueError("n_perm must be >= 1")
+    if np.any(~np.isfinite(a)) or np.any(~np.isfinite(b)):
+        raise ValueError("both groups must contain only finite values")
+    if type(n_perm) is not int or n_perm < 1:
+        raise ValueError("n_perm must be a positive integer")
+    if alternative not in ("two-sided", "greater", "less"):
+        raise ValueError("alternative must be 'two-sided', 'greater', or 'less'")
 
+    # Remove a common location before scaling; otherwise a large offset can
+    # shrink real group differences below the tie tolerance. Half-sums avoid
+    # overflow even when finite observations span opposite float extremes.
+    minimum = min(float(np.min(a)), float(np.min(b)))
+    maximum = max(float(np.max(a)), float(np.max(b)))
+    center = minimum / 2.0 + maximum / 2.0
+    a = a - center
+    b = b - center
+    scale = max(float(np.max(np.abs(a))), float(np.max(np.abs(b))))
+    if scale > 0.0:
+        a = a / scale
+        b = b / scale
+    tolerance = 1e-12
     observed = _mean_diff(a, b)
     pooled = np.concatenate([a, b])
     na = a.size
@@ -36,13 +53,13 @@ def permutation_test(
         perm = rng.permutation(pooled)
         stat = _mean_diff(perm[:na], perm[na:])
         if alternative == "two-sided":
-            if abs(stat) >= abs(observed) - 1e-12:
+            if abs(stat) >= abs(observed) - tolerance:
                 extreme += 1
         elif alternative == "greater":
-            if stat >= observed - 1e-12:
+            if stat >= observed - tolerance:
                 extreme += 1
         else:
-            if stat <= observed + 1e-12:
+            if stat <= observed + tolerance:
                 extreme += 1
     return (1.0 + extreme) / (1.0 + n_perm)
 
@@ -84,6 +101,6 @@ def simulate_power(
         a = sub.normal(0.0, sd, size=n_a)
         b = sub.normal(effect * sd, sd, size=nb)
         p = permutation_test(a, b, n_perm=n_perm, seed=int(child_seeds[i]), alternative=alt)
-        if p < alpha:
+        if p <= alpha:
             rejections += 1
     return rejections / n_sim

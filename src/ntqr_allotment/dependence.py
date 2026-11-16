@@ -31,7 +31,7 @@ from typing import Sequence
 import numpy as np
 
 from .experts import Expert, Item
-from .ntqr_eval import trio_label_vote_counts
+from .ntqr_eval import NoPhysicalSolutionError, trio_label_vote_counts
 
 
 def sample_votes_correlated(
@@ -96,9 +96,19 @@ def measure_error_correlations(
     Uses ``SupervisedEvaluation.pair_label_error_correlation`` and
     ``three_way_label_error_correlation`` (the very quantities the exact
     error-independent solver assumes are zero). Trio-only (NTQR R=2 trio API).
+
+    Raises:
+        NoPhysicalSolutionError: If either true-label stratum is empty.
     """
     if len(votes_by_judge) != 3:
         raise ValueError("error-correlation measurement is trio-only (3 judges)")
+    true_labels = {item.true_label for item in items}
+    missing_labels = tuple(label for label in ("a", "b") if label not in true_labels)
+    if missing_labels:
+        missing = ", ".join(missing_labels)
+        raise NoPhysicalSolutionError(
+            f"error-correlation measurement requires non-empty true-label strata; missing: {missing}"
+        )
     from ntqr.r2.datasketches import TrioLabelVoteCounts
     from ntqr.r2.evaluators import SupervisedEvaluation
 

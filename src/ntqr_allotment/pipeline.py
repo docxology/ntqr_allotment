@@ -184,8 +184,10 @@ def run_trial_ensemble(
             break
         trio_votes = [panel_votes[index] for index in trio_indices]
         eie_sols = error_independent_solutions(trio_votes)
+        if not eie_sols:
+            continue  # degenerate trio: MV symbolic work cannot make it usable
         mv_sols = majority_voting_solutions(trio_votes)
-        if not eie_sols or not mv_sols:
+        if not mv_sols:
             continue  # degenerate trio: skip honestly, do not score it
         oracle = supervised_oracle(trio_votes, items)
         eie = closest_solution(eie_sols, oracle)

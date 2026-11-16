@@ -194,7 +194,7 @@ def paired_size_contrast(
 
 def _verdict(perm_p: float, underpowered: bool, alpha: float) -> str:
     """Honest one-line verdict combining significance and design adequacy."""
-    if perm_p < alpha:
+    if perm_p <= alpha:
         return "significant"
     if underpowered:
         return "underpowered-null"

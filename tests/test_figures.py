@@ -39,6 +39,7 @@ from ntqr_allotment.figures import (
     plot_strategy_ranking,
     plot_theory_alignment_heatmap,
     plot_track_ranking_inversion,
+    plot_trio_conditioning,
 )
 from ntqr_allotment.independence_sweep import IndependenceAggregate
 
@@ -771,6 +772,58 @@ def test_plot_strategy_correlation_rejects_empty_strategy_name(tmp_path: Path) -
         plot_strategy_correlation(aggregates, tmp_path / "strategy_corr.png")
 
 
+def test_plot_trio_conditioning_uses_each_strategys_observed_sizes(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    records = [
+        {
+            "strategy": "expertise_threshold",
+            "panel_size": 3,
+            "mean_abs_corr": 0.10,
+            "eie_error": 0.20,
+        },
+        {
+            "strategy": "expertise_threshold",
+            "panel_size": 6,
+            "mean_abs_corr": 0.20,
+            "eie_error": 0.40,
+        },
+        {
+            "strategy": "random_selection",
+            "panel_size": 9,
+            "mean_abs_corr": 0.30,
+            "eie_error": 0.10,
+        },
+        {
+            "strategy": "random_selection",
+            "panel_size": 12,
+            "mean_abs_corr": 0.40,
+            "eie_error": 0.30,
+        },
+    ]
+    observed_lines: dict[str, tuple[list[float], list[float]]] = {}
+
+    def capture_and_save(fig, output_path):
+        for line in fig.axes[0].lines:
+            label = line.get_label()
+            if not label.startswith("_"):
+                observed_lines[label] = (list(line.get_xdata()), list(line.get_ydata()))
+        return original_save(fig, output_path)
+
+    original_save = figure_module._save_figure
+    monkeypatch.setattr(figure_module, "_save_figure", capture_and_save)
+
+    out = plot_trio_conditioning({"records": records}, tmp_path / "trio_conditioning.png")
+
+    _assert_nontrivial_png(out)
+    assert set(observed_lines) == {"expertise threshold", "random selection"}
+    assert observed_lines["expertise threshold"][0] == [3, 6]
+    assert observed_lines["expertise threshold"][1] == pytest.approx([0.10, 0.20])
+    assert observed_lines["random selection"][0] == [9, 12]
+    assert observed_lines["random selection"][1] == pytest.approx([0.30, 0.40])
+
+
 # --- Session 6: cross-family + power design-diagnosis figures -----------------
 
 
@@ -1102,6 +1155,80 @@ def test_plot_postdoc_empirical_alignment_marks_unresolved_cells(
     out = plot_postdoc_empirical_alignment(payload, tmp_path / "alignment.png")
 
     _assert_nontrivial_png(out)
+
+
+@pytest.mark.parametrize("reverse", [False, True], ids=["source-order", "reversed-order"])
+def test_plot_postdoc_age_bias_heatmap_rejects_conflicting_duplicate_cells(
+    tmp_path: Path,
+    reverse: bool,
+) -> None:
+    rows = [
+        {
+            "track": "live",
+            "strategy": "random_selection",
+            "panel_size": 3,
+            "age_disparity_mean": 0.10,
+            "age_disparity_ci_low": 0.05,
+            "age_disparity_ci_high": 0.15,
+        },
+        {
+            "track": "live",
+            "strategy": "random_selection",
+            "panel_size": 3,
+            "age_disparity_mean": -0.20,
+            "age_disparity_ci_low": -0.25,
+            "age_disparity_ci_high": -0.15,
+        },
+    ]
+    if reverse:
+        rows.reverse()
+    output_path = tmp_path / "duplicate-age-bias.png"
+
+    with pytest.raises(
+        ValueError,
+        match=r"postdoc age-bias heatmap: duplicate cell.*random_selection.*panel_size=3",
+    ):
+        plot_postdoc_age_bias_heatmap(rows, output_path)
+
+    assert not output_path.exists()
+
+
+@pytest.mark.parametrize("reverse", [False, True], ids=["source-order", "reversed-order"])
+def test_plot_postdoc_empirical_alignment_rejects_conflicting_duplicate_cells(
+    tmp_path: Path,
+    reverse: bool,
+) -> None:
+    cells = [
+        {
+            "strategy": "representative_sortition",
+            "panel_size": 3,
+            "sign_agrees": True,
+            "unresolved": False,
+            "analytical_sign": "+",
+            "live_sign": "+",
+        },
+        {
+            "strategy": "representative_sortition",
+            "panel_size": 3,
+            "sign_agrees": False,
+            "unresolved": False,
+            "analytical_sign": "+",
+            "live_sign": "-",
+        },
+    ]
+    if reverse:
+        cells.reverse()
+    output_path = tmp_path / "duplicate-alignment.png"
+
+    with pytest.raises(
+        ValueError,
+        match=(
+            r"postdoc alignment: duplicate cell.*representative_sortition.*panel_size=3"
+        ),
+    ):
+        plot_postdoc_empirical_alignment({"cells": cells}, output_path)
+
+    assert not output_path.exists()
 
 
 # --- Method schematic + cross-track ranking inversion -------------------------
