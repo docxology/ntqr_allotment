@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 import math
 from collections import Counter
 from dataclasses import dataclass
@@ -1016,3 +1017,27 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+_NUMERIC_TOKEN = re.compile(
+    r"(?<![\w@.-])-?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?%?"
+    r"(?![\w-]|\.\d)"
+)
+
+
+def numeric_evidence(variables: dict[str, str]) -> dict[str, list[int | float]]:
+    """Expose numeric components of the computed tokens for Template validation."""
+    evidence = {}
+    for name, value in variables.items():
+        numbers = []
+        for match in _NUMERIC_TOKEN.finditer(value):
+            literal = match[0].replace(",", "")
+            if literal.endswith("%"):
+                number = float(literal[:-1]) / 100
+            else:
+                number = float(literal) if "." in literal else int(literal)
+            if number not in numbers:
+                numbers.append(number)
+        if numbers:
+            evidence[name] = numbers
+    return evidence

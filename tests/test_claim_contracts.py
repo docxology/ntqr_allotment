@@ -20,7 +20,8 @@ def _compact(text: str) -> str:
 
 _TEXT_SURFACES = (
     "README.md",
-    "audits/claim_method_audit.md",
+    "docs/study.md",
+    "docs/audits/claim_method_audit.md",
     "docs/manuscript/00_abstract.md",
     "docs/manuscript/01_introduction.md",
     "docs/manuscript/02_methods.md",
@@ -86,7 +87,7 @@ def test_ntqr_first_definition_is_source_backed() -> None:
 
 def test_ntqr_method_claims_include_upstream_caveats() -> None:
     methods = _compact(_read("docs/manuscript/02_methods.md"))
-    audit = _read("audits/claim_method_audit.md")
+    audit = _read("docs/audits/claim_method_audit.md")
 
     for phrase in [
         "exactly three",
@@ -327,8 +328,8 @@ def test_notation_table_is_labeled_and_has_symbol_column() -> None:
 def test_research_question_and_falsification_ledger_match_active_design() -> None:
     intro = _read("docs/manuscript/01_introduction.md")
     methods = _read("docs/manuscript/02_methods.md")
-    audit = _read("audits/claim_method_audit.md")
-    readme = _read("README.md")
+    audit = _read("docs/audits/claim_method_audit.md")
+    readme = _read("docs/study.md")
 
     assert "Holding the expert population and the panel size fixed" not in intro
     assert "strategy" in intro
@@ -374,7 +375,7 @@ def test_tolerance_and_power_figure_contracts_are_explicit() -> None:
     assert "TOLERANCE_SLOSS" not in results
     tolerance_caption = re.search(
         r"!\[(?P<caption>Oracle-referenced EIE error .+?)\]"
-        r"\(\.\./output/figures/error_vs_correlation\.png\)",
+        r"\(\.\./\.\./output/figures/error_vs_correlation\.png\)",
         results,
     )
     assert tolerance_caption is not None
@@ -391,7 +392,7 @@ def test_tolerance_and_power_figure_contracts_are_explicit() -> None:
 
     power_caption = re.search(
         r"!\[(?P<caption>Analytic two-sample power .+?)\]"
-        r"\(\.\./output/figures/power_vs_n\.png\)",
+        r"\(\.\./\.\./output/figures/power_vs_n\.png\)",
         results,
     )
     assert power_caption is not None
@@ -554,7 +555,7 @@ def test_manuscript_live_track_is_gemma_postdoc_not_qwen_family_comparison() -> 
 def test_statistical_citations_and_power_grain_are_contract_bound() -> None:
     methods = _read("docs/manuscript/02_methods.md")
     results = _read("docs/manuscript/03_results.md")
-    audit = _read("audits/claim_method_audit.md")
+    audit = _read("docs/audits/claim_method_audit.md")
 
     assert "[Cohen (1988)](https://archive.org/details/statisticalpower0000cohe)" in methods
     assert "[Efron and Tibshirani (1993)](https://doi.org/10.1201/9780429246593)" in methods
@@ -714,7 +715,7 @@ def test_manuscript_captions_include_source_statistic_and_caveat() -> None:
 
 
 def test_publication_guide_records_current_workflow() -> None:
-    guide = _read("PUBLICATION_PACKAGE.md")
+    guide = _read("docs/PUBLICATION_PACKAGE.md")
     assert "docs/manuscript" in guide
     assert "gemma3:4b" in guide
     assert "z_generate_manuscript_variables.py" in guide
@@ -749,14 +750,12 @@ def test_project_margin_override_reaches_rendered_tex() -> None:
     )
 
 
-def test_stego_workflow_documents_visual_equivalence_and_verifier() -> None:
-    readme = _read("README.md")
+def test_archive_guide_distinguishes_the_provenance_variant() -> None:
+    guide = _read("docs/reproduction.md")
 
-    assert "The stego PDF is expected to look the same as the normal PDF" in readme
-    assert "uv run python scripts/make_stego_pdf.py" in readme
-    assert "uv run python scripts/verify_stego.py" in readme
-    assert "source_pdf_sha256" in readme
-    assert "not a visible watermark" in readme
+    assert "Visually equivalent provenance variant" in guide
+    assert "uv run --no-sync python scripts/verify_stego.py" in guide
+    assert "source_pdf_sha256" in guide
 
 
 def test_combined_html_has_linked_citations_not_plaintext_keys() -> None:

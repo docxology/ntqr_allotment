@@ -1,28 +1,23 @@
-# docs/ — ntqr_allotment
+# NTQR Allotment documentation
 
-NTQR allotment — ground-truth-free evaluation of noisy classifiers (v0.1.0 public release).
+The study examines how panel formation affects error-independent NTQR recovery.
+The controlled simulations and the retained single-model companion are separate
+evidence tracks.
 
-## Repository layout
+| Guide | Use it to |
+|---|---|
+| [Study overview](study.md) | Understand the research question, code layout, and figures. |
+| [Manuscript](manuscript/README.md) | Read the canonical paper and find its source files. |
+| [Reproduction and rendering](reproduction.md) | Install, verify the recorded study, run an isolated seeded replay, and build PDF, HTML, and EPUB. |
+| [Script reference](scripts.md) | Find the orchestrators and their inputs and outputs. |
+| [Dependencies and NTQR 0.9](dependencies.md) | Check package pins and configure the native CBC solver. |
+| [Reliability](reliability.md) | Check study design constraints, resumable artifacts, and failure handling. |
+| [Claim and method audit](audits/claim_method_audit.md) | Trace the study's claims to their producing methods. |
+| [Research integrity](research_integrity.md) and [claim registry](research_map.json) | Trace the source, citations, and scope of the evidence. |
+| [Publication package](PUBLICATION_PACKAGE.md) | Find the archived release and its publication artifacts. |
+| [Runtime profiling](runtime_profiling.md) | Interpret recorded performance measurements. |
+| [Maintenance backlog](TODO.md) | Find pending engineering work. |
 
-- src/ tests/ scripts/ — package core
-- docs/manuscript/ — publication package
-- audits/ output/ — evaluation evidence
-
-## Verify (real commands from repo metadata)
-
-- `uv run pytest tests/`
-
-
-- [Dependencies and NTQR 0.9 migration](dependencies.md): pins, native CBC, API compatibility and verification.
-
-- [Valid study designs and resumable artifacts](reliability.md): input validation, failure provenance, paired support, native CBC and cache identities.
-
-
-## Profiling and research integrity
-
-- [Runtime profiling](runtime_profiling.md): Python 3.15, workload contracts,
-  source-bound measurements, comparison rules and sampling availability.
-- [Research integrity](research_integrity.md): inference boundaries, publication
-  artifacts, bibliography checks and figure regeneration.
-- [Claim registry](research_map.json): structured evidence paths, reviewed primary
-  references and explicit limits.
+The [artifact index](../output/README.md) describes the recorded data,
+figures, and release files. The published version is
+[Zenodo 21083780](https://zenodo.org/records/21083780).

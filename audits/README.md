@@ -1,7 +1,3 @@
-# audits/ — ntqr_allotment
+# Audits
 
-Internal audit notes.
-
-- `claim_method_audit.md` — audit of claim/method alignment.
-
-Content is local-only evidence, not a publishing surface.
+The current [claim and method audit](../docs/audits/claim_method_audit.md) is in the documentation.

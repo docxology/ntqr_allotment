@@ -914,7 +914,10 @@ def test_publication_manifest_is_deterministic_and_check_is_byte_exact(
         ).encode("utf-8"),
         injected / "00_main.md": b"value=42\n",
         injected / "preamble.md": b"front matter\n",
-        injected / "config.yaml": b"paper:\r\n  title: Test\r\n",
+        injected / "config.yaml": b"# Generated manuscript ordering\npaper:\r\n  title: Test\r\n",
+        output / "data" / "manuscript_numeric_evidence.json": (
+            b'{\n  "A": [\n    42\n  ]\n}\n'
+        ),
         injected / "references.bib": b"@misc{ref,\r\n}\r\n",
     }
     for path, payload in expected.items():

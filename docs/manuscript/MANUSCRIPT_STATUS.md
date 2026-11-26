@@ -1,7 +1,7 @@
-# Manuscript Status
+# Manuscript status
 
-- **Project:** ntqr_allotment
-- **Manuscript title:** Sortition Upstream of NTQR
-- **Location:** `docs/manuscript/` (source-owned; hydrated deliverables are written to `output/manuscript/`)
-- **Type:** Active publication-target manuscript (6 section files)
-- **Status file purpose:** Tracks publication-readiness of the manuscript content in this directory.
+[Sortition Upstream of NTQR](README.md) is maintained in this directory.
+The [version record](https://zenodo.org/records/21083780) identifies the
+archived v0.1.0 paper. The current checkout retains the study's measurements
+and derives the manuscript from those records. See the [render guide](../reproduction.md)
+for the current local build and verification commands.
