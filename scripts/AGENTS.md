@@ -1,6 +1,6 @@
 # AGENTS.md — scripts/
 
-Layout: thin orchestrators — `run_*.py` (analysis: sweep, independence_sweep, bloc_phase, cross_family(+multiseed), trio_conditioning, personas, postdoc_panel, power_analysis, analytical_predictions), `make_*.py` (figures, extended figures, cover, web explorer, stego PDF), `bench_alarm.py`, `verify_stego.py`, `z_generate_manuscript_variables.py` (token injector), `README.md` (inventory table: script | purpose | delegates to | command).
+Layout: thin orchestrators — `run_*.py` (analysis: sweep, independence_sweep, bloc_phase, cross_family(+multiseed), trio_conditioning, personas, postdoc_panel, power_analysis, analytical_predictions), `make_*.py` (figures, extended figures, cover, web explorer, stego PDF), `bench_alarm.py`, `verify_stego.py`, `z_generate_manuscript_variables.py` (token injector), `README.md` (points to docs/scripts.md).
 
 Invariant: I/O and orchestration only — all computation imports from `src/ntqr_allotment/`. Adding logic here violates the thin-orchestrator pattern. Outputs land under `output/`.
 

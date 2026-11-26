@@ -23,7 +23,7 @@ end (every stochastic step is seeded with `numpy.random.default_rng`; figures us
 
 [@fig:pipeline] shows this upstream-to-downstream flow at a glance.
 
-![Left-to-right pipeline of the deterministic synthetic instrument (steps 1–5 in text; count tokens annotated from `{{N_EXPERTS}}`, `{{N_ITEMS}}`, `{{N_TRIOS}}` so the figure cannot drift from the reported configuration): a known population is sampled → a panel is formed by one of four strategies → the panel judges a key-hidden corpus → the EIE evaluator runs blind over trios → only scoring reads the labels. The bracket marks the unsupervised region; the manipulated variable is the upstream formation rule. Explanatory schematic only; quantitative results are in the Results section.](../output/figures/method_pipeline_schematic.png){#fig:pipeline width=95%}
+![Left-to-right pipeline of the deterministic synthetic instrument (steps 1–5 in text; count tokens annotated from `{{N_EXPERTS}}`, `{{N_ITEMS}}`, `{{N_TRIOS}}` so the figure cannot drift from the reported configuration): a known population is sampled → a panel is formed by one of four strategies → the panel judges a key-hidden corpus → the EIE evaluator runs blind over trios → only scoring reads the labels. The bracket marks the unsupervised region; the manipulated variable is the upstream formation rule. Explanatory schematic only; quantitative results are in the Results section.](../../output/figures/method_pipeline_schematic.png){#fig:pipeline width=95%}
 
 The key methodological move is step 5: because the ground truth is synthetic and
 therefore known, the unlabeled `ntqr` evaluation and the supervised oracle can be

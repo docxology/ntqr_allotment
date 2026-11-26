@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "figures": [
+    {
+      "label": "fig:pipeline",
+      "filename": "method_pipeline_schematic.png",
+      "alt_text": "Flow diagram from population and panel formation through the unlabeled trio solve and oracle scoring."
+    },
+    {
+      "label": "fig:ranking",
+      "filename": "strategy_ranking.png",
+      "alt_text": "Bars compare mean recovery error and uncertainty by panel-formation strategy."
+    },
+    {
+      "label": "fig:repideo",
+      "filename": "rep_vs_ideo_heatmap.png",
+      "alt_text": "Faceted maps compare single-bloc and representative recovery across expertise, bias, and panel size."
+    },
+    {
+      "label": "fig:prepost",
+      "filename": "pre_post_ntqr_heatmap.png",
+      "alt_text": "Faceted maps show the difference between error-independent recovery and the supervised majority baseline."
+    },
+    {
+      "label": "fig:theoryalign",
+      "filename": "theory_vs_observed_alignment.png",
+      "alt_text": "A grid shows the fraction of simulated comparisons that agree with analytical predictions."
+    },
+    {
+      "label": "fig:powercurve",
+      "filename": "power_curve.png",
+      "alt_text": "Lines compare recovery error versus panel size for the four strategies."
+    },
+    {
+      "label": "fig:triocond",
+      "filename": "trio_conditioning.png",
+      "alt_text": "Panels show per-trio recovery error and measured correlation by panel size."
+    },
+    {
+      "label": "fig:tolerance",
+      "filename": "error_vs_correlation.png",
+      "alt_text": "Points compare realized error correlation and oracle-scored recovery error."
+    },
+    {
+      "label": "fig:blocphase",
+      "filename": "bloc_phase_diagram.png",
+      "alt_text": "Lines compare recovery error and measured trio correlation as within-bloc error coupling increases."
+    },
+    {
+      "label": "fig:dial",
+      "filename": "bloc_concentration_dial.png",
+      "alt_text": "Curves show error and correlation as more panel members share the confound group."
+    },
+    {
+      "label": "fig:diagnosis",
+      "filename": "power_design_diagnosis.png",
+      "alt_text": "Rows compare pairwise standardized effects with the minimum detectable effect."
+    },
+    {
+      "label": "fig:powervn",
+      "filename": "power_vs_n.png",
+      "alt_text": "Power curves compare prospective samples per group across standardized effect sizes."
+    },
+    {
+      "label": "fig:alarm",
+      "filename": "alarm_cost_curve.png",
+      "alt_text": "Log-scale plotting compares measured alarm runtime with a cubic reference curve."
+    },
+    {
+      "label": "fig:strategycorr",
+      "filename": "strategy_correlation.png",
+      "alt_text": "Bars compare measured error correlation across panel-formation strategies."
+    },
+    {
+      "label": "fig:fairness",
+      "filename": "fairness_maximin.png",
+      "alt_text": "Bars show each eligible candidate's selection probability under the maximin lottery."
+    },
+    {
+      "label": "fig:alarmpower",
+      "filename": "alarm_power.png",
+      "alt_text": "Lines compare the consistency alarm's firing rate across panel and corpus sizes."
+    },
+    {
+      "label": "fig:postdocrank",
+      "filename": "postdoc_strategy_ranking.png",
+      "alt_text": "Paired markers compare the analytical and recorded Gemma strategy rankings."
+    },
+    {
+      "label": "fig:postdocbias",
+      "filename": "postdoc_age_bias_heatmap.png",
+      "alt_text": "A grid compares older-minus-younger recommendation rates by strategy and panel size."
+    },
+    {
+      "label": "fig:postdocalign",
+      "filename": "postdoc_empirical_alignment.png",
+      "alt_text": "Cells compare the direction of analytical and recorded Gemma recommendation disparities."
+    },
+    {
+      "label": "fig:trackinversion",
+      "filename": "track_ranking_inversion.png",
+      "alt_text": "Slopes compare changes in strategy rank between matched three-seat analytical and Gemma studies."
+    }
+  ]
+}

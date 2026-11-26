@@ -1,6 +1,6 @@
 # NTQR_allotment Publication Package
 
-Prepared after the 2026-06-28 RedTeam proofreading pass.
+For a new local render, follow the [offline build](reproduction.md). The readiness and gate reports below describe the archived June 2026 release. The [archive verification notes](reproduction.md#archived-release) record the source-PDF mismatch in the currently tracked provenance bundle.
 
 ## Canonical Metadata
 
@@ -66,7 +66,7 @@ discovery.**
 | Stego provenance PDF | `output/pdf/NTQR_allotment_combined_stego.pdf` | Visually equivalent provenance variant; include only with the caveat that payloads are plain extractable JSON, not encryption. |
 | Combined HTML | `output/web/index.html` | Web reader artifact; verify relative figure paths before hosting outside the repo. |
 | Section HTML | `output/web/manuscript__*.html` | Optional per-section web exports. |
-| Slides | `output/slides/*_slides.pdf` | Optional presentation companion, not the archival manuscript. |
+| Historical slides | `output/slides/*_slides.pdf` | Retained from an earlier build. Current publication formats are PDF, HTML, and EPUB. |
 | Figures | `output/figures/*.png` | Generated from source artifacts; captions in Results remain the claim boundary. |
 | Data artifacts | `output/data/*.json`, `output/data/*.csv` | Include with source archive when the platform supports supplemental files. |
 | Provenance manifest | `output/data/stego_manifest.json` | Pairs with stego PDF/cover. |
@@ -77,7 +77,7 @@ discovery.**
 
 ### Zenodo / OSF / Figshare
 
-- Upload the main PDF, source archive, generated figures, generated data artifacts, and `PUBLICATION_PACKAGE.md`.
+- Upload the main PDF, source archive, generated figures, generated data artifacts, and `docs/PUBLICATION_PACKAGE.md`.
 - Add the stego PDF and `stego_manifest.json` as optional provenance companions with the plain-JSON caveat.
 - DOI minted and Zenodo record published (2026-06-30, concept 10.5281/zenodo.21083779 / version 10.5281/zenodo.21083780, deposition `21083780`, state `done`); the deposit carries only the final combined PDF, per publication policy for this release. `docs/manuscript/config.yaml` updated (doi/version_doi/version_record/keywords), manuscript rerendered, stego rebuilt, gates rerun green.
 
@@ -100,7 +100,7 @@ discovery.**
 - State dependency caveats: `allotment` is AGPL-3.0 and sourced from GitHub; `ntqr` is MIT and vendored as its published wheel because the sdist is not lockable in this environment.
 - State the live dependency caveat: live tests require local Ollama with `gemma3:4b` digest `a2af6cc3eb7f`.
 
-## Latest Gate Evidence
+## Historical Gate Evidence
 
 Refreshed 2026-06-29 after the multi-agent RedTeam + writing-quality pass:
 composition-coupled bloc-confound fan-out study (`bloc_confound.py`,

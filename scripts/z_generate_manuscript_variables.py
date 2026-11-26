@@ -35,7 +35,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 _VENV_PY = PROJECT_ROOT / ".venv" / "bin" / "python"
 try:
     from ntqr_allotment.artifacts import atomic_write_bytes  # noqa: E402
-    from ntqr_allotment.manuscript_variables import generate_variables  # noqa: E402
+    from ntqr_allotment.manuscript_variables import generate_variables, numeric_evidence  # noqa: E402
 except ModuleNotFoundError:
     if os.environ.get("_NTQR_HYDRATE_REEXEC") != "1" and _VENV_PY.is_file():
         os.environ["_NTQR_HYDRATE_REEXEC"] = "1"
@@ -101,12 +101,22 @@ def main(argv: list[str] | None = None) -> int:
     payloads: dict[Path, bytes] = {
         vars_path: json.dumps(variables, indent=2, sort_keys=True).encode("utf-8")
     }
+    payloads[output_dir / "data" / "manuscript_numeric_evidence.json"] = (
+        json.dumps(numeric_evidence(variables), indent=2, sort_keys=True, allow_nan=False)
+        + "\n"
+    ).encode("utf-8")
     for md in source_markdown(manuscript_dir):
         rendered = inject(md.read_text(encoding="utf-8"), variables, source=md)
+        rendered = rendered.replace("](../../output/figures/", "](../figures/")
         payloads[injected_dir / md.name] = rendered.encode("utf-8")
     config_src = manuscript_dir / "config.yaml"
     if config_src.is_file():
-        payloads[injected_dir / "config.yaml"] = config_src.read_bytes()
+        payloads[injected_dir / "config.yaml"] = (
+            b"# Generated manuscript ordering\n" + config_src.read_bytes()
+        )
+    registry = manuscript_dir / "figure_registry.json"
+    if registry.is_file():
+        payloads[output_dir / "figures" / registry.name] = registry.read_bytes()
     for bib in sorted(manuscript_dir.glob("*.bib")):
         payloads[injected_dir / bib.name] = bib.read_bytes()
 

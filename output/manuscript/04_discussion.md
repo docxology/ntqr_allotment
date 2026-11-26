@@ -319,13 +319,13 @@ token-injected from `output/data/` by
 `src/ntqr_allotment/manuscript_variables.py`, so no result is hand-transcribed and
 the manuscript regenerates from source under a zero-orphan token contract. The
 synthetic track is fully deterministic under fixed seeds (profile config hash
-`fda4da941cf0`); the live track reproduces against a local Ollama
+`fda4da941cf0`); the archived companion was collected with a local Ollama
 `gemma3:4b` instance (digest `a2af6cc3eb7f`, config hash
-`5161ffe474b3`) using the serialized, resumable per-vote cache keyed on
+`5161ffe474b3`) and retained a serialized, resumable per-vote cache keyed on
 the config hash, seed, reviewer, application, model digest, and decode parameters.
-A steganographic provenance variant of the PDF additionally carries an extractable
-hash of the current source PDF, verified by `scripts/verify_stego.py`. The archival
-DOI is [10.5281/zenodo.21083779](https://doi.org/10.5281/zenodo.21083779).
+Offline hydration uses the retained artifacts without starting the model or collecting new votes.
+The archived provenance variant carries an extractable hash recorded when
+that artifact was assembled. The archival DOI is [10.5281/zenodo.21083779](https://doi.org/10.5281/zenodo.21083779).
 
 ## Ethics, protected attributes, and competing interests
 

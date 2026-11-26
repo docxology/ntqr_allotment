@@ -55,6 +55,7 @@ when using later main-branch code or regenerated figures.
 
 ```bash
 uv run python scripts/make_figures.py
+uv run python scripts/make_extended_figures.py
 uv run python scripts/z_generate_manuscript_variables.py
 uv run python scripts/z_generate_manuscript_variables.py --check
 ```
