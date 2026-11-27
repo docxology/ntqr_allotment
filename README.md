@@ -1,7 +1,6 @@
 # NTQR_allotment
 
 <p align="center">
-  <a href="https://github.com/docxology/ntqr_allotment/actions/workflows/tests.yml"><img alt="tests.yml workflow status on main" src="https://github.com/docxology/ntqr_allotment/actions/workflows/tests.yml/badge.svg?branch=main"></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
   <img alt="Requires Python 3.12 or newer" src="https://img.shields.io/badge/python-3.12%2B-3776AB?logo=python&logoColor=white">
 </p>
@@ -33,6 +32,10 @@ Two upstream libraries are imported and used for real:
   key**.
 
 ## Documentation
+
+Start with the [offline reproduction guide](docs/reproduction.md) to replay
+the seeded synthetic study using its locked environment and retained
+evidence. The offline path uses no live adjudication provider.
 
 - [Documentation index](docs/README.md) for setup, configuration, and verification.
 - [Study overview](docs/study.md) for the research question, methods, and figures.
