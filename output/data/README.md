@@ -7,4 +7,5 @@ Regenerated analysis artifacts — the single source of truth for every manuscri
 - Live companion: `postdoc_panel_results.json`, `postdoc_panel_alignment.json`, `persona_results.json`, `postdoc_votes/` (per-vote Ollama cache)
 - Provenance: `cover_manifest.json`, `stego_manifest.json`
 
-Producers and their dependency order are declared in `manuscript/config.yaml` (`analysis.scripts`).
+The [manuscript configuration](../../docs/manuscript/config.yaml) lists
+producers in dependency order under `analysis.scripts`.
